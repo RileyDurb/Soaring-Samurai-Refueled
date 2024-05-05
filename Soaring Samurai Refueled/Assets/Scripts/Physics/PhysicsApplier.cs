@@ -1,23 +1,26 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PhysicsApplier : MonoBehaviour
 {
-
 
     // Operator overloads to allow for generic groups
     [System.Serializable]
     
     public abstract class IPhysicsGroup<T>
     {
-        protected T mGroupTypeZero;
+        protected T mGroupTypeZero; // The zero for the generic type used, to make setting values to 0 work with generics
         public IPhysicsGroup(T groupTypeZero, GameObject parent)
         {
             mGroupTypeZero = groupTypeZero;
@@ -30,7 +33,9 @@ public class PhysicsApplier : MonoBehaviour
         public float DampeningMultiplier = 0.9f;
         public float DragCoeff = 0.3f;
         public bool InputBeingApplied = true;
-        private float dampeningZeroThreshold = 0.1f;
+
+        // Private variables
+        float dampeningZeroThreshold = 0.1f; // NOT used, may revisit zeroing out a force once it hits a certain low threshold after applying drag
         protected GameObject mParent;
 
         // Handling when velocity is set before initialization
@@ -69,34 +74,27 @@ public class PhysicsApplier : MonoBehaviour
 
         // Modifying behaviour
         Stack<string> mActiveMaxForceUnlocks = new Stack<string>();
-        //bool mUnlockMaxForces = false;
-        //public bool UnlockMaxForces {
-        //    get { return mActiveMaxForceUnlocks.Count > 0; } 
-        //    set { mUnlockMaxForces = value; }
-        //}
 
-        public void Update(float dt, GameObject parent)
+        public void Update(float dt)
         {
-            Rigidbody2D physics = parent.GetComponent<Rigidbody2D>();
+            Rigidbody2D physics = mParent.GetComponent<Rigidbody2D>();
 
             // Apply jerk for this frame
             if (mActiveMaxForceUnlocks.Count <=  0) // If no max force unlocks
             {
                 mJerk = Clamp(mJerk, mMaxJerk);
             }
-            mAcceleration = Add(mAcceleration, Scale(mJerk, Time.deltaTime));
+            mAcceleration = Add(mAcceleration, Scale(mJerk, dt));
 
             // Apply acceleration
             if (mActiveMaxForceUnlocks.Count <= 0) // if no max force unlocks
             {
                 mAcceleration = Clamp(mAcceleration, mMaxAcceleration);
             }
-            T currVelocity = Add(GetVelocity(), Scale(mAcceleration, Time.deltaTime));
+            T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
 
             // Always clamp max velocity, weird stuff if we don't
             currVelocity = Clamp(currVelocity, mMaxVelocity);
-
-
 
 
             if (physics != null)
@@ -111,13 +109,15 @@ public class PhysicsApplier : MonoBehaviour
             if (InputBeingApplied == false) // Only apply if not input was made this frame
             {
                 // Apply dampening to acceleration
-                mAcceleration = Add(mAcceleration, Scale(Scale(Subtract(mGroupTypeZero, mAcceleration), DampeningMultiplier), Time.deltaTime));
+                mAcceleration = Add(mAcceleration, Scale(Scale(Subtract(mGroupTypeZero, mAcceleration), DampeningMultiplier), dt));
                 
                 // Cut off acceleration at a predefined threshold
                 // Do this to prevent infinite drifting, and potential oscillations in the direction of acceleration, which drag can cause at small values
+                // TODO: Probably switch this to instead of hard stopping everything, switch to linear dampening, with a constant, or adjustable amount, so that it will actually hit 0, but isn't so abrupt. Could just lerp, or decay depending on the amount
                 if (Abs(mAcceleration) <= dampeningZeroThreshold)
                 {
                     mAcceleration = mGroupTypeZero; // Cancel acceleration
+                    SetVelocity(mGroupTypeZero);
                 }
             }
 
@@ -125,15 +125,13 @@ public class PhysicsApplier : MonoBehaviour
         }
 
 
+        public abstract void ApplyDrag();
+
         public abstract T Add(T left, T right);
         public abstract float Square(T value);
         public abstract T Scale(T baseValue, float scaleValue);
         public abstract T Subtract(T left, T right);
         public abstract float Abs(T value);
-        //public abstract void UpdateRigidBody(Rigidbody2D physics);
-        //public abstract void UpdateVelocityFromRigidBody(Rigidbody2D physics);
-
-        public abstract void ApplyDrag(GameObject parent);
 
         public abstract T Clamp(T value, T maxMag);
 
@@ -206,7 +204,7 @@ public class PhysicsApplier : MonoBehaviour
 
         public override float Square(Vector2 value)
         {
-            return value.magnitude * value.magnitude;
+            return value.sqrMagnitude;
         }
 
         public override Vector2 Scale(Vector2 baseValue, float scaleValue)
@@ -219,9 +217,10 @@ public class PhysicsApplier : MonoBehaviour
         }
         public override Vector2 Clamp(Vector2 value, Vector2 max)
         {
-            value.x = Mathf.Clamp(value.x, -max.x, max.x);
-            value.y = Mathf.Clamp(value.y, -max.y, max.y);
-            return value;
+            
+            //value.x = Mathf.Clamp(value.x, -max.x, max.x);
+            //value.y = Mathf.Clamp(value.y, -max.y, max.y);
+            return Vector2.ClampMagnitude(value, max.magnitude);
         }
         public override float Abs(Vector2 value)
         {
@@ -242,18 +241,10 @@ public class PhysicsApplier : MonoBehaviour
         {
             mJerk += jerk;
         }
-        //public override void UpdateRigidBody(Rigidbody2D physics)
-        //{
-        //    physics.velocity = mVelocity;
-        //}
 
-        //public override void UpdateVelocityFromRigidBody(Rigidbody2D physics)
-        //{
-        //    mVelocity = physics.velocity;
-        //}
-        public override void ApplyDrag(GameObject parent)
+        public override void ApplyDrag()
         {
-            float drag = DragCoeff * parent.GetComponent<Rigidbody2D>().mass * (Square(Velocity) / 2) * Time.deltaTime;
+            float drag = DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Square(Velocity) / 2) * Time.deltaTime;
             Vector2 dragVec = Velocity.normalized * -1 * drag;
 
             //// Set to 0 if drag would make the object change directions
@@ -297,7 +288,6 @@ public class PhysicsApplier : MonoBehaviour
             {
                 mPreInitVelocity = newValue;
                 mVelocityPreInitted = true;
-                //print("SetVelocity(Vector2): Tried to access parent before it was set in initialization");
                 return;
             }
             mParent.GetComponent<Rigidbody2D>().velocity = newValue;
@@ -353,9 +343,9 @@ public class PhysicsApplier : MonoBehaviour
             mJerk += jerk;
         }
 
-        public override void ApplyDrag(GameObject parent)
+        public override void ApplyDrag()
         {
-            float angularDragMag = DragCoeff * parent.GetComponent<Rigidbody2D>().mass * (Mathf.Pow(Velocity, 2) / 2) * Time.deltaTime;
+            float angularDragMag = DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Mathf.Pow(Velocity, 2) / 2) * Time.deltaTime;
             float angularDrag = Mathf.Sign(Velocity) * -1 * angularDragMag;
 
             //// If drag would cause object to change directions
@@ -400,7 +390,6 @@ public class PhysicsApplier : MonoBehaviour
             {
                 mVelocityPreInitted = true;
                 mPreInitVelocity = newValue;
-                //print("SetVelocity(float): Tried to access parent before it was set in initialization");
                 return;
             }
             mParent.GetComponent<Rigidbody2D>().angularVelocity = newValue;
@@ -445,7 +434,8 @@ public class PhysicsApplier : MonoBehaviour
 
         if (mDebugDraw == true && name == "Player")
         {
-            TextMeshPro tmp = GameObject.Find("PhysicsDebugPrinter").GetComponent<TextMeshPro>();
+            TextMeshProUGUI tmp = GameObject.Find("PhysicsDebugPrinter").GetComponent<TextMeshProUGUI>();
+
             if (tmp != null)
             {
                tmp.text = "Velocity: " + mDirectionalForces.Velocity + "\n" +
@@ -455,18 +445,22 @@ public class PhysicsApplier : MonoBehaviour
                           "Acceleration: " + mRotationalForces.Acceleration + "\n" +
                           "Jerk: " + mRotationalForces.Jerk;
             }
+
+            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.GetVelocity().x, mDirectionalForces.GetVelocity().y, 0), Color.green, 0, false);
+            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Acceleration.x, mDirectionalForces.Acceleration.y, 0), Color.red, 0, false);
+            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Jerk.x, mDirectionalForces.Jerk.y, 0), Color.blue, 0, false);
         }
 
 
-        mDirectionalForces.ApplyDrag(gameObject);
-        mDirectionalForces.Update(Time.deltaTime, gameObject);
+        mDirectionalForces.ApplyDrag();
+        mDirectionalForces.Update(Time.deltaTime);
 
         if (mRotationalForces.InputBeingApplied == false) // Only apply when input is not applied
         {
-            mRotationalForces.ApplyDrag(gameObject);
+            mRotationalForces.ApplyDrag();
 
         }
-        mRotationalForces.Update(Time.deltaTime, gameObject);
+        mRotationalForces.Update(Time.deltaTime);
         if (name == "Player")
         {
             //print("Player Physics Update");
