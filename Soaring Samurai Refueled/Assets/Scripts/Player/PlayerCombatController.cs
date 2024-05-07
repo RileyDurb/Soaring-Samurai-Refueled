@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,14 +13,14 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Private variables
-    PlayerControls controls;
     Vector2 moveInput;
-    
 
-    void Awake()
-    {
-        controls = new PlayerControls();
-
+    [SerializeField]
+    private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
+    public int PlayerIndex
+    { 
+        get { return playerIndex; }
+        set { playerIndex = value; }
     }
 
     // Update is called once per frame
@@ -42,7 +44,6 @@ public class PlayerCombatController : MonoBehaviour
             physics.mDirectionalForces.InputBeingApplied = true;
 
         }
-        //transform.position += new Vector3(moveVec.x, moveVec.y, 0.0f);
     }
 
 
@@ -53,21 +54,42 @@ public class PlayerCombatController : MonoBehaviour
         transform.localScale *= 1.6f;
     }
 
-    private void OnEnable()
+    //private void OnEnable()
+    //{ 
+    //    //controls.Combat.Enable();
+    //    //// Subscribe grow function
+    //    //controls.Combat.Grow.performed += context => Grow();
+
+    //    //// Subscribe movement callbacks
+    //    //controls.Combat.Move.performed += context => moveInput = context.ReadValue<Vector2>();
+    //    //controls.Combat.Move.canceled += context => moveInput = Vector2.zero;
+
+    //}
+
+    //private void OnDisable()
+    //{
+    //    controls.Combat.Disable();
+    //}
+
+
+    public void OnMove(InputAction.CallbackContext context)
     {
-        controls.Combat.Enable();
+        switch (context.phase)
+        {
+            case InputActionPhase.Performed:
+                {
+                    moveInput = context.ReadValue<Vector2>();
+                }
+                break;
 
-        // Subscribe grow function
-        controls.Combat.Grow.performed += context => Grow();
+            case InputActionPhase.Canceled:
+                {
+                    moveInput = Vector2.zero;
+                }
+                break;
 
-        // Subscribe movement callbacks
-        controls.Combat.Move.performed += context => moveInput = context.ReadValue<Vector2>();
-        controls.Combat.Move.canceled += context => moveInput = Vector2.zero;
-
-    }
-
-    private void OnDisable()
-    {
-        controls.Combat.Disable();
+            default:
+                break;
+        }
     }
 }
