@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8127609608215675805}
   - component: {fileID: 729769518604565035}
   - component: {fileID: 1457328239894749921}
-  m_Layer: 0
+  - component: {fileID: 4626929853515522751}
+  m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -101,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveJerk: 300
+  TestAttackData:
+    damage: 5
+    knockback: {x: 0, y: 0}
   playerIndex: -1
 --- !u!50 &8127609608215675805
 Rigidbody2D:
@@ -124,7 +128,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -176,10 +180,10 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 183
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 183
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -192,3 +196,20 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &4626929853515522751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de9b1f41844ae6448c6ee01bd2c19e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PoolMax: 100
+  RegenTickValue: 0
+  RegenDelay: 1
+  DangerThreshold: 0
+  PoolCurr: 0

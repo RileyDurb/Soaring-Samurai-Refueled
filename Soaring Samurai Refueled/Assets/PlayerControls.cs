@@ -37,7 +37,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Grow"",
+                    ""name"": ""AttackTest"",
                     ""type"": ""Button"",
                     ""id"": ""6a6ed7cb-7007-4293-aad3-736715ef1221"",
                     ""expectedControlType"": ""Button"",
@@ -65,7 +65,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Grow"",
+                    ""action"": ""AttackTest"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -77,7 +77,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Combat
         m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
         m_Combat_Move = m_Combat.FindAction("Move", throwIfNotFound: true);
-        m_Combat_Grow = m_Combat.FindAction("Grow", throwIfNotFound: true);
+        m_Combat_AttackTest = m_Combat.FindAction("AttackTest", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -140,13 +140,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Combat;
     private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
     private readonly InputAction m_Combat_Move;
-    private readonly InputAction m_Combat_Grow;
+    private readonly InputAction m_Combat_AttackTest;
     public struct CombatActions
     {
         private @PlayerControls m_Wrapper;
         public CombatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Combat_Move;
-        public InputAction @Grow => m_Wrapper.m_Combat_Grow;
+        public InputAction @AttackTest => m_Wrapper.m_Combat_AttackTest;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -159,9 +159,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Grow.started += instance.OnGrow;
-            @Grow.performed += instance.OnGrow;
-            @Grow.canceled += instance.OnGrow;
+            @AttackTest.started += instance.OnAttackTest;
+            @AttackTest.performed += instance.OnAttackTest;
+            @AttackTest.canceled += instance.OnAttackTest;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -169,9 +169,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Grow.started -= instance.OnGrow;
-            @Grow.performed -= instance.OnGrow;
-            @Grow.canceled -= instance.OnGrow;
+            @AttackTest.started -= instance.OnAttackTest;
+            @AttackTest.performed -= instance.OnAttackTest;
+            @AttackTest.canceled -= instance.OnAttackTest;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -192,6 +192,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface ICombatActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnGrow(InputAction.CallbackContext context);
+        void OnAttackTest(InputAction.CallbackContext context);
     }
 }

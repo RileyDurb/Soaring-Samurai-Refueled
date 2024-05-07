@@ -42,4 +42,14 @@ public class PlayerInputHandler : MonoBehaviour
         }
         playerController.OnMove(context);
     }
+
+    public void OnTestAttack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            print("PlayerInputHandler:OnTestAttack: Input handler of index " + input.playerIndex + " tried to do a test attack with it's player, but player was null");
+            return;
+        }
+        playerController.OnTestAttack(context);
+    }
 }

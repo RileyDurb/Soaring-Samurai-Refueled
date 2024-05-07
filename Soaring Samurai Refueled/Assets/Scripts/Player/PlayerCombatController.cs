@@ -9,8 +9,8 @@ public class PlayerCombatController : MonoBehaviour
 {
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
-
-
+    public Hitbox.AttackData TestAttackData = new Hitbox.AttackData();
+    float TestAttackActiveDuration = 1.0f;
 
     // Private variables
     Vector2 moveInput;
@@ -22,6 +22,7 @@ public class PlayerCombatController : MonoBehaviour
         get { return playerIndex; }
         set { playerIndex = value; }
     }
+
 
     // Update is called once per frame
     void Update()
@@ -49,29 +50,6 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Action functions
-    void Grow()
-    {
-        transform.localScale *= 1.6f;
-    }
-
-    //private void OnEnable()
-    //{ 
-    //    //controls.Combat.Enable();
-    //    //// Subscribe grow function
-    //    //controls.Combat.Grow.performed += context => Grow();
-
-    //    //// Subscribe movement callbacks
-    //    //controls.Combat.Move.performed += context => moveInput = context.ReadValue<Vector2>();
-    //    //controls.Combat.Move.canceled += context => moveInput = Vector2.zero;
-
-    //}
-
-    //private void OnDisable()
-    //{
-    //    controls.Combat.Disable();
-    //}
-
-
     public void OnMove(InputAction.CallbackContext context)
     {
         switch (context.phase)
@@ -91,5 +69,24 @@ public class PlayerCombatController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void OnTestAttack(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox"), transform);
+            newHitbox.transform.localScale = new Vector3(transform.lossyScale.x, transform.lossyScale.y, newHitbox.transform.lossyScale.z); // Sets scale equal to the player's
+
+            newHitbox.GetComponent<Hitbox>().InitAttack(TestAttackData, TestAttackActiveDuration);
+        }
+
+    }
+
+    // Combat related functions
+    public void TakeDamage(Hitbox.AttackData attackData)
+    {
+        Pool pool = GetComponent<Pool>();
+        pool.DecreasePool(attackData.damage);
     }
 }

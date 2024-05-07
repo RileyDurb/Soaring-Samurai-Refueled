@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Grow",
+                    "name": "AttackTest",
                     "type": "Button",
                     "id": "6a6ed7cb-7007-4293-aad3-736715ef1221",
                     "expectedControlType": "Button",
@@ -43,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Grow",
+                    "action": "AttackTest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
