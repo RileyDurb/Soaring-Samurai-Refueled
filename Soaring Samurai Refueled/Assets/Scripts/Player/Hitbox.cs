@@ -5,10 +5,31 @@ using UnityEngine;
 public class Hitbox : MonoBehaviour
 {
     [System.Serializable]
+    public class AttackDefinition
+    {
+        [SerializeField] float mDamage = 0.0f;
+        [SerializeField] float mKnockbackStrength = 0.0f;
+        [SerializeField] float mActiveTime = 1.0f;
+
+        public float Damage { get { return mDamage; } }
+        public float KnockbackStrength { get { return mKnockbackStrength; } }
+        public float ActiveTime { get { return mActiveTime; } }
+    }
+
+    [System.Serializable]
     public class AttackData
     {
-        public float damage = 0.0f;
-        public Vector2 knockback = Vector2.zero;
+        public AttackData(float damage, Vector2 knockbackVec) 
+        {
+            mDamage = damage;
+            mKnockbackVec = knockbackVec;
+        }
+
+        float mDamage = 0.0f;
+        Vector2 mKnockbackVec = Vector2.zero;
+
+        public float Damage { get { return mDamage; } }
+        public Vector2 Knockback { get { return mKnockbackVec; } }
     }
 
     // Editor accessible variables
@@ -18,10 +39,9 @@ public class Hitbox : MonoBehaviour
 
 
     // private variables
-    bool mAlreadyHit = false;
-    float mLifetime = 1.0f;
+    bool mAlreadyHit = false; // Whether this hitbox has already hit an opponent
     float mCurrLifeTimer = 0.0f;
-    AttackData mAttackData = new AttackData();
+    AttackDefinition mAttackInfo = new AttackDefinition();
 
 
     // Start is called before the first frame update
@@ -38,7 +58,7 @@ public class Hitbox : MonoBehaviour
         {
             mCurrLifeTimer += Time.deltaTime;
 
-            if (mCurrLifeTimer >= mLifetime) // If timer is up
+            if (mCurrLifeTimer >= mAttackInfo.ActiveTime) // If timer is up
             {
                 Destroy(gameObject);
             }
@@ -59,21 +79,32 @@ public class Hitbox : MonoBehaviour
 
         if (collision.gameObject.tag.Contains("Player"))
         {
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(mAttackData);
+            GameObject parentAttacker = transform.parent.gameObject;
+            if (parentAttacker == null)
+            {
+                print("Hitbox:OnCollisionEnter2D: Hitbox with null parent collided with " + collision.gameObject.name);
+                mAlreadyHit = true;
+                return;
+            }
+
+            // Gets knockback vector
+            Vector2 vecToReceiver = collision.transform.position - parentAttacker.transform.position;
+            Vector2 knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+
+
+            // Sends attack
+            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackData(mAttackInfo.Damage, knockbackVec));
+
+            // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;
         }
     }
 
     // Getters and setters
-    private void SetLifeTimer(float newLifeTime)
-    {
-        mLifetime = newLifeTime;
-        mCurrLifeTimer = 0.0f;
-    }
 
-    public void InitAttack(AttackData attackData, float lifeTime)
+    public void InitAttack(AttackDefinition attack)
     {
-        mAttackData = attackData;
-        SetLifeTimer(lifeTime);
+        mAttackInfo = attack;
+        mCurrLifeTimer = 0.0f;
     }
 }

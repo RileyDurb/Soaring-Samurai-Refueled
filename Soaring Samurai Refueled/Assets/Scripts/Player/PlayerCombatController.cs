@@ -9,11 +9,12 @@ public class PlayerCombatController : MonoBehaviour
 {
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
-    public Hitbox.AttackData TestAttackData = new Hitbox.AttackData();
-    float TestAttackActiveDuration = 1.0f;
-
+    [SerializeField] Hitbox.AttackDefinition TestAttackInfo = new Hitbox.AttackDefinition();
+    [SerializeField] float KnockbackEqualizationPercent = 1.0f;
+    [SerializeField] float KnockbackDuration = 0.3f;
     // Private variables
-    Vector2 moveInput;
+    Vector2 mMoveInput;
+    ActionList mActionList = new ActionList();
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
@@ -27,16 +28,17 @@ public class PlayerCombatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        mActionList.Update(Time.deltaTime);
 
         // Apply movement from current input value
-        Vector2 moveVec = moveInput * MoveJerk;
+        Vector2 moveVec = mMoveInput * MoveJerk;
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
 
         // Applies jerk
         physics.mDirectionalForces.ApplyJerk(moveVec);
 
         // Since things like dampening can be applied differently based in if input is being given, tell the physics the current state
-        if (moveInput == Vector2.zero)
+        if (mMoveInput == Vector2.zero)
         {
             physics.mDirectionalForces.InputBeingApplied = false;
         }
@@ -56,13 +58,13 @@ public class PlayerCombatController : MonoBehaviour
         {
             case InputActionPhase.Performed:
                 {
-                    moveInput = context.ReadValue<Vector2>();
+                    mMoveInput = context.ReadValue<Vector2>();
                 }
                 break;
 
             case InputActionPhase.Canceled:
                 {
-                    moveInput = Vector2.zero;
+                    mMoveInput = Vector2.zero;
                 }
                 break;
 
@@ -78,7 +80,7 @@ public class PlayerCombatController : MonoBehaviour
             GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox"), transform);
             newHitbox.transform.localScale = new Vector3(transform.lossyScale.x, transform.lossyScale.y, newHitbox.transform.lossyScale.z); // Sets scale equal to the player's
 
-            newHitbox.GetComponent<Hitbox>().InitAttack(TestAttackData, TestAttackActiveDuration);
+            newHitbox.GetComponent<Hitbox>().InitAttack(TestAttackInfo);
         }
 
     }
@@ -86,7 +88,12 @@ public class PlayerCombatController : MonoBehaviour
     // Combat related functions
     public void TakeDamage(Hitbox.AttackData attackData)
     {
-        Pool pool = GetComponent<Pool>();
-        pool.DecreasePool(attackData.damage);
+        GetComponent<PoolContainer>().GetPool("Health").DecreasePool(attackData.Damage);
+
+        if (SimManager.Instance.DebugMode)
+        {
+            Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
+        }
+        mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, KnockbackEqualizationPercent, KnockbackDuration);
     }
 }

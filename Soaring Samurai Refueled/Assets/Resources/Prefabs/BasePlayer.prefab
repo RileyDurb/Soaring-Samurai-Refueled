@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8127609608215675805}
   - component: {fileID: 729769518604565035}
   - component: {fileID: 1457328239894749921}
-  - component: {fileID: 4626929853515522751}
+  - component: {fileID: -4621455244979845033}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -102,9 +102,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveJerk: 300
-  TestAttackData:
-    damage: 5
-    knockback: {x: 0, y: 0}
+  TestAttackInfo:
+    mDamage: 5
+    mKnockbackStrength: 5
+    mActiveTime: 1
+  KnockbackEqualizationPercent: 1
+  KnockbackDuration: 0.3
   playerIndex: -1
 --- !u!50 &8127609608215675805
 Rigidbody2D:
@@ -196,7 +199,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &4626929853515522751
+--- !u!114 &-4621455244979845033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,11 +208,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 652935351384745842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de9b1f41844ae6448c6ee01bd2c19e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 30868b25877824c4a9604e0bdc946aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PoolMax: 100
-  RegenTickValue: 0
-  RegenDelay: 1
-  DangerThreshold: 0
-  PoolCurr: 0
+  mPoolList:
+  - Name: Health
+    PoolMax: 100
+    RegenPerSec: 0
+    RegenDelay: 0
+    PoolCurr: 0
+    CriticalThresholdPercent: 0
