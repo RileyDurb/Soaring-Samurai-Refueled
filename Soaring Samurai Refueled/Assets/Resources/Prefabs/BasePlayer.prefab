@@ -104,7 +104,7 @@ MonoBehaviour:
   MoveJerk: 300
   TestAttackInfo:
     mDamage: 5
-    mKnockbackStrength: 5
+    mKnockbackStrength: 30
     mActiveTime: 1
   KnockbackEqualizationPercent: 1
   KnockbackDuration: 0.3
@@ -149,9 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mDirectionalForces:
-    mMaxVelocity: {x: 6, y: 6}
-    mMaxAcceleration: {x: 50, y: 50}
-    mMaxJerk: {x: 1000, y: 1000}
+    mMaxVelocity: 6
+    mMaxAcceleration: 50
+    mMaxJerk: 1000
     DampeningMultiplier: 5
     DragCoeff: 1
     InputBeingApplied: 1

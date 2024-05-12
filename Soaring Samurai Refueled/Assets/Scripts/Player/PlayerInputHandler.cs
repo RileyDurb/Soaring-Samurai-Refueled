@@ -37,7 +37,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (playerController == null)
         {
-            print("PlayerInputHandler:OnMove: Input handler of index " +  input.playerIndex + " tried to move it's player, but player was null");
+            // NOTE: Would want to print the below error message, but since the object is not initialized when this error case occurs, using a print statement triggers an exception
+            //print("PlayerInputHandler:OnMove: Input handler of index " +  input.playerIndex + " tried to move it's player, but player was null");
             return;
         }
         playerController.OnMove(context);
@@ -47,7 +48,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (playerController == null)
         {
-            print("PlayerInputHandler:OnTestAttack: Input handler of index " + input.playerIndex + " tried to do a test attack with it's player, but player was null");
+            // NOTE: Would want to print the below error message, but since the object is not initialized when this error case occurs, using a print statement triggers an exception
+            //print("PlayerInputHandler:OnTestAttack: Input handler of index " + input.playerIndex + " tried to do a test attack with it's player, but player was null");
             return;
         }
         playerController.OnTestAttack(context);
