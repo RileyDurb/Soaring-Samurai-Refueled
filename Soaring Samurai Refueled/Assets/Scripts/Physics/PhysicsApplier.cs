@@ -27,9 +27,9 @@ public class PhysicsApplier : MonoBehaviour
             mParent = parent;
         }
 
-        public T mMaxVelocity;
-        public T mMaxAcceleration;
-        public T mMaxJerk;
+        public float mMaxVelocity;
+        public float mMaxAcceleration;
+        public float mMaxJerk;
         public float DampeningMultiplier = 0.9f;
         public float DragCoeff = 0.3f;
         public bool InputBeingApplied = true;
@@ -133,7 +133,7 @@ public class PhysicsApplier : MonoBehaviour
         public abstract T Subtract(T left, T right);
         public abstract float Abs(T value);
 
-        public abstract T Clamp(T value, T maxMag);
+        public abstract T Clamp(T value, float maxMag);
 
         public abstract void ApplyForce(T acceleration);
 
@@ -215,12 +215,12 @@ public class PhysicsApplier : MonoBehaviour
         {
             return left - right;
         }
-        public override Vector2 Clamp(Vector2 value, Vector2 max)
+        public override Vector2 Clamp(Vector2 value, float maxMag)
         {
             
             //value.x = Mathf.Clamp(value.x, -max.x, max.x);
             //value.y = Mathf.Clamp(value.y, -max.y, max.y);
-            return Vector2.ClampMagnitude(value, max.magnitude);
+            return Vector2.ClampMagnitude(value, maxMag);
         }
         public override float Abs(Vector2 value)
         {
@@ -438,9 +438,9 @@ public class PhysicsApplier : MonoBehaviour
 
             if (tmp != null)
             {
-               tmp.text = "Velocity: " + mDirectionalForces.Velocity + "\n" +
-                          "Acceleration: " + mDirectionalForces.Acceleration + "\n" +
-                          "Jerk: " + mDirectionalForces.Jerk + "\n" +
+               tmp.text = "Velocity: \n" + mDirectionalForces.Velocity + "\n" +
+                          "Acceleration: \n" + mDirectionalForces.Acceleration + "\n" +
+                          "Jerk: \n" + mDirectionalForces.Jerk + "\n" +
                           "Velocity: " + mRotationalForces.Velocity + "\n" +
                           "Acceleration: " + mRotationalForces.Acceleration + "\n" +
                           "Jerk: " + mRotationalForces.Jerk;

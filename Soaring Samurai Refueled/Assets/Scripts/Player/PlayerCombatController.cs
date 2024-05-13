@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,33 +9,36 @@ public class PlayerCombatController : MonoBehaviour
 {
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
-
-
-
+    [SerializeField] Hitbox.AttackDefinition TestAttackInfo = new Hitbox.AttackDefinition();
+    [SerializeField] float KnockbackEqualizationPercent = 1.0f;
+    [SerializeField] float KnockbackDuration = 0.3f;
     // Private variables
-    PlayerControls controls;
-    Vector2 moveInput;
-    
+    Vector2 mMoveInput;
+    ActionList mActionList = new ActionList();
 
-    void Awake()
-    {
-        controls = new PlayerControls();
-
+    [SerializeField]
+    private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
+    public int PlayerIndex
+    { 
+        get { return playerIndex; }
+        set { playerIndex = value; }
     }
+
 
     // Update is called once per frame
     void Update()
     {
+        mActionList.Update(Time.deltaTime);
 
         // Apply movement from current input value
-        Vector2 moveVec = moveInput * MoveJerk;
+        Vector2 moveVec = mMoveInput * MoveJerk;
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
 
         // Applies jerk
         physics.mDirectionalForces.ApplyJerk(moveVec);
 
         // Since things like dampening can be applied differently based in if input is being given, tell the physics the current state
-        if (moveInput == Vector2.zero)
+        if (mMoveInput == Vector2.zero)
         {
             physics.mDirectionalForces.InputBeingApplied = false;
         }
@@ -42,32 +47,53 @@ public class PlayerCombatController : MonoBehaviour
             physics.mDirectionalForces.InputBeingApplied = true;
 
         }
-        //transform.position += new Vector3(moveVec.x, moveVec.y, 0.0f);
     }
 
 
 
     // Action functions
-    void Grow()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        transform.localScale *= 1.6f;
+        switch (context.phase)
+        {
+            case InputActionPhase.Performed:
+                {
+                    mMoveInput = context.ReadValue<Vector2>();
+                }
+                break;
+
+            case InputActionPhase.Canceled:
+                {
+                    mMoveInput = Vector2.zero;
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
-    private void OnEnable()
+    public void OnTestAttack(InputAction.CallbackContext context)
     {
-        controls.Combat.Enable();
+        if (context.phase == InputActionPhase.Started)
+        {
+            GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox"), transform);
+            newHitbox.transform.localScale = new Vector3(transform.lossyScale.x, transform.lossyScale.y, newHitbox.transform.lossyScale.z); // Sets scale equal to the player's
 
-        // Subscribe grow function
-        controls.Combat.Grow.performed += context => Grow();
-
-        // Subscribe movement callbacks
-        controls.Combat.Move.performed += context => moveInput = context.ReadValue<Vector2>();
-        controls.Combat.Move.canceled += context => moveInput = Vector2.zero;
+            newHitbox.GetComponent<Hitbox>().InitAttack(TestAttackInfo);
+        }
 
     }
 
-    private void OnDisable()
+    // Combat related functions
+    public void TakeDamage(Hitbox.AttackData attackData)
     {
-        controls.Combat.Disable();
+        GetComponent<PoolContainer>().GetPool("Health").DecreasePool(attackData.Damage);
+
+        if (SimManager.Instance.DebugMode)
+        {
+            Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
+        }
+        mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, KnockbackEqualizationPercent, KnockbackDuration);
     }
 }
