@@ -730,9 +730,9 @@ class Action_EqualizedKnockback : Action_
         {
             if (mParentObj != null)
             {
-                mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.UnlockMaxForces("EqualizedKnockback");
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
                 // Apply knockback
-                mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ApplyUncappedForce(mKnockbackForce);
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
                 ////mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + mKnockbackForce);
             }
 
@@ -744,7 +744,7 @@ class Action_EqualizedKnockback : Action_
 
         Vector2 currentStepForce = mEquilazationForce * currentStep; // Lerp for the current time step
 
-        mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
+        mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
         //mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + currentStepForce);
 
 
@@ -754,7 +754,7 @@ class Action_EqualizedKnockback : Action_
         // If interpolation is complete
         if (mPercentDone == 1)
         {
-            mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
             return false; // Action done, return false to stop
         }
 

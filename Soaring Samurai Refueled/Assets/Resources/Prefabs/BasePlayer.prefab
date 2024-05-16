@@ -102,12 +102,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveJerk: 300
-  TestAttackInfo:
+  DirectionalSlashAttackStats:
     mDamage: 5
+    mActiveTime: 0.3
     mKnockbackStrength: 30
-    mActiveTime: 1
-  KnockbackEqualizationPercent: 1
-  KnockbackDuration: 0.3
+    mKnockbackEqualizationPercent: 1
+    mKnockbackDuration: 0.3
+  AttackOffsetDistance: 1
   playerIndex: -1
 --- !u!50 &8127609608215675805
 Rigidbody2D:
@@ -152,9 +153,12 @@ MonoBehaviour:
     mMaxVelocity: 6
     mMaxAcceleration: 50
     mMaxJerk: 1000
-    DampeningMultiplier: 5
-    DragCoeff: 1
+    DampeningMultiplier: 3
+    DragCoeff: 3
     InputBeingApplied: 1
+    mDampeningZeroThreshold: 0.1
+    mDampeningType: 0
+    mMaxDampeningTime: 1
   mRotationalForces:
     mMaxVelocity: 0
     mMaxAcceleration: 0
@@ -162,6 +166,9 @@ MonoBehaviour:
     DampeningMultiplier: 0.9
     DragCoeff: 0.3
     InputBeingApplied: 1
+    mDampeningZeroThreshold: 0.1
+    mDampeningType: 0
+    mMaxDampeningTime: 1
     mStaticFrictionThreshold: 0.5
   mDebugDraw: 1
 --- !u!70 &1457328239894749921
@@ -183,10 +190,10 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 439
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 439
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295

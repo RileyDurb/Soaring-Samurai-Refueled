@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6503067614806947238}
   - component: {fileID: 7644529891004468329}
   - component: {fileID: 4009646765507289946}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6487043653448507333}
   - component: {fileID: 5303685344161159027}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StageBoundaries
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 7757142250471885109}
   - component: {fileID: 5671379268272840710}
   - component: {fileID: 8258632159950194124}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 488457381977996096}
   - component: {fileID: 1024109572708594696}
   - component: {fileID: 8447592127660263320}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 3076467289368611670}
   - component: {fileID: 2141511172001918234}
   - component: {fileID: 3191760286738948051}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}

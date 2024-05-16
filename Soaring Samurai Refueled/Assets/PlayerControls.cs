@@ -37,9 +37,36 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""AttackTest"",
+                    ""name"": ""DownLeftSlash"",
                     ""type"": ""Button"",
-                    ""id"": ""6a6ed7cb-7007-4293-aad3-736715ef1221"",
+                    ""id"": ""2082df76-b3d3-44e2-a9c3-a8226d2b6068"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpLeftSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""123304fe-bd68-421f-93cc-da02d49ecfd1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownRightSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b145e31-289f-4aad-89c2-a79451905779"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpRightSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""c4911a38-56e9-48d4-86c6-b404719124c1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -60,12 +87,45 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b002ba96-c771-4f53-bb2f-5a758fa6c68b"",
+                    ""id"": ""bc23d936-375e-400f-a83b-7a91050f33ab"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AttackTest"",
+                    ""action"": ""DownLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""122ac79e-ec6f-4909-a944-e55e288e369a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d3bd95f-ea1e-459b-8326-7b7678fc288f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownRightSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86de84b8-abba-472b-bf5d-f9411e60e976"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpRightSlash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -77,7 +137,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Combat
         m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
         m_Combat_Move = m_Combat.FindAction("Move", throwIfNotFound: true);
-        m_Combat_AttackTest = m_Combat.FindAction("AttackTest", throwIfNotFound: true);
+        m_Combat_DownLeftSlash = m_Combat.FindAction("DownLeftSlash", throwIfNotFound: true);
+        m_Combat_UpLeftSlash = m_Combat.FindAction("UpLeftSlash", throwIfNotFound: true);
+        m_Combat_DownRightSlash = m_Combat.FindAction("DownRightSlash", throwIfNotFound: true);
+        m_Combat_UpRightSlash = m_Combat.FindAction("UpRightSlash", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -140,13 +203,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Combat;
     private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
     private readonly InputAction m_Combat_Move;
-    private readonly InputAction m_Combat_AttackTest;
+    private readonly InputAction m_Combat_DownLeftSlash;
+    private readonly InputAction m_Combat_UpLeftSlash;
+    private readonly InputAction m_Combat_DownRightSlash;
+    private readonly InputAction m_Combat_UpRightSlash;
     public struct CombatActions
     {
         private @PlayerControls m_Wrapper;
         public CombatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Combat_Move;
-        public InputAction @AttackTest => m_Wrapper.m_Combat_AttackTest;
+        public InputAction @DownLeftSlash => m_Wrapper.m_Combat_DownLeftSlash;
+        public InputAction @UpLeftSlash => m_Wrapper.m_Combat_UpLeftSlash;
+        public InputAction @DownRightSlash => m_Wrapper.m_Combat_DownRightSlash;
+        public InputAction @UpRightSlash => m_Wrapper.m_Combat_UpRightSlash;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -159,9 +228,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @AttackTest.started += instance.OnAttackTest;
-            @AttackTest.performed += instance.OnAttackTest;
-            @AttackTest.canceled += instance.OnAttackTest;
+            @DownLeftSlash.started += instance.OnDownLeftSlash;
+            @DownLeftSlash.performed += instance.OnDownLeftSlash;
+            @DownLeftSlash.canceled += instance.OnDownLeftSlash;
+            @UpLeftSlash.started += instance.OnUpLeftSlash;
+            @UpLeftSlash.performed += instance.OnUpLeftSlash;
+            @UpLeftSlash.canceled += instance.OnUpLeftSlash;
+            @DownRightSlash.started += instance.OnDownRightSlash;
+            @DownRightSlash.performed += instance.OnDownRightSlash;
+            @DownRightSlash.canceled += instance.OnDownRightSlash;
+            @UpRightSlash.started += instance.OnUpRightSlash;
+            @UpRightSlash.performed += instance.OnUpRightSlash;
+            @UpRightSlash.canceled += instance.OnUpRightSlash;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -169,9 +247,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @AttackTest.started -= instance.OnAttackTest;
-            @AttackTest.performed -= instance.OnAttackTest;
-            @AttackTest.canceled -= instance.OnAttackTest;
+            @DownLeftSlash.started -= instance.OnDownLeftSlash;
+            @DownLeftSlash.performed -= instance.OnDownLeftSlash;
+            @DownLeftSlash.canceled -= instance.OnDownLeftSlash;
+            @UpLeftSlash.started -= instance.OnUpLeftSlash;
+            @UpLeftSlash.performed -= instance.OnUpLeftSlash;
+            @UpLeftSlash.canceled -= instance.OnUpLeftSlash;
+            @DownRightSlash.started -= instance.OnDownRightSlash;
+            @DownRightSlash.performed -= instance.OnDownRightSlash;
+            @DownRightSlash.canceled -= instance.OnDownRightSlash;
+            @UpRightSlash.started -= instance.OnUpRightSlash;
+            @UpRightSlash.performed -= instance.OnUpRightSlash;
+            @UpRightSlash.canceled -= instance.OnUpRightSlash;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -192,6 +279,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface ICombatActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnAttackTest(InputAction.CallbackContext context);
+        void OnDownLeftSlash(InputAction.CallbackContext context);
+        void OnUpLeftSlash(InputAction.CallbackContext context);
+        void OnDownRightSlash(InputAction.CallbackContext context);
+        void OnUpRightSlash(InputAction.CallbackContext context);
     }
 }

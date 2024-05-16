@@ -44,6 +44,11 @@ public class ActionList
         mActions.Add(newAction);
     }
 
+    public void Clear()
+    {
+        mActions.Clear();
+    }
+
     // Query functions ///////////////////////////////////////////////////////////
     public bool Empty() { return mActions.Count == 0; }
 
