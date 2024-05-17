@@ -105,9 +105,9 @@ MonoBehaviour:
   DirectionalSlashAttackStats:
     mDamage: 5
     mActiveTime: 0.3
-    mKnockbackStrength: 30
-    mKnockbackEqualizationPercent: 1
-    mKnockbackDuration: 0.3
+    mKnockbackStrength: 600
+    mKnockbackEqualizationPercent: 0.8
+    mKnockbackDuration: 0.1
   AttackOffsetDistance: 1
   playerIndex: -1
 --- !u!50 &8127609608215675805
@@ -136,7 +136,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &729769518604565035
 MonoBehaviour:
   m_ObjectHideFlags: 0
