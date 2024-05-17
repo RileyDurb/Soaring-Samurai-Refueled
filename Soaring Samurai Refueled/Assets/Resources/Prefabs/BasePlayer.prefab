@@ -159,6 +159,16 @@ MonoBehaviour:
     mDampeningZeroThreshold: 0.1
     mDampeningType: 0
     mMaxDampeningTime: 1
+  mUncappedDirectionalForces:
+    mMaxVelocity: 100
+    mMaxAcceleration: 0
+    mMaxJerk: 0
+    DampeningMultiplier: 3
+    DragCoeff: 3
+    InputBeingApplied: 1
+    mDampeningZeroThreshold: 0.1
+    mDampeningType: 0
+    mMaxDampeningTime: 1
   mRotationalForces:
     mMaxVelocity: 0
     mMaxAcceleration: 0

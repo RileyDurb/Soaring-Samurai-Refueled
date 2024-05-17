@@ -23,8 +23,8 @@ public class PhysicsApplier : MonoBehaviour
     {
         public enum PhysicsApplicationType
         {
-            Overwrite,
-            Add
+            Primary,
+            Additional
         }
         enum DampeningType
         {
@@ -32,7 +32,7 @@ public class PhysicsApplier : MonoBehaviour
             Interpolation
         }
         protected T mGroupTypeZero; // The zero for the generic type used, to make setting values to 0 work with generics
-        public IPhysicsGroup(T groupTypeZero, GameObject parent, PhysicsApplicationType applicationType = PhysicsApplicationType.Overwrite)
+        public IPhysicsGroup(T groupTypeZero, GameObject parent, PhysicsApplicationType applicationType = PhysicsApplicationType.Primary)
         {
             mGroupTypeZero = groupTypeZero;
             mParent = parent;
@@ -57,7 +57,7 @@ public class PhysicsApplier : MonoBehaviour
         [SerializeField] float mMaxDampeningTime = 1.0f; // The time it takes to dampen when at max velocity. Lower velocities will take less time
 
         // Application type
-        PhysicsApplicationType mApplicationType = PhysicsApplicationType.Overwrite;
+        PhysicsApplicationType mApplicationType = PhysicsApplicationType.Primary;
 
         // Handling when velocity is set before initialization
         protected T mPreInitVelocity;
@@ -101,14 +101,7 @@ public class PhysicsApplier : MonoBehaviour
             // Apply new velocity
             if (physics != null)
             {
-                if (mApplicationType == PhysicsApplicationType.Overwrite)
-                {
-                    SetVelocity(currVelocity);
-                }
-                else if (mApplicationType == PhysicsApplicationType.Add)
-                {
-                    SetVelocity(Add(Velocity, currVelocity));
-                }
+                SetVelocity(currVelocity);
             }
 
             mJerk = mGroupTypeZero; // Cancel out jerk, does not carry over to the next frame
@@ -145,7 +138,16 @@ public class PhysicsApplier : MonoBehaviour
                         if (Abs(mAcceleration) <= mDampeningZeroThreshold)
                         {
                             mAcceleration = mGroupTypeZero; // Cancel acceleration
-                            SetVelocity(mGroupTypeZero);
+                            if (mApplicationType == PhysicsApplicationType.Primary) // Main forces
+                            {
+                                // Stop the object completely
+                                SetVelocity(mGroupTypeZero);
+                            }
+                            else // Additional forces are done
+                            {
+                                // Turn back on input bool, so that drag from this force no longer applies
+                                InputBeingApplied = true;
+                            }
                         }
                     }
                     break;
@@ -281,7 +283,7 @@ public class PhysicsApplier : MonoBehaviour
     public class PhysicsVectorGroup : IPhysicsGroup<Vector2>
     {
         //float dragZeroThreshold = 0.05f;
-        public PhysicsVectorGroup(Vector2 zeroVec, GameObject parent = null, PhysicsApplicationType applicationType = PhysicsApplicationType.Overwrite) : base(zeroVec, parent, applicationType)
+        public PhysicsVectorGroup(Vector2 zeroVec, GameObject parent = null, PhysicsApplicationType applicationType = PhysicsApplicationType.Primary) : base(zeroVec, parent, applicationType)
         {
         }
 
@@ -394,7 +396,7 @@ public class PhysicsApplier : MonoBehaviour
     {
         float dragZeroThreshold = 7.0f;
         public float mStaticFrictionThreshold = 0.5f;
-        public PhysicsFloatGroup(float zero, GameObject parent = null, PhysicsApplicationType applicationType = PhysicsApplicationType.Overwrite) : base(zero, parent, applicationType)
+        public PhysicsFloatGroup(float zero, GameObject parent = null, PhysicsApplicationType applicationType = PhysicsApplicationType.Primary) : base(zero, parent, applicationType)
         {
         }
 
@@ -504,7 +506,7 @@ public class PhysicsApplier : MonoBehaviour
     }
 
     public PhysicsVectorGroup mDirectionalForces = new PhysicsVectorGroup(Vector2.zero);
-    public PhysicsVectorGroup mUncappedDirectionalForces = new PhysicsVectorGroup(Vector2.zero, null, IPhysicsGroup<Vector2>.PhysicsApplicationType.Add);
+    public PhysicsVectorGroup mUncappedDirectionalForces = new PhysicsVectorGroup(Vector2.zero, null, IPhysicsGroup<Vector2>.PhysicsApplicationType.Additional);
 
     public PhysicsFloatGroup mRotationalForces = new PhysicsFloatGroup(0.0f);
 
@@ -544,12 +546,19 @@ public class PhysicsApplier : MonoBehaviour
 
         if (mDebugDraw == true)
         {
-            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.GetVelocity().x, mDirectionalForces.GetVelocity().y, 0), Color.green, 0, false);
-            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Acceleration.x, mDirectionalForces.Acceleration.y, 0), Color.red, 0, false);
-            Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Jerk.x, mDirectionalForces.Jerk.y, 0), Color.blue, 0, false);
+
             
             if (name == "Player")
             {
+                // Draw debug lines for each force and derivative
+                Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.GetVelocity().x, mDirectionalForces.GetVelocity().y, 0), Color.green, 0, false);
+                Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Acceleration.x, mDirectionalForces.Acceleration.y, 0), Color.red, 0, false);
+                Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Jerk.x, mDirectionalForces.Jerk.y, 0), Color.blue, 0, false);
+
+                Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.GetVelocity().x, mUncappedDirectionalForces.GetVelocity().y, 0), Color.black, 0, false);
+                Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Acceleration.x, mUncappedDirectionalForces.Acceleration.y, 0), Color.grey, 0, false);
+                Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Jerk.x, mUncappedDirectionalForces.Jerk.y, 0), Color.magenta, 0, false);
+
                 TextMeshProUGUI tmp = GameObject.Find("PhysicsDebugPrinter").GetComponent<TextMeshProUGUI>();
 
                 if (tmp != null)

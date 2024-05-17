@@ -733,6 +733,7 @@ class Action_EqualizedKnockback : Action_
                 mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
                 // Apply knockback
                 mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
                 ////mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + mKnockbackForce);
             }
 
@@ -755,6 +756,7 @@ class Action_EqualizedKnockback : Action_
         if (mPercentDone == 1)
         {
             mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = false;
             return false; // Action done, return false to stop
         }
 
