@@ -77,8 +77,8 @@ public class PhysicsApplier : MonoBehaviour
 
 
 
-        public void Update(float dt)
-        {
+        public int Update(float dt)
+        {            
             Rigidbody2D physics = mParent.GetComponent<Rigidbody2D>();
 
             // Apply jerk for this frame
@@ -95,7 +95,7 @@ public class PhysicsApplier : MonoBehaviour
             }
             T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
 
-            // Always clamp max velocity, weird stuff if we don't
+            // Always allow for clamping clamp max velocity, weird stuff if we don't
             currVelocity = Clamp(currVelocity, mMaxVelocity);
 
             // Apply new velocity
@@ -108,9 +108,10 @@ public class PhysicsApplier : MonoBehaviour
 
             // Dampening for acceleration
 
+            int cancelVelocity = 0;
             if (InputBeingApplied == false) // Only apply if not input was made this frame
             {
-                ApplyDampening(dt);
+                cancelVelocity = ApplyDampening(dt);
             }
             else
             {
@@ -121,9 +122,11 @@ public class PhysicsApplier : MonoBehaviour
             // Saves current input state as the last, for next frame
             mInputAppliedLastFrame = InputBeingApplied;
 
+            return cancelVelocity;
+
         }
 
-        void ApplyDampening(float dt)
+        int ApplyDampening(float dt)
         {
             switch (mDampeningType)
             {
@@ -140,15 +143,18 @@ public class PhysicsApplier : MonoBehaviour
                             mAcceleration = mGroupTypeZero; // Cancel acceleration
                             if (mApplicationType == PhysicsApplicationType.Primary) // Main forces
                             {
-                                // Stop the object completely
-                                SetVelocity(mGroupTypeZero);
+                                //// Stop the object completely
+                                //SetVelocity(mGroupTypeZero);
+                                return 1; // Return should cancel
                             }
                             else // Additional forces are done
                             {
                                 // Turn back on input bool, so that drag from this force no longer applies
                                 InputBeingApplied = true;
+                                return 1; // Return should cancel
                             }
                         }
+                        return 0; // Return don't cancel
                     }
                     break;
 
@@ -161,9 +167,12 @@ public class PhysicsApplier : MonoBehaviour
                         {
                             mParent.GetComponent<PhysicsApplier>().mActionList.AddAction(new Action_DampenDirectional(mParent, 0.0f, mMaxDampeningTime * (Abs(Velocity) / mMaxVelocity)));
                         }
+                        return 0;
                     }
                     break;
             }
+
+            return 0;
         }
 
         void HandleDampeningInputChange()
@@ -188,6 +197,7 @@ public class PhysicsApplier : MonoBehaviour
         public abstract T Scale(T baseValue, float scaleValue);
         public abstract T Subtract(T left, T right);
         public abstract float Abs(T value);
+        public abstract float Mag(T value);
 
         public abstract T Clamp(T value, float maxMag);
 
@@ -318,6 +328,11 @@ public class PhysicsApplier : MonoBehaviour
             return Mathf.Abs(value.magnitude);
         }
 
+        public override float Mag(Vector2 value)
+        {
+            return value.magnitude;
+        }
+
         public override void SetAccelerationDampening(float magnitude)
         {
             mAcceleration = mAcceleration.normalized * magnitude;
@@ -426,6 +441,11 @@ public class PhysicsApplier : MonoBehaviour
         }
 
         public override float Abs(float value)
+        {
+            return Mathf.Abs(value);
+        }
+
+        public override float Mag(float value)
         {
             return Mathf.Abs(value);
         }
@@ -575,13 +595,20 @@ public class PhysicsApplier : MonoBehaviour
 
 
         mDirectionalForces.ApplyDrag();
+
+        // Handle uncapped forces first, to give the opportunity to overwrite max velocity
         
-        mDirectionalForces.Update(Time.deltaTime);
+        int cancelVelocity = mUncappedDirectionalForces.Update(Time.deltaTime);
 
 
-        mUncappedDirectionalForces.ApplyDrag();
+        // Then handle normal capped forces
+        cancelVelocity += mDirectionalForces.Update(Time.deltaTime);
 
-        mUncappedDirectionalForces.Update(Time.deltaTime);
+        if (cancelVelocity >= 2)
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+
 
 
         if (mRotationalForces.InputBeingApplied == false) // Only apply when input is not applied
@@ -619,6 +646,10 @@ public class PhysicsApplier : MonoBehaviour
         mDebugDraw = physics.mDebugDraw;
     }
 }
+
+
+
+
 
 // Dampening action
 class Action_DampenDirectional : Action_
@@ -678,218 +709,3 @@ class Action_DampenDirectional : Action_
         return true; // Action not done, return true to continue
     }
 }
-
-//[System.Serializable]
-//public class PhysicsVectorGroup
-//{
-
-//    public PhysicsVectorGroup()
-//    {
-//    }
-
-//    public Vector2 mMaxVelocity = new Vector2(1, 1);
-//    public Vector2 mMaxAcceleration = new Vector2(1, 1);
-//    public Vector2 mMaxJerk = new Vector2(1, 1);
-//    public float DragMultiplier = 0.9f;
-//    public float DragCoeff = 0.3f;
-
-//    Vector2 mVelocity = new Vector2(0, 0);
-//    public Vector2 Velocity
-//    {
-//        get { return mVelocity; }
-//    }
-//    Vector2 mAcceleration = new Vector2(0, 0);
-//    public Vector2 Acceleration
-//    {
-//        get { return mAcceleration; }
-//    }
-//    Vector2 mJerk = new Vector2(0, 0);
-//    public Vector2 Jerk
-//    {
-//        get { return mJerk; }
-//        set
-//        {
-//            mJerk = Vector2.ClampMagnitude(value, mMaxJerk.magnitude);
-//        }
-//    }
-
-//    public void Update(float dt, GameObject parent)
-//    {
-//        // Applies acceleration over the current frame
-//        mAcceleration += mJerk * Time.deltaTime;
-//        // Apply drag
-//        float drag = DragCoeff * parent.GetComponent<Rigidbody2D>().mass * mVelocity.magnitude * mVelocity.magnitude * Time.deltaTime;
-//        Vector2 dragVec = mVelocity * -1;
-//        dragVec.Normalize();
-//        dragVec *= drag;
-//        mAcceleration += dragVec;
-//        // Clamps to max
-//        mAcceleration.x = Mathf.Clamp(mAcceleration.x, -mMaxAcceleration.x, mMaxAcceleration.x);
-//        mAcceleration.y = Mathf.Clamp(mAcceleration.y, -mMaxAcceleration.y, mMaxAcceleration.y);
-
-//        mVelocity += mAcceleration * Time.deltaTime;
-//        // Clamps to max
-//        mVelocity.x = Mathf.Clamp(mVelocity.x, -mMaxVelocity.x, mMaxVelocity.x);
-//        mVelocity.y = Mathf.Clamp(mVelocity.y, -mMaxVelocity.y, mMaxVelocity.y);
-
-//        // if at max velocity
-//        if (mVelocity == mMaxVelocity)
-//        {
-//            // Turn off acceleration and jerk
-//            //mAcceleration.x = 0;
-//            //mAcceleration.y = 0;
-
-//            //mJerk.x = 0;
-//            //mJerk.y = 0;
-//        }
-
-//        Rigidbody2D physics = parent.GetComponent<Rigidbody2D>();
-
-
-//        if (physics != null)
-//        {
-//            physics.velocity = mVelocity;
-//        }
-
-//        mJerk = Vector2.zero; // Clear out jerk, as forces have been applied this frame
-
-//        // Old drag using just the multiplier
-//        //mVelocity = mVelocity + (Vector2.zero - mVelocity) * DragMultiplier * Time.deltaTime;
-//        //mAcceleration = mAcceleration + (Vector2.zero - mAcceleration) * DragMultiplier * Time.deltaTime;
-//        //mJerk = mJerk + (Vector2.zero - mJerk) * DragMultiplier * Time.deltaTime;
-
-//        //mVelocity = mVelocity + (Vector2.zero - mVelocity) * DragMultiplier * Time.deltaTime;
-//        //mAcceleration = mAcceleration + (Vector2.zero - mAcceleration) * DragMultiplier * Time.deltaTime;
-
-//        // Notes:
-//        /* Using mass instead of volume, so we don't care about how big an object looks
-//         * 
-//         */
-//        //mVelocity += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mVelocity * mVelocity) / 2)) * Time.deltaTime;
-//        //mAcceleration += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mAcceleration * mAcceleration) / 2)) * Time.deltaTime;
-//        //mJerk += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mJerk * mJerk) / 2)) * Time.deltaTime;
-
-//    }
-
-//    public void DirectionChangeForceModify()
-//    {
-//        mAcceleration.x = 0;
-//        mAcceleration.y = 0;
-//        mJerk.x = 0;
-//        mJerk.y = 0;
-//    }
-
-//    public void ClearAllForces()
-//    {
-//        mVelocity.x = 0;
-//        mVelocity.y = 0;
-//        mAcceleration.x = 0;
-//        mAcceleration.y = 0;
-//        mJerk.x = 0;
-//        mJerk.y = 0;
-//    }
-
-//    public void ApplyForce(Vector2 jerk)
-//    {
-//        mJerk += jerk;
-//    }
-//    //public bool IsAccelerating()
-//    //{
-//    //    return mAcceleration
-//    //}
-//}
-
-//[System.Serializable]
-//public class PhysicsFloatGroup
-//{
-
-//    public PhysicsFloatGroup()
-//    {
-//    }
-
-
-//    public float mMaxVelocity = 1;
-//    public float mMaxAcceleration = 1;
-//    public float mMaxJerk = 1;
-//    public float DragMultiplier = 0.9f;
-//    public float DragCoeff = 0.3f;
-
-//    float mVelocity = 0;
-//    public float Velocity
-//    {
-//        get { return mVelocity; }
-//    }
-//    float mAcceleration = 0;
-//    public float Acceleration
-//    {
-//        get { return mAcceleration; }
-//    }
-//    float mJerk = 0;
-//    public float Jerk
-//    {
-//        get { return mJerk; }
-//        set { mJerk = Mathf.Clamp(value, -mMaxJerk, mMaxJerk); }
-//    }
-
-//    public void Update(float dt, GameObject parent)
-//    {
-//        // Applies acceleration over the current frame
-//        mAcceleration += mJerk * Time.deltaTime;
-//        // Apply drag
-//        float drag = DragCoeff * parent.GetComponent<Rigidbody2D>().mass * (mVelocity * mVelocity / 2) * Time.deltaTime;
-//        mAcceleration += mAcceleration > 0 ? -1 : 1 * drag;
-//        // Clamps to max
-//        mAcceleration = Mathf.Clamp(mAcceleration, -mMaxAcceleration, mMaxAcceleration);
-
-//        mVelocity += mAcceleration * Time.deltaTime;
-//        // Clamps to max
-//        mVelocity = Mathf.Clamp(mVelocity, -mMaxVelocity, mMaxVelocity);
-
-//        // If at max velocity
-//        if (mVelocity == mMaxVelocity)
-//        {
-//            // turn off acceleration and jerk
-//            //mAcceleration = 0;
-//            //mJerk = 0;
-//        }
-
-//        Rigidbody2D physics = parent.GetComponent<Rigidbody2D>();
-
-
-//        if (physics != null)
-//        {
-//            physics.angularVelocity = mVelocity;
-//        }
-
-//        mJerk = 0.0f; // Clear out jerk, as forces have been applied this frame
-//                      //mVelocity = mVelocity + (0 - mVelocity) * DragMultiplier * Time.deltaTime;
-//                      //mAcceleration = mAcceleration + (0 - mAcceleration) * DragMultiplier * Time.deltaTime;
-//                      //mJerk = mJerk + (0 - mJerk) * DragMultiplier * Time.deltaTime;
-
-//        //mVelocity = mVelocity + (0 - mVelocity) * DragMultiplier * Time.deltaTime;
-//        //mAcceleration = mAcceleration + (0 - mAcceleration) * DragMultiplier * Time.deltaTime;
-//        //mVelocity += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mVelocity * mVelocity) / 2)) * Time.deltaTime;
-//        //mAcceleration += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mAcceleration * mAcceleration) / 2)) * Time.deltaTime;
-//        //mJerk += -(DragCoeff * parent.GetComponent<Rigidbody2D>().mass * ((mJerk * mJerk) / 2)) * Time.deltaTime;
-
-//    }
-
-//    public void DirectionChangeForceModify()
-//    {
-//        mAcceleration = 0;
-//        mJerk = 0;
-//    }
-
-//    public void ClearAllForces()
-//    {
-//        mVelocity = 0;
-//        mAcceleration = 0;
-//        mJerk = 0;
-//    }
-
-//    public void ApplyForce(float jerk)
-//    {
-//        mJerk += jerk;
-//    }
-
-//}

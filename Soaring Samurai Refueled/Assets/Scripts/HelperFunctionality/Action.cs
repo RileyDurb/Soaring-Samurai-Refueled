@@ -734,7 +734,6 @@ class Action_EqualizedKnockback : Action_
                 // Apply knockback
                 mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
                 mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
-                ////mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + mKnockbackForce);
             }
 
             mKnockbackInitted = true;
@@ -746,7 +745,6 @@ class Action_EqualizedKnockback : Action_
         Vector2 currentStepForce = mEquilazationForce * currentStep; // Lerp for the current time step
 
         mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
-        //mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + currentStepForce);
 
 
         mLastPercentDone = mPercentDone; // Save current percent done for next frame
