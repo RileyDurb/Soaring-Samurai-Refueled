@@ -9,12 +9,6 @@ public class PlayerCombatController : MonoBehaviour
 {
     // Class and other Definitions
 
-    enum CombatStates
-    {
-        Ready,
-        SlashAttack
-    }
-
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
     [SerializeField] Hitbox.AttackDefinition DirectionalSlashAttackStats = new Hitbox.AttackDefinition();
@@ -22,31 +16,21 @@ public class PlayerCombatController : MonoBehaviour
     // Private variables
     Vector2 mMoveInput;
     ActionList mActionList = new ActionList();
-    CombatStates mCurrCombatState = CombatStates.Ready;
-    float mCombatStateTransitionTimer = -1.0f; // Initializes to a negative value, which means timer is off
-    CombatStates mNextCombatState = CombatStates.Ready;
 
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
 
+    //private void Start()
+    //{
+    //    GetComponent<StateManager>().AddOnExit("Slash Attack", newStateName => mActionList.AddActionScreenShake(null, 1.0f, 0.2f));
+    //    GetComponent<StateManager>().AddOnExit("Slash Attack", newStateName => mActionList.AddActionScreenShake(null, 1.0f, 0.2f, 5.0f));
+    //}
 
     // Update is called once per frame
     void Update()
     {
         mActionList.Update(Time.deltaTime);
-        
-        // Update State transition timer
-        if (mCombatStateTransitionTimer >= 0.0f) // If timer is on
-        {
-            mCombatStateTransitionTimer -= Time.deltaTime;
-
-            if (mCombatStateTransitionTimer <= 0.0f) // If timer is done
-            {
-                mCurrCombatState = mNextCombatState;
-                mCombatStateTransitionTimer = -1.0f; // Turns timer off
-            }
-        }
 
         // Apply movement from current input value
         Vector2 moveVec = mMoveInput * MoveJerk;
@@ -112,74 +96,60 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDownLeftAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+
+        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
+            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
+            SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
         }
     }
 
     public void OnUpLeftAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
+            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
+            SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
         }
     }
 
 
     public void OnDownRightAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
+            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
+            SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
         }
     }
 
     public void OnUpRightAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
+            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
+            SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
         }
     }
 
