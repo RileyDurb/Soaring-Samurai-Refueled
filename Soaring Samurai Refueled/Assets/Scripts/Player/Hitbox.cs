@@ -7,29 +7,43 @@ public class Hitbox : MonoBehaviour
     [System.Serializable]
     public class AttackDefinition
     {
+        [Header("Main Effectiveness")]
         [SerializeField] float mDamage = 0.0f;
-        [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mActiveTime = 1.0f;
+        [Header("Knockback")]
+        [SerializeField] float mKnockbackStrength = 0.0f;
+        [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
+        [SerializeField] float mKnockbackDuration = 0.3f;
 
+        // Getters
         public float Damage { get { return mDamage; } }
         public float KnockbackStrength { get { return mKnockbackStrength; } }
         public float ActiveTime { get { return mActiveTime; } }
+        public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
+        public float KnockbackDuration { get { return mKnockbackDuration; } }
     }
 
     [System.Serializable]
     public class AttackData
     {
-        public AttackData(float damage, Vector2 knockbackVec) 
+        public AttackData(float damage, Vector2 knockbackVec, float knockbackEqualizationPercent, float knockbackDuration) 
         {
             mDamage = damage;
             mKnockbackVec = knockbackVec;
+            mKnockbackEqualizationPercent = knockbackEqualizationPercent;
+            mKnockbackDuration = knockbackDuration;
         }
 
         float mDamage = 0.0f;
         Vector2 mKnockbackVec = Vector2.zero;
+        float mKnockbackEqualizationPercent = 1.0f;
+        float mKnockbackDuration = 0.3f;
 
+        // Getters
         public float Damage { get { return mDamage; } }
         public Vector2 Knockback { get { return mKnockbackVec; } }
+        public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
+        public float KnockbackDuration { get { return mKnockbackDuration; } }
     }
 
     // Editor accessible variables
@@ -93,7 +107,7 @@ public class Hitbox : MonoBehaviour
 
 
             // Sends attack
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackData(mAttackInfo.Damage, knockbackVec));
+            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackData(mAttackInfo.Damage, knockbackVec, mAttackInfo.KnockbackEqualizationPercent, mAttackInfo.KnockbackDuration));
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;

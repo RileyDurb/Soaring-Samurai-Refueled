@@ -6,6 +6,11 @@ using System;
 
 public class SimManager : MonoBehaviour
 {
+    // Editor Accessible variables ////////////////////////////////////////////////////////////////////////
+    public float TestSlapStrength = 30.0f;
+    public float TestKnockbackEqualizationPercent = 1.0f;
+    public float TestKnockbackDuration = 0.3f;
+
     // Events /////////////////////////////////////////////////////////////////////////////////////////////
     public Action GameEnd;
 
@@ -14,7 +19,11 @@ public class SimManager : MonoBehaviour
 
     // Private Variables //////////////////////////////////////////////////////////////////////////////////
     Dictionary<string, GameObject> mPrefabs = new Dictionary<string, GameObject>();
+
+    // Debug related
     bool mDebugMode = false;
+    bool mAllowDebug = true;
+    Vector2 mTestSlapDirection = Vector2.left;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +39,24 @@ public class SimManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // DEBUG KEY: Toggle debug mode
         if (Input.GetKeyUp(KeyCode.D))
         {
             DebugMode = !mDebugMode;
+        }
+
+        if (mAllowDebug == true)
+        {
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                GameObject player = GameObject.Find("Player");
+                if (player != null)
+                {
+                    player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackData(0.0f, mTestSlapDirection * TestSlapStrength, 
+                                                                             TestKnockbackEqualizationPercent, TestKnockbackDuration));
+                    mTestSlapDirection *= -1;
+                }
+            }
         }
     }
 

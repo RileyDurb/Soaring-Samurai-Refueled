@@ -33,6 +33,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
     }
 
+    // Input actions //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Movement
     public void OnMove(InputAction.CallbackContext context)
     {
         if (playerController == null)
@@ -44,14 +46,40 @@ public class PlayerInputHandler : MonoBehaviour
         playerController.OnMove(context);
     }
 
-    public void OnTestAttack(InputAction.CallbackContext context)
+    // Attacks
+    public void OnDownLeftAttack(InputAction.CallbackContext context)
     {
         if (playerController == null)
         {
-            // NOTE: Would want to print the below error message, but since the object is not initialized when this error case occurs, using a print statement triggers an exception
-            //print("PlayerInputHandler:OnTestAttack: Input handler of index " + input.playerIndex + " tried to do a test attack with it's player, but player was null");
             return;
         }
-        playerController.OnTestAttack(context);
+        playerController.OnDownLeftAttack(context);
+    }
+
+    public void OnUpLeftAttack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnUpLeftAttack(context);
+    }
+
+    public void OnDownRightAttack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnDownRightAttack(context);
+    }
+
+    public void OnUpRightAttack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnUpRightAttack(context);
     }
 }

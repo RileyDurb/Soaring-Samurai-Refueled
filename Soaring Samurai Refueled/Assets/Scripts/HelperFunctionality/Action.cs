@@ -730,10 +730,10 @@ class Action_EqualizedKnockback : Action_
         {
             if (mParentObj != null)
             {
-                mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.UnlockMaxForces("EqualizedKnockback");
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
                 // Apply knockback
-                mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ApplyUncappedForce(mKnockbackForce);
-                ////mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + mKnockbackForce);
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
+                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
             }
 
             mKnockbackInitted = true;
@@ -744,8 +744,7 @@ class Action_EqualizedKnockback : Action_
 
         Vector2 currentStepForce = mEquilazationForce * currentStep; // Lerp for the current time step
 
-        mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
-        //mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.SetStartingVelocity(mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.Velocity + currentStepForce);
+        mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
 
 
         mLastPercentDone = mPercentDone; // Save current percent done for next frame
@@ -754,7 +753,8 @@ class Action_EqualizedKnockback : Action_
         // If interpolation is complete
         if (mPercentDone == 1)
         {
-            mParentObj.GetComponent<PhysicsApplier>().mDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = false;
             return false; // Action done, return false to stop
         }
 

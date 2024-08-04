@@ -234,6 +234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab24e39e36222144afb6bb20013bbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TestSlapStrength: 500
+  TestKnockbackEqualizationPercent: 0.8
+  TestKnockbackDuration: 0.1
 --- !u!4 &584672405
 Transform:
   m_ObjectHideFlags: 0
