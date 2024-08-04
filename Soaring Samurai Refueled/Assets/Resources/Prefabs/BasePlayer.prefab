@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 729769518604565035}
   - component: {fileID: 1457328239894749921}
   - component: {fileID: -4621455244979845033}
+  - component: {fileID: -2039837495546538420}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -235,3 +236,23 @@ MonoBehaviour:
     RegenDelay: 0
     PoolCurr: 0
     CriticalThresholdPercent: 0
+--- !u!114 &-2039837495546538420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e31be69ba14b24649a15c639b0e13fd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mStateList:
+  - mName: Ready
+    mStatesCancellableInto:
+    - Slash Attack
+  - mName: Slash Attack
+    mStatesCancellableInto:
+    - Ready
+  mStartingState: Ready
