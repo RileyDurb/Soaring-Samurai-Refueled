@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,13 +16,21 @@ public class PlayerCombatController : MonoBehaviour
         SlashAttack
     }
 
+    enum FacingDirection
+    { 
+        Left,
+        Right
+    }
+
+
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
     [SerializeField] Hitbox.AttackDefinition DirectionalSlashAttackStats = new Hitbox.AttackDefinition();
-    [SerializeField] float AttackOffsetDistance = .7f;
+    [SerializeField] float AttackOffsetDistance = 0.7f;
+    public ActionList mActionList = new ActionList();
     // Private variables
     Vector2 mMoveInput;
-    ActionList mActionList = new ActionList();
+
     CombatStates mCurrCombatState = CombatStates.Ready;
     float mCombatStateTransitionTimer = -1.0f; // Initializes to a negative value, which means timer is off
     CombatStates mNextCombatState = CombatStates.Ready;
@@ -30,6 +39,25 @@ public class PlayerCombatController : MonoBehaviour
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
 
+    AnimationController mAnimationController;
+
+    PlayerCombatController mOpponentRef;
+
+    void Start()
+    {
+        // Set component references
+        mAnimationController = GetComponent<AnimationController>();
+
+        // gets reference to the opponent
+        PlayerCombatController[] mPlayers = GameObject.FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
+        foreach (PlayerCombatController player in mPlayers )
+        {
+            if (player != this)
+            {
+                mOpponentRef = player;
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -44,10 +72,29 @@ public class PlayerCombatController : MonoBehaviour
             if (mCombatStateTransitionTimer <= 0.0f) // If timer is done
             {
                 mCurrCombatState = mNextCombatState;
+
+                if (mCurrCombatState == CombatStates.Ready)
+                {
+                    // Return to idle animation
+                    mAnimationController.SetAnimationState("Player_Idle");
+                }
                 mCombatStateTransitionTimer = -1.0f; // Turns timer off
             }
         }
 
+        // Face opponent while idling
+        if (mCurrCombatState == CombatStates.Ready)
+        {
+            if (mOpponentRef.transform.position.x < transform.position.x)
+            {
+                SetFacingDirection(FacingDirection.Left);
+            }
+            else
+            {
+                SetFacingDirection(FacingDirection.Right);
+
+            }
+        }
         // Apply movement from current input value
         Vector2 moveVec = mMoveInput * MoveJerk;
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
@@ -119,6 +166,12 @@ public class PlayerCombatController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facting direction
+            SetFacingDirection(FacingDirection.Left);
+
+            mAnimationController.SetAnimationState("Player_DRNormalAttack");
+
             // Turns to slash state
             mCurrCombatState = CombatStates.SlashAttack;
 
@@ -137,12 +190,22 @@ public class PlayerCombatController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Left);
+
+            mAnimationController.SetAnimationState("Player_URNormalAttack");
+
             // Turns to slash state
             mCurrCombatState = CombatStates.SlashAttack;
 
             // Sets up timer for when player can attack again
             mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
             mNextCombatState = CombatStates.Ready;
+
+
+
         }
     }
 
@@ -156,6 +219,13 @@ public class PlayerCombatController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Right);
+
+            mAnimationController.SetAnimationState("Player_DRNormalAttack");
+
             // Turns to slash state
             mCurrCombatState = CombatStates.SlashAttack;
 
@@ -174,6 +244,12 @@ public class PlayerCombatController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Right);
+
+            mAnimationController.SetAnimationState("Player_URNormalAttack");
             // Turns to slash state
             mCurrCombatState = CombatStates.SlashAttack;
 
@@ -205,4 +281,17 @@ public class PlayerCombatController : MonoBehaviour
         newHitbox.transform.localPosition = new Vector3(offsetFromPlayer.x, offsetFromPlayer.y, newHitbox.transform.localPosition.z); // Sets position to the given offset
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo);
     }
+
+    void SetFacingDirection(FacingDirection newDirection)
+    {
+        if (newDirection == FacingDirection.Left)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
 }
+
