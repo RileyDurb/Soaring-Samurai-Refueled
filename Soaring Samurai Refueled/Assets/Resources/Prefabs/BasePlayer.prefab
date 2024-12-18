@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 729769518604565035}
   - component: {fileID: 1457328239894749921}
   - component: {fileID: -4621455244979845033}
-  - component: {fileID: -4791883806590359902}
-  - component: {fileID: 300497040161367891}
+  - component: {fileID: 3281120090090558124}
+  - component: {fileID: 3103302829655798344}
+  - component: {fileID: 5589586871410828363}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -237,7 +238,7 @@ MonoBehaviour:
     RegenDelay: 0
     PoolCurr: 0
     CriticalThresholdPercent: 0
---- !u!95 &-4791883806590359902
+--- !u!95 &3281120090090558124
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -258,7 +259,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &300497040161367891
+--- !u!114 &3103302829655798344
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,3 +272,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mAnimator: {fileID: 0}
+--- !u!114 &5589586871410828363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e31be69ba14b24649a15c639b0e13fd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mStateList:
+  - mName: Ready
+    mStatesCancellableInto:
+    - Slash Attack
+  - mName: Slash Attack
+    mStatesCancellableInto:
+    - Ready
+  mStartingState: Ready

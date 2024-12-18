@@ -9,13 +9,6 @@ using UnityEngine.InputSystem;
 public class PlayerCombatController : MonoBehaviour
 {
     // Class and other Definitions
-
-    enum CombatStates
-    {
-        Ready,
-        SlashAttack
-    }
-
     enum FacingDirection
     { 
         Left,
@@ -31,9 +24,6 @@ public class PlayerCombatController : MonoBehaviour
     // Private variables
     Vector2 mMoveInput;
 
-    CombatStates mCurrCombatState = CombatStates.Ready;
-    float mCombatStateTransitionTimer = -1.0f; // Initializes to a negative value, which means timer is off
-    CombatStates mNextCombatState = CombatStates.Ready;
 
 
     [SerializeField]
@@ -43,13 +33,17 @@ public class PlayerCombatController : MonoBehaviour
 
     PlayerCombatController mOpponentRef;
 
+    StateManager mStateManager;
+
     void Start()
     {
         // Set component references
         mAnimationController = GetComponent<AnimationController>();
 
+        mStateManager = GetComponent<StateManager>();
+
         // gets reference to the opponent
-        PlayerCombatController[] mPlayers = GameObject.FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
+        PlayerCombatController[] mPlayers = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
         foreach (PlayerCombatController player in mPlayers )
         {
             if (player != this)
@@ -57,33 +51,18 @@ public class PlayerCombatController : MonoBehaviour
                 mOpponentRef = player;
             }
         }
+
+        // Subscribe state change functions
+        mStateManager.AddOnEnter("Ready", StartIdle);
     }
 
     // Update is called once per frame
     void Update()
     {
         mActionList.Update(Time.deltaTime);
-        
-        // Update State transition timer
-        if (mCombatStateTransitionTimer >= 0.0f) // If timer is on
-        {
-            mCombatStateTransitionTimer -= Time.deltaTime;
-
-            if (mCombatStateTransitionTimer <= 0.0f) // If timer is done
-            {
-                mCurrCombatState = mNextCombatState;
-
-                if (mCurrCombatState == CombatStates.Ready)
-                {
-                    // Return to idle animation
-                    mAnimationController.SetAnimationState("Player_Idle");
-                }
-                mCombatStateTransitionTimer = -1.0f; // Turns timer off
-            }
-        }
 
         // Face opponent while idling
-        if (mCurrCombatState == CombatStates.Ready)
+        if (mStateManager.CurrStateName == "Ready")
         {
             if (mOpponentRef.transform.position.x < transform.position.x)
             {
@@ -159,36 +138,34 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDownLeftAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
+           mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+
             SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
 
             // Set animation and facting direction
             SetFacingDirection(FacingDirection.Left);
 
             mAnimationController.SetAnimationState("Player_DRNormalAttack");
-
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
-
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
         }
     }
 
     public void OnUpLeftAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+
             SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
 
             // Set animation and facing direction
@@ -196,28 +173,20 @@ public class PlayerCombatController : MonoBehaviour
             SetFacingDirection(FacingDirection.Left);
 
             mAnimationController.SetAnimationState("Player_URNormalAttack");
-
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
-
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
-
-
-
         }
     }
 
 
     public void OnDownRightAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+                
             SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
 
             // Set animation and facing direction
@@ -225,24 +194,19 @@ public class PlayerCombatController : MonoBehaviour
             SetFacingDirection(FacingDirection.Right);
 
             mAnimationController.SetAnimationState("Player_DRNormalAttack");
-
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
-
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
         }
     }
 
     public void OnUpRightAttack(InputAction.CallbackContext context)
     {
-        if (mCurrCombatState != CombatStates.Ready)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+
             SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
 
             // Set animation and facing direction
@@ -250,12 +214,6 @@ public class PlayerCombatController : MonoBehaviour
             SetFacingDirection(FacingDirection.Right);
 
             mAnimationController.SetAnimationState("Player_URNormalAttack");
-            // Turns to slash state
-            mCurrCombatState = CombatStates.SlashAttack;
-
-            // Sets up timer for when player can attack again
-            mCombatStateTransitionTimer = DirectionalSlashAttackStats.ActiveTime;
-            mNextCombatState = CombatStates.Ready;
         }
     }
 
@@ -292,6 +250,11 @@ public class PlayerCombatController : MonoBehaviour
         {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
+    }
+
+    void StartIdle(string prevState)
+    {
+        mAnimationController.SetAnimationState("Player_Idle");
     }
 }
 
