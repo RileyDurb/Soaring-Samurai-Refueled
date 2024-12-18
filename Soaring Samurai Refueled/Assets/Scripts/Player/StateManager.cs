@@ -25,8 +25,16 @@ public class StateManager : MonoBehaviour
         // Private Variables ///////////////////////////////////////////////////
     }
 
+    // Public variables
+
+
     public List<State> mStateList;
     public string mStartingState;
+
+    public string CurrStateName
+    {
+        get { return mCurrState.mName; }
+    }
 
     // Private Varianles
     State mCurrState;

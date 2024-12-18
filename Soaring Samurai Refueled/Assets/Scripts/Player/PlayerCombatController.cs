@@ -2,36 +2,78 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerCombatController : MonoBehaviour
 {
     // Class and other Definitions
+    enum FacingDirection
+    { 
+        Left,
+        Right
+    }
+
 
     // Editor Accessible variables
     public float MoveJerk = 5.0f;
     [SerializeField] Hitbox.AttackDefinition DirectionalSlashAttackStats = new Hitbox.AttackDefinition();
-    [SerializeField] float AttackOffsetDistance = .7f;
+    [SerializeField] float AttackOffsetDistance = 0.7f;
+    public ActionList mActionList = new ActionList();
     // Private variables
     Vector2 mMoveInput;
-    ActionList mActionList = new ActionList();
+
 
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
 
-    //private void Start()
-    //{
-    //    GetComponent<StateManager>().AddOnExit("Slash Attack", newStateName => mActionList.AddActionScreenShake(null, 1.0f, 0.2f));
-    //    GetComponent<StateManager>().AddOnExit("Slash Attack", newStateName => mActionList.AddActionScreenShake(null, 1.0f, 0.2f, 5.0f));
-    //}
+    AnimationController mAnimationController;
+
+    PlayerCombatController mOpponentRef;
+
+    StateManager mStateManager;
+
+    void Start()
+    {
+        // Set component references
+        mAnimationController = GetComponent<AnimationController>();
+
+        mStateManager = GetComponent<StateManager>();
+
+        // gets reference to the opponent
+        PlayerCombatController[] mPlayers = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
+        foreach (PlayerCombatController player in mPlayers )
+        {
+            if (player != this)
+            {
+                mOpponentRef = player;
+            }
+        }
+
+        // Subscribe state change functions
+        mStateManager.AddOnEnter("Ready", StartIdle);
+    }
 
     // Update is called once per frame
     void Update()
     {
         mActionList.Update(Time.deltaTime);
 
+        // Face opponent while idling
+        if (mStateManager.CurrStateName == "Ready")
+        {
+            if (mOpponentRef.transform.position.x < transform.position.x)
+            {
+                SetFacingDirection(FacingDirection.Left);
+            }
+            else
+            {
+                SetFacingDirection(FacingDirection.Right);
+
+            }
+        }
         // Apply movement from current input value
         Vector2 moveVec = mMoveInput * MoveJerk;
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
@@ -97,59 +139,81 @@ public class PlayerCombatController : MonoBehaviour
     public void OnDownLeftAttack(InputAction.CallbackContext context)
     {
 
-        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+           mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facting direction
+            SetFacingDirection(FacingDirection.Left);
+
+            mAnimationController.SetAnimationState("Player_DRNormalAttack");
         }
     }
 
     public void OnUpLeftAttack(InputAction.CallbackContext context)
     {
-        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Left);
+
+            mAnimationController.SetAnimationState("Player_URNormalAttack");
         }
     }
 
 
     public void OnDownRightAttack(InputAction.CallbackContext context)
     {
-        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
-
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+                
             SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
 
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Right);
+
+            mAnimationController.SetAnimationState("Player_DRNormalAttack");
         }
     }
 
     public void OnUpRightAttack(InputAction.CallbackContext context)
     {
-        if (GetComponent<StateManager>().CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
         if (context.phase == InputActionPhase.Started)
         {
-            GetComponent<StateManager>().EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+
+            // Set animation and facing direction
+
+            SetFacingDirection(FacingDirection.Right);
+
+            mAnimationController.SetAnimationState("Player_URNormalAttack");
         }
     }
 
@@ -175,4 +239,22 @@ public class PlayerCombatController : MonoBehaviour
         newHitbox.transform.localPosition = new Vector3(offsetFromPlayer.x, offsetFromPlayer.y, newHitbox.transform.localPosition.z); // Sets position to the given offset
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo);
     }
+
+    void SetFacingDirection(FacingDirection newDirection)
+    {
+        if (newDirection == FacingDirection.Left)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
+
+    void StartIdle(string prevState)
+    {
+        mAnimationController.SetAnimationState("Player_Idle");
+    }
 }
+

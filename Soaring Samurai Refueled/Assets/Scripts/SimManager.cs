@@ -54,6 +54,11 @@ public class SimManager : MonoBehaviour
                 {
                     player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackData(0.0f, mTestSlapDirection * TestSlapStrength, 
                                                                              TestKnockbackEqualizationPercent, TestKnockbackDuration));
+                    PlayerCombatController combatCont = player.GetComponent<PlayerCombatController>();
+                    Vector2 currScale = player.transform.localScale;
+                    combatCont.mActionList.AddActionScale(player, new Vector2(currScale.x, currScale.y * 1.2f), .1f);
+                    combatCont.mActionList.AddActionScale(player, new Vector2(currScale.x, currScale.y), .1f, .1f);
+
                     mTestSlapDirection *= -1;
                 }
             }
