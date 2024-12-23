@@ -71,6 +71,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""d07e46c7-ee7e-4515-9bba-0e4f8a7d5b69"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DashAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0753e57c-2fc5-4ce2-9f22-145b761a931f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -128,6 +146,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""UpRightSlash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e582338d-2c29-40d3-8b47-b44a05609edf"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""113130be-fa12-42b5-bd93-a8794f3856f0"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -141,6 +181,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Combat_UpLeftSlash = m_Combat.FindAction("UpLeftSlash", throwIfNotFound: true);
         m_Combat_DownRightSlash = m_Combat.FindAction("DownRightSlash", throwIfNotFound: true);
         m_Combat_UpRightSlash = m_Combat.FindAction("UpRightSlash", throwIfNotFound: true);
+        m_Combat_Dash = m_Combat.FindAction("Dash", throwIfNotFound: true);
+        m_Combat_DashAttack = m_Combat.FindAction("DashAttack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +249,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_UpLeftSlash;
     private readonly InputAction m_Combat_DownRightSlash;
     private readonly InputAction m_Combat_UpRightSlash;
+    private readonly InputAction m_Combat_Dash;
+    private readonly InputAction m_Combat_DashAttack;
     public struct CombatActions
     {
         private @PlayerControls m_Wrapper;
@@ -216,6 +260,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @UpLeftSlash => m_Wrapper.m_Combat_UpLeftSlash;
         public InputAction @DownRightSlash => m_Wrapper.m_Combat_DownRightSlash;
         public InputAction @UpRightSlash => m_Wrapper.m_Combat_UpRightSlash;
+        public InputAction @Dash => m_Wrapper.m_Combat_Dash;
+        public InputAction @DashAttack => m_Wrapper.m_Combat_DashAttack;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -240,6 +286,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UpRightSlash.started += instance.OnUpRightSlash;
             @UpRightSlash.performed += instance.OnUpRightSlash;
             @UpRightSlash.canceled += instance.OnUpRightSlash;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
+            @DashAttack.started += instance.OnDashAttack;
+            @DashAttack.performed += instance.OnDashAttack;
+            @DashAttack.canceled += instance.OnDashAttack;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -259,6 +311,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UpRightSlash.started -= instance.OnUpRightSlash;
             @UpRightSlash.performed -= instance.OnUpRightSlash;
             @UpRightSlash.canceled -= instance.OnUpRightSlash;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
+            @DashAttack.started -= instance.OnDashAttack;
+            @DashAttack.performed -= instance.OnDashAttack;
+            @DashAttack.canceled -= instance.OnDashAttack;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -283,5 +341,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnUpLeftSlash(InputAction.CallbackContext context);
         void OnDownRightSlash(InputAction.CallbackContext context);
         void OnUpRightSlash(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
+        void OnDashAttack(InputAction.CallbackContext context);
     }
 }
