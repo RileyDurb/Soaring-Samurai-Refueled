@@ -105,6 +105,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveJerk: 300
+  DashingJerk: 1000
+  DashDuration: 0.3
+  DashAttackStats:
+    mDamage: 20
+    mActiveTime: 0.7
+    mKnockbackStrength: 0
+    mKnockbackEqualizationPercent: 1
+    mKnockbackDuration: 0.3
+  DashAttackChargeTime: 1
+  DashAttackRecoveryTime: 0.5
+  DashAttackJerk: 1200
   DirectionalSlashAttackStats:
     mDamage: 5
     mActiveTime: 0.3
@@ -112,6 +123,10 @@ MonoBehaviour:
     mKnockbackEqualizationPercent: 0.8
     mKnockbackDuration: 0.1
   AttackOffsetDistance: 1
+  mActionAesthetics:
+    DashStretchMin: 0.8
+    DashStretchMax: 1.6
+    DashStrechEasing: 0
   playerIndex: -1
 --- !u!50 &8127609608215675805
 Rigidbody2D:
@@ -166,8 +181,8 @@ MonoBehaviour:
     mMaxVelocity: 100
     mMaxAcceleration: 0
     mMaxJerk: 0
-    DampeningMultiplier: 3
-    DragCoeff: 3
+    DampeningMultiplier: 6
+    DragCoeff: 6
     InputBeingApplied: 1
     mDampeningZeroThreshold: 0.1
     mDampeningType: 0
@@ -288,7 +303,17 @@ MonoBehaviour:
   - mName: Ready
     mStatesCancellableInto:
     - Slash Attack
+    - Dash
+    - Dash Attack
   - mName: Slash Attack
+    mStatesCancellableInto:
+    - Ready
+    - Dash
+  - mName: Dash
+    mStatesCancellableInto:
+    - Ready
+    - Slash Attack
+  - mName: Dash Attack
     mStatesCancellableInto:
     - Ready
   mStartingState: Ready

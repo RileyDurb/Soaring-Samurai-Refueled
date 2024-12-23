@@ -1,22 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class StateManager : MonoBehaviour
+public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
 {
+
     [System.Serializable]
     public class State
     {
         // Public Definitions ////////////////////////////////////////////////////
-        public delegate void OnStateEnterCallback(string previousState);
-        public delegate void OnStateExitCallback(string nextState);
+        public delegate void OnStateEnterCallback(T previousState);
+        public delegate void OnStateExitCallback(T nextState);
 
         // Editor Accessible variables ///////////////////////////////////////////
         // State definition
-        public string mName;
-        public List<string> mStatesCancellableInto = new List<string>();
+        public T mName;
+        public List<T> mStatesCancellableInto = new List<T>();
 
         // Events
         public OnStateEnterCallback mOnStateEnterEvent;
@@ -29,9 +31,11 @@ public class StateManager : MonoBehaviour
 
 
     public List<State> mStateList;
-    public string mStartingState;
+    public T mStartingState;
 
-    public string CurrStateName
+    T mEnumTypeZero;
+
+    public T CurrStateName
     {
         get { return mCurrState.mName; }
     }
@@ -39,13 +43,13 @@ public class StateManager : MonoBehaviour
     // Private Varianles
     State mCurrState;
     float mCurrStateTimer = -1;
-    string mDoneStateName;
+    T mDoneStateName;
 
     // Start is called before the first frame update
     void Start()
     {
         // Set Starting state
-        if (mStartingState != null)
+        if (mStartingState.CompareTo(mEnumTypeZero) != 0) // if starting state not blank
         {
             mCurrState = GetState(mStartingState);
         }
@@ -75,7 +79,7 @@ public class StateManager : MonoBehaviour
                 if (CanEnterState(mDoneStateName))
                 {
                     // Enter done state
-                    EnterState(mDoneStateName);
+                    EnterState(mDoneStateName, mEnumTypeZero);
                 }
                 else
                 {
@@ -83,21 +87,21 @@ public class StateManager : MonoBehaviour
                 }
 
                 // Reset variables
-                mDoneStateName = "";
+                mDoneStateName = mEnumTypeZero;
                 mCurrStateTimer = -1;
             }
         }
     }
 
     // Interface functions ////////////////////////////////////////////////////////////////////////////////////
-    public bool CanEnterState(string newStateName)
+    public bool CanEnterState(T newStateName)
     {
         return mCurrState.mStatesCancellableInto.Contains(newStateName);
     }
 
     // Enters the give state, if any
     // If given a poisitive time, and done state name, sets a timer that will return to state when elapsed
-    public void EnterState(string newStateName, float stateTime = -1, string doneStateName = "")
+    public void EnterState(T newStateName, T doneStateName, float stateTime = -1 )
     {
         State newState = GetState(newStateName);
 
@@ -111,7 +115,7 @@ public class StateManager : MonoBehaviour
         if (mCurrState.mOnStateExitEvent != null)
             mCurrState.mOnStateExitEvent.Invoke(newStateName);
 
-        string prevStateName = mCurrState.mName; // Save previous name
+        T prevStateName = mCurrState.mName; // Save previous name
         mCurrState = newState;                   // Set new state
 
         if (mCurrState.mOnStateEnterEvent != null)
@@ -119,21 +123,16 @@ public class StateManager : MonoBehaviour
 
 
 
-        // Set state timer, if given a time and state to enter when done
-        if (stateTime > 0 && doneStateName != "")
+        // Set state timer, if given a time
+        if (stateTime > 0)
         {
             mCurrStateTimer = stateTime;
             mDoneStateName = doneStateName;
         }
-        else // cancel entering the done state after this one
-        {
-            mCurrStateTimer = -1.0f;
-            mDoneStateName = "";
-        }
     }
 
     // Getters and setters ///////////////////////////////////////////////////////////////////////////////////
-    public void AddOnEnter(string stateName, State.OnStateEnterCallback callback)
+    public void AddOnEnter(T stateName, State.OnStateEnterCallback callback)
     {
         State targetState = GetState(stateName);
 
@@ -148,7 +147,7 @@ public class StateManager : MonoBehaviour
 
 
 
-    public void AddOnExit(string stateName, State.OnStateExitCallback callback)
+    public void AddOnExit(T stateName, State.OnStateExitCallback callback)
     {
         State targetState = GetState(stateName);
 
@@ -163,7 +162,7 @@ public class StateManager : MonoBehaviour
 
 
     // Helper functions //////////////////////////////////////////////////////////////////////////////////////
-    State GetState(string stateName)
+    State GetState(T stateName)
     {
         if (mStateList.Count == 0)
         {
@@ -171,7 +170,7 @@ public class StateManager : MonoBehaviour
             return null;
         }
 
-        State foundState = mStateList.Find(state => state.mName == stateName);
+        State foundState = mStateList.Find(state => state.mName.CompareTo(stateName) == 0);
 
         if (foundState == null)
         {

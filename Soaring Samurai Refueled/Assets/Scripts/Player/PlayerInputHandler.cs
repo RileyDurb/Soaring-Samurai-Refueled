@@ -82,4 +82,22 @@ public class PlayerInputHandler : MonoBehaviour
         }
         playerController.OnUpRightAttack(context);
     }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnDash(context);
+    }
+
+    public void OnDashAttack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnDashAttack(context);
+    }
 }

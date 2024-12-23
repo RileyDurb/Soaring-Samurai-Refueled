@@ -764,6 +764,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1314307047219442108, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: DashAttackJerk
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314307047219442108, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: DashAttackRecoveryTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314307047219442108, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: DashAttackStats.mActiveTime
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2991329939210656334, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_Color.b
       value: 0.8962264
