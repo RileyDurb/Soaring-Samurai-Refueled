@@ -15,7 +15,8 @@ public abstract class Action_
         EaseInHeavy,
         EaseOutHeavy,
         EaseInShakey,
-        EaseInBounce
+        EaseInBounce,
+        Custom
     }
 
     // Public variables
@@ -27,6 +28,7 @@ public abstract class Action_
     protected float mPercentDone = 0.0f; // 0-1 value representing current progress towards goal (0-1 = 0-100%)
     protected float mDelay = 0.0f;
     protected EasingTypes mEasingType = EasingTypes.None;
+    protected AnimationCurve mCustomEasingCurve;
 
     // Updates time and percent done variables based on given dt
     // Returns whether to keep update the action
@@ -101,6 +103,8 @@ public abstract class Action_
                 const float c3 = c1 + 1;
 
                 return c3 * percentDone * percentDone * percentDone - c1 * percentDone * percentDone;
+            case EasingTypes.Custom:
+                return mCustomEasingCurve.Evaluate(percentDone);
             default:
                 //("Easing: Tried to eas an action, but no valid easing type provided." + " \"" + type.ToString() + "\" " + "Either fix input, or add an easing function for the given type")
                 return percentDone;
@@ -585,7 +589,7 @@ class Action_Scale : Action_
     Vector3 mEndScale;
     bool mScaleInitted = false;
 
-    public Action_Scale(GameObject parent, Vector3 endScale, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None)
+    public Action_Scale(GameObject parent, Vector3 endScale, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None, AnimationCurve customEasingCurve = null)
     {
         mParentObj = parent;
 
@@ -595,6 +599,8 @@ class Action_Scale : Action_
         mDelay = delay;
         
         mEasingType = easingType;
+
+        mCustomEasingCurve = customEasingCurve;
     }
 
     public override bool Update(float dt)

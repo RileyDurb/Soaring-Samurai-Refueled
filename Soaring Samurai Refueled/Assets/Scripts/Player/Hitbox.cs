@@ -7,6 +7,17 @@ public class Hitbox : MonoBehaviour
     [System.Serializable]
     public class AttackDefinition
     {
+        public AttackDefinition() { } // Default Constructor
+        public AttackDefinition(float damage, float activeTime, float knockbackStrength, float knockbackEqualizationPercent, float knockbackDuration) // Testing costructor
+        {
+            mDamage = damage;
+            mActiveTime = activeTime;
+            mKnockbackStrength = knockbackStrength;
+            mKnockbackEqualizationPercent = knockbackEqualizationPercent;
+            mKnockbackDuration = knockbackDuration;
+
+            // Constructor is only meant for use with making hardcoded attacks for testing, and setting of other variables likely isn't needed
+        }
         [Header("Main Effectiveness")]
         [SerializeField] float mDamage = 0.0f;
         [SerializeField] float mActiveTime = 1.0f;
@@ -14,6 +25,9 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
         [SerializeField] float mKnockbackDuration = 0.3f;
+        [Header("VFX")]
+        [SerializeField] bool mUseCustomCurveHitSquish = false;
+        [SerializeField] AnimationCurve mSquishCurve;
 
         // Getters
         public float Damage { get { return mDamage; } }
@@ -21,29 +35,21 @@ public class Hitbox : MonoBehaviour
         public float ActiveTime { get { return mActiveTime; } }
         public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
         public float KnockbackDuration { get { return mKnockbackDuration; } }
+        public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
+        public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
     }
 
     [System.Serializable]
-    public class AttackData
+    public class AttackCurrentData
     {
-        public AttackData(float damage, Vector2 knockbackVec, float knockbackEqualizationPercent, float knockbackDuration) 
+        public AttackCurrentData(Vector2 knockbackVec) 
         {
-            mDamage = damage;
             mKnockbackVec = knockbackVec;
-            mKnockbackEqualizationPercent = knockbackEqualizationPercent;
-            mKnockbackDuration = knockbackDuration;
         }
 
-        float mDamage = 0.0f;
         Vector2 mKnockbackVec = Vector2.zero;
-        float mKnockbackEqualizationPercent = 1.0f;
-        float mKnockbackDuration = 0.3f;
-
         // Getters
-        public float Damage { get { return mDamage; } }
         public Vector2 Knockback { get { return mKnockbackVec; } }
-        public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
-        public float KnockbackDuration { get { return mKnockbackDuration; } }
     }
 
     // Editor accessible variables
@@ -107,7 +113,8 @@ public class Hitbox : MonoBehaviour
 
 
             // Sends attack
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackData(mAttackInfo.Damage, knockbackVec, mAttackInfo.KnockbackEqualizationPercent, mAttackInfo.KnockbackDuration));
+            // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
+            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec), mAttackInfo);
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;

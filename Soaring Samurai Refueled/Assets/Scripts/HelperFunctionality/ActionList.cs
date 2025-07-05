@@ -126,9 +126,9 @@ public class ActionList
     }
 
     // Version that takes a vector 2 scale, and assumes z scale is 1
-    public void AddActionScale(GameObject parent, Vector2 endScale, float duration, float delay = 0.0f, Action_.EasingTypes easingTypes = Action_.EasingTypes.None)
+    public void AddActionScale(GameObject parent, Vector2 endScale, float duration, float delay = 0.0f, Action_.EasingTypes easingTypes = Action_.EasingTypes.None, AnimationCurve customCurve = null)
     {
-        mActions.Add(new Action_Scale(parent, new Vector3(endScale.x, endScale.y, 1), duration, delay, easingTypes));
+        mActions.Add(new Action_Scale(parent, new Vector3(endScale.x, endScale.y, 1), duration, delay, easingTypes, customCurve));
     }
 
     // Forces

@@ -17,6 +17,8 @@ public class SimManager : MonoBehaviour
     // Instance ///////////////////////////////////////////////////////////////////////////////////////////
     public static SimManager Instance;
 
+    public AttackDataObject mDebugSlapStats;
+
     // Private Variables //////////////////////////////////////////////////////////////////////////////////
     Dictionary<string, GameObject> mPrefabs = new Dictionary<string, GameObject>();
 
@@ -52,8 +54,7 @@ public class SimManager : MonoBehaviour
                 GameObject player = GameObject.Find("Player");
                 if (player != null)
                 {
-                    player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackData(0.0f, mTestSlapDirection * TestSlapStrength, 
-                                                                             TestKnockbackEqualizationPercent, TestKnockbackDuration));
+                    player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackCurrentData(mTestSlapDirection * TestSlapStrength), mDebugSlapStats.mStats);
                     PlayerCombatController combatCont = player.GetComponent<PlayerCombatController>();
                     Vector2 currScale = player.transform.localScale;
                     combatCont.mActionList.AddActionScale(player, new Vector2(currScale.x, currScale.y * 1.2f), .1f);
