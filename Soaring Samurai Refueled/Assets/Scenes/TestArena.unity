@@ -237,6 +237,7 @@ MonoBehaviour:
   TestSlapStrength: 500
   TestKnockbackEqualizationPercent: 0.8
   TestKnockbackDuration: 0.1
+  mDebugSlapStats: {fileID: 11400000, guid: f9a22638c09674d4ea58c9bb3fc5b997, type: 2}
 --- !u!4 &584672405
 Transform:
   m_ObjectHideFlags: 0

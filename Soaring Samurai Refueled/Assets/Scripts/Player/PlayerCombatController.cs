@@ -39,12 +39,12 @@ public class PlayerCombatController : MonoBehaviour
     public float MoveJerk = 5.0f;
     public float DashingJerk = 35.0f;
     public float DashDuration = 0.15f;
-    [SerializeField] Hitbox.AttackDefinition DashAttackStats = new Hitbox.AttackDefinition();
+    [SerializeField] AttackDataObject DashAttackStats;
     public float DashAttackChargeTime = 1.0f;
     public float DashAttackRecoveryTime = 1.0f;
     public float DashAttackJerk = 300.0f;
 
-    [SerializeField] Hitbox.AttackDefinition DirectionalSlashAttackStats = new Hitbox.AttackDefinition();
+    [SerializeField] AttackDataObject DirectionalSlashAttackStats;
     [SerializeField] float AttackOffsetDistance = 0.7f;
 
     [Header("Aesthetics")]
@@ -128,10 +128,10 @@ public class PlayerCombatController : MonoBehaviour
                 mAnimationController.SetAnimationState("Player_DashAttackActive"); // Play animation
 
                 // Spawns attack hitbox right around the player
-                SpawnDirectionalAttack(new Vector2(0, 0), DashAttackStats);
+                SpawnDirectionalAttack(new Vector2(0, 0), DashAttackStats.mStats);
 
                 // Set to go into recovery after active time is done
-                mActionList.AddActionCallback(() => StartDashAttackRecovery(), DashAttackStats.ActiveTime);
+                mActionList.AddActionCallback(() => StartDashAttackRecovery(), DashAttackStats.mStats.ActiveTime);
             }
         }
 
@@ -262,9 +262,9 @@ public class PlayerCombatController : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Started)
         {
-           mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+           mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+            SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facting direction
             SetFacingDirection(FacingDirection.Left);
@@ -281,9 +281,9 @@ public class PlayerCombatController : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+            SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 
@@ -302,9 +302,9 @@ public class PlayerCombatController : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
                 
-            SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+            SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 
@@ -322,9 +322,9 @@ public class PlayerCombatController : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats);
+            SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 
@@ -375,17 +375,24 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Combat related functions
-    public void TakeDamage(Hitbox.AttackData attackData)
+    public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
-        GetComponent<PoolContainer>().GetPool("Health").DecreasePool(attackData.Damage);
+        GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
 
         if (SimManager.Instance.DebugMode)
         {
             Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
         }
-        mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, attackData.KnockbackEqualizationPercent, attackData.KnockbackDuration);
+        mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
 
-        mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f);
+        if (baseAttackInfo.UseCustomHitSquishCurve)
+        {
+            mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f, 0.0f, Action_.EasingTypes.Custom, baseAttackInfo.SquishCurve);
+        }
+        else
+        {
+            mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f); // Don't ease, just scale linearly
+        }
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), .1f, .1f);
     }
 

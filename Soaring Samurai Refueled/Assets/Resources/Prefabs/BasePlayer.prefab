@@ -107,21 +107,11 @@ MonoBehaviour:
   MoveJerk: 300
   DashingJerk: 1000
   DashDuration: 0.3
-  DashAttackStats:
-    mDamage: 20
-    mActiveTime: 0.7
-    mKnockbackStrength: 0
-    mKnockbackEqualizationPercent: 1
-    mKnockbackDuration: 0.3
+  DashAttackStats: {fileID: 11400000, guid: 143e24aca0fbaf341958afa5288fb731, type: 2}
   DashAttackChargeTime: 1
   DashAttackRecoveryTime: 0.5
   DashAttackJerk: 1200
-  DirectionalSlashAttackStats:
-    mDamage: 5
-    mActiveTime: 0.3
-    mKnockbackStrength: 600
-    mKnockbackEqualizationPercent: 0.8
-    mKnockbackDuration: 0.1
+  DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   AttackOffsetDistance: 1
   mActionAesthetics:
     DashStretchMin: 0.8
