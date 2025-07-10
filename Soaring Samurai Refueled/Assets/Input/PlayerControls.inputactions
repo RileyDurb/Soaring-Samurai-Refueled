@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "4332c5d9-dc68-423c-8221-2257adf4f57e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -74,6 +74,17 @@
                     "name": "",
                     "id": "2763de8c-e818-42dc-93b9-fb95192bb098",
                     "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc34a965-e2ab-4adb-9a45-806a987dac72",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -6,11 +6,21 @@ using UnityEngine.Rendering;
 
 public class CameraFollow : MonoBehaviour
 {
+    enum FollowMode
+    {
+        SingleTarget,
+        AllPlayers
+    }
+
     // Editor accessible values
     public float CameraSpeed = 1.0f;
+    public Vector3 CurrFollowTarget = new Vector3();
+    public float CurrTargetVelocityMag = 0.0f;
     // Private variables
 
     GameObject mFollowObject;
+    GameObject mFollowObjects;
+    [SerializeField]FollowMode mCurrFollowMode = FollowMode.AllPlayers;
     float mBaseOrthographicSize = 0.0f;
     // Start is called before the first frame update
     void Start()
@@ -30,12 +40,16 @@ public class CameraFollow : MonoBehaviour
                 return;
             }
         }
-        Vector3 targetPos = mFollowObject.transform.position;
-        targetPos = new Vector3(targetPos.x, targetPos.y, transform.position.z);
-        transform.position = transform.position + (targetPos - transform.position) * CameraSpeed * Time.deltaTime;
+
+        // Lerp position closer to target position
+        CurrFollowTarget = mFollowObject.transform.position;
+        CurrFollowTarget = new Vector3(CurrFollowTarget.x, CurrFollowTarget.y, transform.position.z);
+        transform.position = transform.position + (CurrFollowTarget - transform.position) * CameraSpeed * Time.deltaTime;
         //transform.position = targetPos;
 
-        SetZoom(mFollowObject.GetComponent<Rigidbody2D>().velocity.magnitude);
+        // Set the zoom based on the follow target's velocity
+        CurrTargetVelocityMag = mFollowObject.GetComponent<Rigidbody2D>().velocity.magnitude;
+        SetZoom(CurrTargetVelocityMag);
     }
 
 
