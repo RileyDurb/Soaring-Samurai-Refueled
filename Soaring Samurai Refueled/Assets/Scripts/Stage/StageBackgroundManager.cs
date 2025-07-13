@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StageBackgroundManager : MonoBehaviour
 {
+    // NOTE: Not used, previous WIP stuff, probably will use this for the bakground manager, but do differently
     enum BackgroundMode
     {
         StillImage,
