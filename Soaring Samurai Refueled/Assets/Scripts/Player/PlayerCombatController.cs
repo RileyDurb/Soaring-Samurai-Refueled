@@ -23,6 +23,27 @@ public class PlayerCombatController : MonoBehaviour
         Recovery
     }
 
+    enum InputMode
+    { 
+        Player,
+        MirrorOpponent
+    }
+
+    // TODO: make player use a scriptable object with base stats instead of the straight variables
+    [System.Serializable]
+    public class PlayerBaseStats
+    {
+        [Header("Movememt Stats")]
+        public float MoveJerk = 1000.0f;
+        public float DashingJerk = 1000.0f;
+        public float DashDuration = 0.3f;
+
+        [Header("Dash Attack Additional Stats")]
+        public float DashAttackChargeTime = 1.0f;
+        public float DashAttackRecoveryTime = 0.5f;
+        public float DashAttackJerk = 1200;
+    }
+
 
     [System.Serializable]
     public class ActionAesthetics
@@ -45,7 +66,6 @@ public class PlayerCombatController : MonoBehaviour
     public float DashAttackJerk = 300.0f;
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
-    [SerializeField] float AttackOffsetDistance = 0.7f;
 
     [Header("Aesthetics")]
     public ActionAesthetics mActionAesthetics = new ActionAesthetics();
@@ -60,6 +80,10 @@ public class PlayerCombatController : MonoBehaviour
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
+
+    [SerializeField]
+    private InputMode mCurrInputMode = InputMode.Player;
+
 
     // Component references
     AnimationController mAnimationController;
@@ -116,6 +140,14 @@ public class PlayerCombatController : MonoBehaviour
                 SetFacingDirection(FacingDirection.Right);
 
             }
+        }
+
+        // Opponent mirroring debug input mode
+
+        if (mCurrInputMode == InputMode.MirrorOpponent)
+        {
+            Vector2 opponentMoveInput = mOpponentRef.mMoveInput;
+            mMoveInput = opponentMoveInput;
         }
 
         // Dash attack state update
@@ -264,7 +296,7 @@ public class PlayerCombatController : MonoBehaviour
         {
            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facting direction
             SetFacingDirection(FacingDirection.Left);
@@ -283,7 +315,7 @@ public class PlayerCombatController : MonoBehaviour
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 
@@ -304,7 +336,7 @@ public class PlayerCombatController : MonoBehaviour
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
                 
-            SpawnDirectionalAttack(new Vector2(1, -1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 
@@ -324,7 +356,7 @@ public class PlayerCombatController : MonoBehaviour
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(1, 1) * AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
 

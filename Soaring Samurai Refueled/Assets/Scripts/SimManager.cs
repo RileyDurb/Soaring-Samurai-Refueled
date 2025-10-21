@@ -27,6 +27,11 @@ public class SimManager : MonoBehaviour
     bool mAllowDebug = true;
     Vector2 mTestSlapDirection = Vector2.left;
 
+    /* Debug hotkeys
+    // / - debug mode
+    // X - test slap your player with side to side knockback
+    */
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,14 +47,14 @@ public class SimManager : MonoBehaviour
     void Update()
     {
         // DEBUG KEY: Toggle debug mode
-        if (Input.GetKeyUp(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.Slash))
         {
             DebugMode = !mDebugMode;
         }
 
         if (mAllowDebug == true)
         {
-            if (Input.GetKeyUp(KeyCode.S))
+            if (Input.GetKeyUp(KeyCode.X))
             {
                 GameObject player = GameObject.Find("Player");
                 if (player != null)

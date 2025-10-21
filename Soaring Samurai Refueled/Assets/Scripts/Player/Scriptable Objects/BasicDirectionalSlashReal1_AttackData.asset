@@ -15,8 +15,8 @@ MonoBehaviour:
   mStats:
     mDamage: 5
     mActiveTime: 0.3
-    mKnockbackStrength: 600
-    mKnockbackEqualizationPercent: 0.8
+    mKnockbackStrength: 800
+    mKnockbackEqualizationPercent: 0.5
     mKnockbackDuration: 0.1
     mUseCustomCurveHitSquish: 1
     mSquishCurve:

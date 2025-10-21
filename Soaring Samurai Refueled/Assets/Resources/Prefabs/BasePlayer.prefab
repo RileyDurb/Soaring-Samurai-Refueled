@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf51146db063a54ba1cb12f9054c3d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveJerk: 300
+  MoveJerk: 1000
   DashingJerk: 1000
   DashDuration: 0.3
   DashAttackStats: {fileID: 11400000, guid: 143e24aca0fbaf341958afa5288fb731, type: 2}

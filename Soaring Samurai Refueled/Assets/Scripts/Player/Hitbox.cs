@@ -21,6 +21,7 @@ public class Hitbox : MonoBehaviour
         [Header("Main Effectiveness")]
         [SerializeField] float mDamage = 0.0f;
         [SerializeField] float mActiveTime = 1.0f;
+        [SerializeField] float mAttackOffsetDistance = 1.0f;
         [Header("Knockback")]
         [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
@@ -37,6 +38,7 @@ public class Hitbox : MonoBehaviour
         public float KnockbackDuration { get { return mKnockbackDuration; } }
         public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
         public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
+        public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
     }
 
     [System.Serializable]
