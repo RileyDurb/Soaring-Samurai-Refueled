@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hitbox : MonoBehaviour
@@ -22,6 +23,7 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mDamage = 0.0f;
         [SerializeField] float mActiveTime = 1.0f;
         [SerializeField] float mAttackOffsetDistance = 1.0f;
+        [SerializeField] Vector2 mHitboxScaleFromPlayer = new Vector2(1.0f, 1.0f);
         [Header("Knockback")]
         [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
@@ -39,6 +41,7 @@ public class Hitbox : MonoBehaviour
         public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
         public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
         public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
+        public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
     }
 
     [System.Serializable]
@@ -89,7 +92,7 @@ public class Hitbox : MonoBehaviour
 
         // Enables debug draw if in debug mode, disables if not
         // NOTE: Size not accurate at the moment
-        GetComponent<SpriteRenderer>().enabled = SimManager.Instance.DebugMode;
+        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugMode;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

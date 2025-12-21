@@ -15,7 +15,8 @@ MonoBehaviour:
   mStats:
     mDamage: 5
     mActiveTime: 0.3
-    mAttackOffsetDistance: 1
+    mAttackOffsetDistance: 0.6
+    mHitboxScaleFromPlayer: {x: 0.5, y: 0.5}
     mKnockbackStrength: 800
     mKnockbackEqualizationPercent: 0.5
     mKnockbackDuration: 0.1

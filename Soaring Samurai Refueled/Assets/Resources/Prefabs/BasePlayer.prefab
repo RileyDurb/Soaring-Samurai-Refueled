@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 652935351384745842}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.0207, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.47, y: 2.47, z: 2.47}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -112,12 +112,12 @@ MonoBehaviour:
   DashAttackRecoveryTime: 0.5
   DashAttackJerk: 1200
   DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
-  AttackOffsetDistance: 1
   mActionAesthetics:
     DashStretchMin: 0.8
     DashStretchMax: 1.6
     DashStrechEasing: 0
   playerIndex: -1
+  mCurrInputMode: 0
 --- !u!50 &8127609608215675805
 Rigidbody2D:
   serializedVersion: 4
