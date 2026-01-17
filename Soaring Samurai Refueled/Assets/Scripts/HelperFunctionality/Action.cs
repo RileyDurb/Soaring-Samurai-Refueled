@@ -21,6 +21,7 @@ public abstract class Action_
 
     // Public variables
     public bool mBlocking = false;
+    public bool mLooping = false;
 
     // Private variables
     protected float mTime = 0.0f;
@@ -30,12 +31,23 @@ public abstract class Action_
     protected EasingTypes mEasingType = EasingTypes.None;
     protected AnimationCurve mCustomEasingCurve;
 
+    protected float mInitialDelay = 0.0f;
+    bool mInitialDelaySet = false;
+
     // Updates time and percent done variables based on given dt
     // Returns whether to keep update the action
     public virtual bool IncrementTime(float dt)
     {
         if (mDelay >= 0.0f)
         {
+            // Saves initial delay at the beginning, for using when restarting the action, if we do that
+            if (mInitialDelaySet == false)
+            {
+                mInitialDelay = mDelay;
+
+                mInitialDelaySet = true;
+            }
+
             mDelay -= dt;
 
             if (mDelay <= 0.0f)
@@ -69,6 +81,14 @@ public abstract class Action_
 
     // The action's logic, should always be
     public abstract bool Update(float dt);
+
+    public virtual void Restart()
+    {
+        mPercentDone = 0.0f;
+        mTime = 0.0f;
+
+        mDelay = mInitialDelay;
+    }
 
     // Private functions
 
@@ -409,7 +429,7 @@ class Action_Callback : Action_
     BaseCallback mCallback;
     bool mDependsOnObject = false;
 
-    public Action_Callback(GameObject parent, BaseCallback callback, float delay = 0.0f, bool blocking = false)
+    public Action_Callback(GameObject parent, BaseCallback callback, float delay = 0.0f, bool blocking = false, bool looping = false)
     {
         mParentObj = parent;
         if (parent == null)
@@ -426,6 +446,8 @@ class Action_Callback : Action_
         mDelay = delay;
 
         mBlocking = blocking;
+
+        mLooping = looping;
     }
 
     public override bool Update(float dt)

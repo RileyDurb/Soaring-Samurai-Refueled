@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3281120090090558124}
   - component: {fileID: 3103302829655798344}
   - component: {fileID: 5589586871410828363}
+  - component: {fileID: -1883828559541653457}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -307,3 +308,16 @@ MonoBehaviour:
     mStatesCancellableInto:
     - Ready
   mStartingState: Ready
+--- !u!114 &-1883828559541653457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f9f2f495cb10f4ba9da5dce3b7688c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mCurrAIMode: 0

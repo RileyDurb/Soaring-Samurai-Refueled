@@ -6,10 +6,11 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerCombatController : MonoBehaviour
 {
-    // Class and other Definitions
+    // Class and other Definitions ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     enum FacingDirection
     { 
         Left,
@@ -22,12 +23,6 @@ public class PlayerCombatController : MonoBehaviour
         Ready,
         Active,
         Recovery
-    }
-
-    enum InputMode
-    { 
-        Player,
-        MirrorOpponent
     }
 
     // TODO: make player use a scriptable object with base stats instead of the straight variables
@@ -57,7 +52,7 @@ public class PlayerCombatController : MonoBehaviour
 
 
 
-    // Editor Accessible variables
+    // Editor Accessible variables  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public float MoveJerk = 5.0f;
     public float DashingJerk = 35.0f;
     public float DashDuration = 0.15f;
@@ -73,7 +68,16 @@ public class PlayerCombatController : MonoBehaviour
 
     public ActionList mActionList = new ActionList();
 
-    // Private variables
+    // Getters and setters ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public PlayerCombatController OpponentRef { get { return mOpponentRef; } }
+
+    public Vector2 CurrMoveInput
+    {
+        get { return mMoveInput; }
+        set { mMoveInput = value; }
+    }
+
+    // Private variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 mMoveInput;
     Vector2 mLastDirectionalMoveInput;
     Vector2 mOGScale; // Original scale, for using to base squash and stretch off of, so we don't loose it with overlapping actions and become bigger
@@ -81,10 +85,6 @@ public class PlayerCombatController : MonoBehaviour
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
-
-    [SerializeField]
-    private InputMode mCurrInputMode = InputMode.Player;
-
 
     // Component references
     AnimationController mAnimationController;
@@ -143,13 +143,6 @@ public class PlayerCombatController : MonoBehaviour
             }
         }
 
-        // Opponent mirroring debug input mode
-
-        if (mCurrInputMode == InputMode.MirrorOpponent)
-        {
-            Vector2 opponentMoveInput = mOpponentRef.mMoveInput;
-            mMoveInput = opponentMoveInput;
-        }
 
         // Dash attack state update
         if (mStateManager.CurrStateName == "Dash Attack")
@@ -289,13 +282,19 @@ public class PlayerCombatController : MonoBehaviour
     public void OnDownLeftAttack(InputAction.CallbackContext context)
     {
 
+        DownLeftAttackInput(context.phase);
+    }
+
+    // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
+    public void DownLeftAttackInput(InputActionPhase inputPhase)
+    {
         if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
-        if (context.phase == InputActionPhase.Started)
+        if (inputPhase == InputActionPhase.Started)
         {
-           mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
@@ -308,11 +307,16 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnUpLeftAttack(InputAction.CallbackContext context)
     {
+        UpLeftAttackInput(context.phase);   
+    }
+    // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
+    public void UpLeftAttackInput(InputActionPhase inputPhase)
+    {
         if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
-        if (context.phase == InputActionPhase.Started)
+        if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
@@ -329,14 +333,20 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDownRightAttack(InputAction.CallbackContext context)
     {
+        DownRightAttackInput(context.phase);
+    }
+
+    // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
+    public void DownRightAttackInput(InputActionPhase inputPhase)
+    {
         if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
-        if (context.phase == InputActionPhase.Started)
+        if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
-                
+
             SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
@@ -349,11 +359,18 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnUpRightAttack(InputAction.CallbackContext context)
     {
+        UpRightAttackInput(context.phase);
+    }
+
+    // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
+    public void UpRightAttackInput(InputActionPhase inputPhase)
+    {
         if (mStateManager.CanEnterState("Slash Attack") == false)
         {
             return;
         }
-        if (context.phase == InputActionPhase.Started)
+
+        if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
 
@@ -433,7 +450,9 @@ public class PlayerCombatController : MonoBehaviour
     // Helper functions
     void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo)
     {
-        GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox_V2"), transform);
+        GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox_V2"), transform); // Spawn a hitbox
+
+
         newHitbox.transform.localScale = new Vector3(newHitbox.transform.localScale.x * attackInfo.HitboxScale.x, newHitbox.transform.localScale.y * attackInfo.HitboxScale.y, 1.0f); // Sets scale equal to a multiplier of the player's scale
         newHitbox.transform.localPosition += new Vector3(offsetFromPlayer.x, offsetFromPlayer.y); // Adds the given offset
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo);
@@ -452,9 +471,6 @@ public class PlayerCombatController : MonoBehaviour
             GetComponent<SpriteRenderer>().flipX = false;
         }
     }
-
-
-
 
     // State functions
 

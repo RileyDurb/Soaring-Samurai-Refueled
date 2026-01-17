@@ -97,14 +97,14 @@ public class ActionList
     }
 
     // Callback
-    public void AddActionCallback(BaseCallback callbackFunc, float delay = 0.0f, bool blocking = false)
+    public void AddActionCallback(BaseCallback callbackFunc, float delay = 0.0f, bool blocking = false, bool looping = false)
     {
-        mActions.Add(new Action_Callback(null, callbackFunc, delay, blocking));
+        mActions.Add(new Action_Callback(null, callbackFunc, delay, blocking, looping));
 
     }
-    public void AddActionCallback(GameObject parent, BaseCallback callbackFunc, float delay = 0.0f)
+    public void AddActionCallback(GameObject parent, BaseCallback callbackFunc, float delay = 0.0f, bool looping = false)
     {
-        mActions.Add(new Action_Callback(parent, callbackFunc, delay));
+        mActions.Add(new Action_Callback(parent, callbackFunc, delay, looping));
     }
 
     // Fade
@@ -165,6 +165,15 @@ public class ActionList
 
         if (continueAction == false) // if action is done
         {
+            // If looping, restart and return still running
+            if (action.mLooping == true)
+            {
+                action.Restart();
+
+                return true;
+            }
+
+            // Not looping, remove the action
             mActions.RemoveAt(currIndex); // Removes current action
             currIndex--; // Updates index to account for deleted action
 
