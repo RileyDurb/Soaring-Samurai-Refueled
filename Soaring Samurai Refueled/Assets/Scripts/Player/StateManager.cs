@@ -22,6 +22,9 @@ public class StateManager : MonoBehaviour
         public OnStateEnterCallback mOnStateEnterEvent;
         public OnStateExitCallback mOnStateExitEvent;
 
+        // Behaviour Functions //////////////////////////////////////////////
+        public virtual void Update(float dt) { }
+
         // Private Variables ///////////////////////////////////////////////////
     }
 
@@ -85,6 +88,11 @@ public class StateManager : MonoBehaviour
                 // Reset variables
                 mDoneStateName = "";
                 mCurrStateTimer = -1;
+            }
+            else
+            {
+                // Updates current state, for optional overwritten update functionality
+                mCurrState.Update(Time.deltaTime);
             }
         }
     }

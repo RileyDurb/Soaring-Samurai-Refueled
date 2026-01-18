@@ -6,7 +6,6 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerCombatController : MonoBehaviour
 {
@@ -91,7 +90,7 @@ public class PlayerCombatController : MonoBehaviour
 
     PlayerCombatController mOpponentRef;
 
-    StateManager mStateManager;
+    StateManagerPlayer mStateManager;
 
     // Dash attack variables
     DashAttackStates mCurrDashAttackState = DashAttackStates.Charge;
@@ -102,7 +101,7 @@ public class PlayerCombatController : MonoBehaviour
         // Set component references
         mAnimationController = GetComponent<AnimationController>();
 
-        mStateManager = GetComponent<StateManager>();
+        mStateManager = GetComponent<StateManagerPlayer>();
 
         // gets reference to the opponent
         PlayerCombatController[] mPlayers = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
@@ -117,11 +116,11 @@ public class PlayerCombatController : MonoBehaviour
         mOGScale = transform.localScale;
 
         // Subscribe state change functions
-        mStateManager.AddOnEnter("Ready", StartIdle);
+        mStateManager.AddOnEnter(PlayerStates.Ready, StartIdle);
 
-        mStateManager.AddOnEnter("Dash", StartDash);
+        mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
-        mStateManager.AddOnEnter("Dash Attack", StartDashAttackCharge);
+        mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
     }
 
     // Update is called once per frame
@@ -130,7 +129,7 @@ public class PlayerCombatController : MonoBehaviour
         mActionList.Update(Time.deltaTime);
 
         // Face opponent while idling
-        if (mStateManager.CurrStateName == "Ready" || mStateManager.CurrStateName == "Dash Attack")
+        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             if (mOpponentRef.transform.position.x < transform.position.x)
             {
@@ -145,7 +144,7 @@ public class PlayerCombatController : MonoBehaviour
 
 
         // Dash attack state update
-        if (mStateManager.CurrStateName == "Dash Attack")
+        if (mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             if (mCurrDashAttackState == DashAttackStates.Ready && mDashAttackInputReleased == true)
             {
@@ -166,11 +165,11 @@ public class PlayerCombatController : MonoBehaviour
         float currSpeed = MoveJerk;
 
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
-        if (mStateManager.CurrStateName == "Dash")
+        if (mStateManager.CurrStateName == PlayerStates.Dash)
         {
             currSpeed = DashingJerk;
         }
-        else if (mStateManager.CurrStateName == "Dash Attack")
+        else if (mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             currSpeed = DashAttackJerk;
 
@@ -211,7 +210,7 @@ public class PlayerCombatController : MonoBehaviour
 
         Vector2 moveVec = mMoveInput * currSpeed;
 
-        if (mStateManager.CurrStateName == "Dash" || mStateManager.CurrStateName == "Dash Attack")
+        if (mStateManager.CurrStateName == PlayerStates.Dash || mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             // Applies jerk
             physics.mUncappedDirectionalForces.ApplyJerk(moveVec);
@@ -288,13 +287,13 @@ public class PlayerCombatController : MonoBehaviour
     // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
     public void DownLeftAttackInput(InputActionPhase inputPhase)
     {
-        if (mStateManager.CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState(PlayerStates.SlashAttack) == false)
         {
             return;
         }
         if (inputPhase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
@@ -312,13 +311,13 @@ public class PlayerCombatController : MonoBehaviour
     // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
     public void UpLeftAttackInput(InputActionPhase inputPhase)
     {
-        if (mStateManager.CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState(PlayerStates.SlashAttack) == false)
         {
             return;
         }
         if (inputPhase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
@@ -339,13 +338,13 @@ public class PlayerCombatController : MonoBehaviour
     // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
     public void DownRightAttackInput(InputActionPhase inputPhase)
     {
-        if (mStateManager.CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState(PlayerStates.SlashAttack) == false)
         {
             return;
         }
         if (inputPhase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
@@ -365,14 +364,14 @@ public class PlayerCombatController : MonoBehaviour
     // Takes the current input phase for the attack, letting the attack be triggered by info from input, or manually calling it
     public void UpRightAttackInput(InputActionPhase inputPhase)
     {
-        if (mStateManager.CanEnterState("Slash Attack") == false)
+        if (mStateManager.CanEnterState(PlayerStates.SlashAttack) == false)
         {
             return;
         }
 
         if (inputPhase == InputActionPhase.Started)
         {
-            mStateManager.EnterState("Slash Attack", DirectionalSlashAttackStats.mStats.ActiveTime, "Ready"); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
@@ -387,14 +386,14 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (mStateManager.CanEnterState("Dash") == false)
+        if (mStateManager.CanEnterState(PlayerStates.Dash) == false)
         {
             return;
         }
 
         if (context.phase == InputActionPhase.Canceled)
         {
-            mStateManager.EnterState("Dash", DashDuration, "Ready");
+            mStateManager.EnterState(PlayerStates.Dash, DashDuration, PlayerStates.Ready);
         }
     }
 
@@ -404,16 +403,16 @@ public class PlayerCombatController : MonoBehaviour
 
         if (context.phase == InputActionPhase.Performed)
         {
-            if (mStateManager.CanEnterState("Dash Attack") == false || mStateManager.CurrStateName == "Dash Attack")
+            if (mStateManager.CanEnterState(PlayerStates.DashAttack) == false || mStateManager.CurrStateName == PlayerStates.DashAttack)
             {
                 return;
             }
 
-            mStateManager.EnterState("Dash Attack");
+            mStateManager.EnterState(PlayerStates.DashAttack);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            if (mStateManager.CurrStateName == "Dash Attack")
+            if (mStateManager.CurrStateName == PlayerStates.DashAttack)
             {
                 mDashAttackInputReleased = true;
             }
@@ -474,12 +473,12 @@ public class PlayerCombatController : MonoBehaviour
 
     // State functions
 
-    void StartIdle(string prevState)
+    void StartIdle(PlayerStates prevState)
     {
         mAnimationController.SetAnimationState("Player_Idle");
     }
 
-    void StartDash(string prevState)
+    void StartDash(PlayerStates prevState)
     {
         // Do squash and stretch
         float timeElapsed = 0.0f;
@@ -501,7 +500,7 @@ public class PlayerCombatController : MonoBehaviour
         // Nothing needed gameplay wise, movememnt update speeds up while in dash state
     }
 
-    void StartDashAttackCharge(string prevState)
+    void StartDashAttackCharge(PlayerStates prevState)
     {
         mAnimationController.SetAnimationState("Player_DashAttackCharge");
 
@@ -523,9 +522,9 @@ public class PlayerCombatController : MonoBehaviour
 
     void EndDashAttackRecovery()
     {
-        if (mStateManager.CanEnterState("Ready"))
+        if (mStateManager.CanEnterState(PlayerStates.Ready))
         {
-            mStateManager.EnterState("Ready");
+            mStateManager.EnterState(PlayerStates.Ready);
         }
     }
 }

@@ -15,6 +15,16 @@ public class AIBehaviour : MonoBehaviour
         AttackOnTimer
     }
 
+    enum AttackDirection
+    { 
+        UpRight,
+        UpLeft,
+        DownRight,
+        DownLeft
+    }
+
+
+
     // serialized variables ////////////////////////////////////////////////////////////////
 
     [SerializeField]
@@ -22,6 +32,9 @@ public class AIBehaviour : MonoBehaviour
 
     [SerializeField]
     private float mAttackOnTimerInterval = 5.0f;
+
+    [SerializeField]
+    private AttackDirection mAttackOnTimerAttackDirection = AttackDirection.UpLeft;
 
     // Private variables /////////////////////////////////////////////////////////////////////
     // References
@@ -35,6 +48,8 @@ public class AIBehaviour : MonoBehaviour
     // Attack on timer variables
 
     bool mAttackOnTimerActive = false;
+
+    float mLastTimerInterval = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -62,9 +77,18 @@ public class AIBehaviour : MonoBehaviour
             {
                 if (mAttackOnTimerActive == false)
                 {
-                    mAIActionList.AddActionCallback(TriggerUpLeftAttack, 5.0f, false, true); // Set a looping action to trigger an attack
+                    mAIActionList.AddActionCallback(()=> { TriggerNormalSlashAttack(mAttackOnTimerAttackDirection); }, mAttackOnTimerInterval, false, true); // Set a looping action to trigger an attack
+
+                        mLastTimerInterval = mAttackOnTimerInterval;
 
                     mAttackOnTimerActive = true;
+                }
+
+                if (mAttackOnTimerInterval != mLastTimerInterval)
+                {
+                    mAIActionList.Clear(); // Clear actions so we can reset the attack function
+
+                    mAttackOnTimerActive = false; // Set to false so it resets on next loop
                 }
                 break;
             }
@@ -88,6 +112,36 @@ public class AIBehaviour : MonoBehaviour
 
         // Update action list
         mAIActionList.Update(Time.deltaTime);
+    }
+
+    void TriggerNormalSlashAttack(AttackDirection directionToSlash)
+    {
+        switch (directionToSlash)
+        {
+            case AttackDirection.UpRight:
+            {
+                TriggerUpRightAttack();
+            }
+            break;
+
+            case AttackDirection.UpLeft:
+            {
+                TriggerUpLeftAttack();
+            }
+            break;
+
+            case AttackDirection.DownRight:
+            {
+                TriggerDownRightAttack();
+            }
+            break;
+
+            case AttackDirection.DownLeft:
+            {
+                TriggerDownLeftAttack();
+            }
+            break;
+        }
     }
 
 

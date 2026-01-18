@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum PlayerStates
@@ -7,20 +8,11 @@ public enum PlayerStates
     
     Ready,
     SlashAttack,
-    Dash
+    Dash,
+    DashAttack
 }
 
 public class StateManagerPlayer : StateManagerEnum<PlayerStates>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

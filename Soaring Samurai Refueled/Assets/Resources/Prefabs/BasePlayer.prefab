@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: -4621455244979845033}
   - component: {fileID: 3281120090090558124}
   - component: {fileID: 3103302829655798344}
-  - component: {fileID: 5589586871410828363}
   - component: {fileID: -1883828559541653457}
+  - component: {fileID: 3464813975692426095}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -118,7 +118,6 @@ MonoBehaviour:
     DashStretchMax: 1.6
     DashStrechEasing: 0
   playerIndex: -1
-  mCurrInputMode: 0
 --- !u!50 &8127609608215675805
 Rigidbody2D:
   serializedVersion: 4
@@ -278,36 +277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mAnimator: {fileID: 0}
---- !u!114 &5589586871410828363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652935351384745842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e31be69ba14b24649a15c639b0e13fd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mStateList:
-  - mName: Ready
-    mStatesCancellableInto:
-    - Slash Attack
-    - Dash
-    - Dash Attack
-  - mName: Slash Attack
-    mStatesCancellableInto:
-    - Ready
-    - Dash
-  - mName: Dash
-    mStatesCancellableInto:
-    - Ready
-    - Slash Attack
-  - mName: Dash Attack
-    mStatesCancellableInto:
-    - Ready
-  mStartingState: Ready
 --- !u!114 &-1883828559541653457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,3 +290,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mCurrAIMode: 0
+  mAttackOnTimerInterval: 5
+  mAttackOnTimerAttackDirection: 1
+--- !u!114 &3464813975692426095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9f9c3df93c728e46a7a04c2ada77347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mStateList:
+  - mName: 0
+    mStatesCancellableInto: 00000000020000000100000003000000
+  - mName: 1
+    mStatesCancellableInto: 0000000002000000
+  - mName: 2
+    mStatesCancellableInto: 000000000100000003000000
+  - mName: 3
+    mStatesCancellableInto: 00000000
+  mStartingState: 0

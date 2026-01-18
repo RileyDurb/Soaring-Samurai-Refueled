@@ -5,7 +5,7 @@ using System.Data.SqlTypes;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
+public class StateManagerEnum <T> : MonoBehaviour where T : Enum
 {
 
     [System.Serializable]
@@ -33,8 +33,6 @@ public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
     public List<State> mStateList;
     public T mStartingState;
 
-    T mEnumTypeZero;
-
     public T CurrStateName
     {
         get { return mCurrState.mName; }
@@ -49,7 +47,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
     void Start()
     {
         // Set Starting state
-        if (mStartingState.CompareTo(mEnumTypeZero) != 0) // if starting state not blank
+        if (Enum.IsDefined(mStartingState.GetType(), mStartingState)) // if starting state not blank
         {
             mCurrState = GetState(mStartingState);
         }
@@ -79,7 +77,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
                 if (CanEnterState(mDoneStateName))
                 {
                     // Enter done state
-                    EnterState(mDoneStateName, mEnumTypeZero);
+                    EnterState(mDoneStateName, default);
                 }
                 else
                 {
@@ -87,7 +85,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
                 }
 
                 // Reset variables
-                mDoneStateName = mEnumTypeZero;
+                mDoneStateName = default;
                 mCurrStateTimer = -1;
             }
         }
@@ -101,7 +99,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : struct, System.Enum
 
     // Enters the give state, if any
     // If given a poisitive time, and done state name, sets a timer that will return to state when elapsed
-    public void EnterState(T newStateName, T doneStateName, float stateTime = -1 )
+    public void EnterState(T newStateName, float stateTime = -1, T doneStateName = default)
     {
         State newState = GetState(newStateName);
 
