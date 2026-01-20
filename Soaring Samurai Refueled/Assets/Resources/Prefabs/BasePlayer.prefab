@@ -307,10 +307,31 @@ MonoBehaviour:
   mStateList:
   - mName: 0
     mStatesCancellableInto: 00000000020000000100000003000000
+    mParentObject: {fileID: 0}
   - mName: 1
     mStatesCancellableInto: 0000000002000000
+    mParentObject: {fileID: 0}
   - mName: 2
     mStatesCancellableInto: 000000000100000003000000
+    mParentObject: {fileID: 0}
   - mName: 3
     mStatesCancellableInto: 00000000
+    mParentObject: {fileID: 0}
+  mStateInfoList:
+  - mName: 0
+    mStatesCancellableInto: 00000000020000000100000003000000
+    mParentObject: {fileID: 0}
+  - mName: 1
+    mStatesCancellableInto: 0000000002000000
+    mParentObject: {fileID: 0}
+  - mName: 2
+    mStatesCancellableInto: 000000000100000003000000
+    mParentObject: {fileID: 0}
+  - mName: 3
+    mStatesCancellableInto: 00000000
+    mParentObject: {fileID: 0}
   mStartingState: 0
+  test:
+    mName: 0
+    mStatesCancellableInto: 
+    mParentObject: {fileID: 0}

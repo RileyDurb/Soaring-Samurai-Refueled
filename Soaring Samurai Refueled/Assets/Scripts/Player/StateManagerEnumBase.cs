@@ -24,13 +24,26 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         public OnStateEnterCallback mOnStateEnterEvent;
         public OnStateExitCallback mOnStateExitEvent;
 
+        [NonSerialized]
+        public GameObject mParentObject;
+
+        // Public functions
+
+        public virtual void OnEnter() { }
+        public virtual void OnUpdate(float dt) { }
+        public virtual void OnExit() { }
+
         // Private Variables ///////////////////////////////////////////////////
+
     }
 
     // Public variables
 
-
+    [NonSerialized]
     public List<State> mStateList;
+
+    public List<State> mStateInfoList;
+    //public Dictionary<T, State>
     public T mStartingState;
 
     public T CurrStateName
@@ -44,8 +57,15 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
     T mDoneStateName;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
+
+        // Gives each state it's parent context
+        foreach (State currState in mStateList)
+        {
+            currState.mParentObject = this.gameObject;
+        }
+
         // Set Starting state
         if (Enum.IsDefined(mStartingState.GetType(), mStartingState)) // if starting state not blank
         {

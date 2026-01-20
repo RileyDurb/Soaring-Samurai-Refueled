@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombatController : MonoBehaviour
 {
     // Class and other Definitions ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    enum FacingDirection
+    public enum FacingDirection
     { 
         Left,
         Right
@@ -129,7 +129,7 @@ public class PlayerCombatController : MonoBehaviour
         mActionList.Update(Time.deltaTime);
 
         // Face opponent while idling
-        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.DashAttack)
+        if (/*mStateManager.CurrStateName == PlayerStates.Ready || */mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             if (mOpponentRef.transform.position.x < transform.position.x)
             {
@@ -420,7 +420,18 @@ public class PlayerCombatController : MonoBehaviour
     }
 
 
-
+    // Public interface
+    public void SetFacingDirection(FacingDirection newDirection)
+    {
+        if (newDirection == FacingDirection.Left)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
 
 
     // Combat related functions
@@ -459,17 +470,6 @@ public class PlayerCombatController : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
     }
 
-    void SetFacingDirection(FacingDirection newDirection)
-    {
-        if (newDirection == FacingDirection.Left)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-        }
-    }
 
     // State functions
 
