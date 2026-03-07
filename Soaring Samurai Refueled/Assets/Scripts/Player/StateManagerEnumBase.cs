@@ -40,9 +40,9 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
     // Public variables
 
     [NonSerialized]
-    public List<State> mStateList;
+    public List<State> mStateList = new List<State>();
 
-    public List<State> mStateInfoList;
+    public List<State> mStateInfoList = new List<State>();
     //public Dictionary<T, State>
     public T mStartingState;
 
