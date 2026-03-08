@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Users;
 
 public class PlayerInputHandler : MonoBehaviour
 {
     PlayerCombatController playerController;
     PlayerInput input;
+    [SerializeField]
+    InputAction moveInputAction;
+
+    bool spawnedMobileInput = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,12 +28,28 @@ public class PlayerInputHandler : MonoBehaviour
         {
             if (controller.PlayerIndex < 0) // If unassigned player found
             {
+
                 playerController = controller; // Saves player object for controlling
                 controller.PlayerIndex = input.playerIndex; // Gives the player this input handler's index
                 break;
             }
         }
-        
+
+        if (spawnedMobileInput == false)
+        {
+
+            GameObject joystick = GameObject.Find("TestMobileJoystick");
+            OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
+
+            InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
+
+            //PlayerInputManager inputManager = GameObject.Find("PlayerManager").GetComponent<PlayerInputManager>();
+            //inputManager.JoinPlayer(1, -1, "GamePad", joystickComp.control.device);
+  
+            //spawnedMobileInput = true;
+        }
+
+
     }
 
     // Update is called once per frame
