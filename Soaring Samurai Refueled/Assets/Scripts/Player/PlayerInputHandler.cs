@@ -15,8 +15,6 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField]
     InputAction moveInputAction;
 
-    bool spawnedMobileInput = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -35,20 +33,20 @@ public class PlayerInputHandler : MonoBehaviour
             }
         }
 
-        if (spawnedMobileInput == false)
-        {
 
-            GameObject joystick = GameObject.Find("TestMobileJoystick");
-            OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
+        GameObject joystick = GameObject.Find("TestMobileJoystick");
+        OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
 
-            InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
+        GameObject northButton = GameObject.Find("UpRightAttackButton");
+        OnScreenButton buttonCom = northButton.GetComponent<OnScreenButton>();
 
-            //PlayerInputManager inputManager = GameObject.Find("PlayerManager").GetComponent<PlayerInputManager>();
-            //inputManager.JoinPlayer(1, -1, "GamePad", joystickComp.control.device);
+        InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
+        //InputUser.PerformPairingWithDevice(buttonCom.control.device, input.user);
+
+        //PlayerInputManager inputManager = GameObject.Find("PlayerManager").GetComponent<PlayerInputManager>();
+        //inputManager.JoinPlayer(1, -1, "GamePad", joystickComp.control.device);
   
-            //spawnedMobileInput = true;
-        }
-
+        //spawnedMobileInput = true;
 
     }
 

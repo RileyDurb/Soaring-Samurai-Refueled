@@ -45,6 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9295aeb7376175f429aa67ef3aaa3062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveInputAction:
+    m_Name: Move Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c7ef2b65-de4f-4d23-a252-1fe1bdf58823
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &2384243058583410260
 MonoBehaviour:
   m_ObjectHideFlags: 0
