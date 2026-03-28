@@ -29,6 +29,8 @@ public class PlayerInputHandler : MonoBehaviour
 
                 playerController = controller; // Saves player object for controlling
                 controller.PlayerIndex = input.playerIndex; // Gives the player this input handler's index
+
+
                 break;
             }
         }

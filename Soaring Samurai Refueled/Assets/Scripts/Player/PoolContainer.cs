@@ -99,8 +99,16 @@ public class PoolContainer : MonoBehaviour
             set { PoolCurr = Mathf.Clamp(value, 0.0f, PoolMax); }
         }
 
+        public float PoolMaxValue
+        {
+            get { return PoolMax; }
+        }
+
         public string PoolName
-        { get { return Name; } }
+        {
+            get { return Name; }
+        }
+
 
         // Decreases pool by given amount, and returns whether the pool became empty by that decrease
         public virtual bool DecreasePool(float amount)

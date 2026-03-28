@@ -75,6 +75,8 @@ public class PlayerCombatController : MonoBehaviour
 
     StateManagerPlayer mStateManager;
 
+    [SerializeField] GameObject mHealthBar;
+
     // Dash attack variables
     DashAttackStates mCurrDashAttackState = DashAttackStates.Charge;
     bool mDashAttackInputReleased = false;
@@ -104,6 +106,12 @@ public class PlayerCombatController : MonoBehaviour
         mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
         mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
+
+        // Set up health bar
+        if (mHealthBar != null)
+        {
+            mHealthBar.GetComponent<HealthBarController>().SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health"));
+        }
     }
 
     // Update is called once per frame
