@@ -25,19 +25,6 @@ public class PlayerCombatController : MonoBehaviour
     }
 
     // TODO: make player use a scriptable object with base stats instead of the straight variables
-    [System.Serializable]
-    public class PlayerBaseStats
-    {
-        [Header("Movememt Stats")]
-        public float MoveJerk = 1000.0f;
-        public float DashingJerk = 1000.0f;
-        public float DashDuration = 0.3f;
-
-        [Header("Dash Attack Additional Stats")]
-        public float DashAttackChargeTime = 1.0f;
-        public float DashAttackRecoveryTime = 0.5f;
-        public float DashAttackJerk = 1200;
-    }
 
 
     [System.Serializable]
@@ -52,13 +39,9 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Editor Accessible variables  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public float MoveJerk = 5.0f;
-    public float DashingJerk = 35.0f;
-    public float DashDuration = 0.15f;
-    [SerializeField] AttackDataObject DashAttackStats;
-    public float DashAttackChargeTime = 1.0f;
-    public float DashAttackRecoveryTime = 1.0f;
-    public float DashAttackJerk = 300.0f;
+    [SerializeField] PlayerBaseDataObject mPlayerBaseStats;
+    [SerializeField] DashAttackDataObject mDashAttackStats;
+
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
@@ -92,6 +75,8 @@ public class PlayerCombatController : MonoBehaviour
 
     StateManagerPlayer mStateManager;
 
+    [SerializeField] GameObject mHealthBar;
+
     // Dash attack variables
     DashAttackStates mCurrDashAttackState = DashAttackStates.Charge;
     bool mDashAttackInputReleased = false;
@@ -121,6 +106,12 @@ public class PlayerCombatController : MonoBehaviour
         mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
         mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
+
+        // Set up health bar
+        if (mHealthBar != null)
+        {
+            mHealthBar.GetComponent<HealthBarController>().SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health"));
+        }
     }
 
     // Update is called once per frame
@@ -129,7 +120,7 @@ public class PlayerCombatController : MonoBehaviour
         mActionList.Update(Time.deltaTime);
 
         // Face opponent while idling
-        if (/*mStateManager.CurrStateName == PlayerStates.Ready || */mStateManager.CurrStateName == PlayerStates.DashAttack)
+        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             if (mOpponentRef.transform.position.x < transform.position.x)
             {
@@ -153,25 +144,25 @@ public class PlayerCombatController : MonoBehaviour
                 mAnimationController.SetAnimationState("Player_DashAttackActive"); // Play animation
 
                 // Spawns attack hitbox right around the player
-                SpawnDirectionalAttack(new Vector2(0, 0), DashAttackStats.mStats);
+                SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats);
 
                 // Set to go into recovery after active time is done
-                mActionList.AddActionCallback(() => StartDashAttackRecovery(), DashAttackStats.mStats.ActiveTime);
+                mActionList.AddActionCallback(() => StartDashAttackRecovery(), mDashAttackStats.mStats.ActiveTime);
             }
         }
 
 
         // Apply movement from current input value
-        float currSpeed = MoveJerk;
+        float currSpeed = mPlayerBaseStats.mMovementStats.MoveJerk;
 
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
         if (mStateManager.CurrStateName == PlayerStates.Dash)
         {
-            currSpeed = DashingJerk;
+            currSpeed = mPlayerBaseStats.mMovementStats.DashingJerk;
         }
         else if (mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
-            currSpeed = DashAttackJerk;
+            currSpeed = mDashAttackStats.DashingJerk;
 
             // Modify ability to move based on state of the attack
 
@@ -210,14 +201,19 @@ public class PlayerCombatController : MonoBehaviour
 
         Vector2 moveVec = mMoveInput * currSpeed;
 
+        //if (mMoveInput.magnitude > 0)
+        //{
+        //    print(mMoveInput.magnitude.ToString()); 
+        //}
+
         if (mStateManager.CurrStateName == PlayerStates.Dash || mStateManager.CurrStateName == PlayerStates.DashAttack)
         {
             // Applies jerk
-            physics.mUncappedDirectionalForces.ApplyJerk(moveVec);
+            physics.mUncappedDirectionalForces.ApplyJerk(moveVec * Time.deltaTime);
         }
         else
         {
-            physics.mDirectionalForces.ApplyJerk(moveVec);
+            physics.mDirectionalForces.ApplyJerk(moveVec * Time.deltaTime);
         }
 
         // Since things like dampening can be applied differently based in if input is being given, tell the physics the current state
@@ -393,7 +389,7 @@ public class PlayerCombatController : MonoBehaviour
 
         if (context.phase == InputActionPhase.Canceled)
         {
-            mStateManager.EnterState(PlayerStates.Dash, DashDuration, PlayerStates.Ready);
+            mStateManager.EnterState(PlayerStates.Dash, mPlayerBaseStats.mMovementStats.DashDuration, PlayerStates.Ready);
         }
     }
 
@@ -484,17 +480,17 @@ public class PlayerCombatController : MonoBehaviour
         float timeElapsed = 0.0f;
 
         // Scale down to min
-        float currDashStageTime = DashDuration / 4;
+        float currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 4;
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x * 1.2f, mOGScale.y * mActionAesthetics.DashStretchMin), currDashStageTime, 0.0f, Action_.EasingTypes.EaseInSmall);
         timeElapsed += currDashStageTime;
 
         // up to max
-        currDashStageTime = DashDuration / 2;
+        currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 2;
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x * mActionAesthetics.DashStretchMin, mOGScale.y * mActionAesthetics.DashStretchMax), currDashStageTime,  timeElapsed, Action_.EasingTypes.EaseInBounce);
         timeElapsed += currDashStageTime;
 
         // Scale back to normal
-        currDashStageTime = DashDuration / 4;
+        currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 4;
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), currDashStageTime, timeElapsed, Action_.EasingTypes.EaseOutMedium);
 
         // Nothing needed gameplay wise, movememnt update speeds up while in dash state
@@ -508,7 +504,7 @@ public class PlayerCombatController : MonoBehaviour
         mCurrDashAttackState = DashAttackStates.Charge;
         mDashAttackInputReleased = false;
 
-        mActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, DashAttackChargeTime); // Set timer for charge to be ready
+        mActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
     }
 
     void StartDashAttackRecovery()
@@ -517,7 +513,7 @@ public class PlayerCombatController : MonoBehaviour
 
         mAnimationController.SetAnimationState("Player_DashAttackRecoverySheathed");
 
-        mActionList.AddActionCallback(() => EndDashAttackRecovery(), DashAttackRecoveryTime);
+        mActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
     }
 
     void EndDashAttackRecovery()

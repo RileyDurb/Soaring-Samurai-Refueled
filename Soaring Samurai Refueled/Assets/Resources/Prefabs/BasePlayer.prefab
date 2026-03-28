@@ -105,10 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf51146db063a54ba1cb12f9054c3d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveJerk: 1000
-  DashingJerk: 1000
-  DashDuration: 0.3
-  DashAttackStats: {fileID: 11400000, guid: 143e24aca0fbaf341958afa5288fb731, type: 2}
+  mPlayerBaseStats: {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
+  mDashAttackStats: {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
   DashAttackChargeTime: 1
   DashAttackRecoveryTime: 0.5
   DashAttackJerk: 1200
@@ -304,34 +302,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f9c3df93c728e46a7a04c2ada77347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mStateList:
-  - mName: 0
-    mStatesCancellableInto: 00000000020000000100000003000000
-    mParentObject: {fileID: 0}
-  - mName: 1
-    mStatesCancellableInto: 0000000002000000
-    mParentObject: {fileID: 0}
-  - mName: 2
-    mStatesCancellableInto: 000000000100000003000000
-    mParentObject: {fileID: 0}
-  - mName: 3
-    mStatesCancellableInto: 00000000
-    mParentObject: {fileID: 0}
   mStateInfoList:
   - mName: 0
     mStatesCancellableInto: 00000000020000000100000003000000
-    mParentObject: {fileID: 0}
   - mName: 1
     mStatesCancellableInto: 0000000002000000
-    mParentObject: {fileID: 0}
   - mName: 2
     mStatesCancellableInto: 000000000100000003000000
-    mParentObject: {fileID: 0}
   - mName: 3
     mStatesCancellableInto: 00000000
-    mParentObject: {fileID: 0}
   mStartingState: 0
-  test:
-    mName: 0
-    mStatesCancellableInto: 
-    mParentObject: {fileID: 0}

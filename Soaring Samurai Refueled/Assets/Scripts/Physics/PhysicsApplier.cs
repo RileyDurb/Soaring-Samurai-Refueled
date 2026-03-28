@@ -324,7 +324,9 @@ public class PhysicsApplier : MonoBehaviour
 
         public override void ApplyJerk(Vector2 jerk)
         {
+            print ("Adding jerk: " + mJerk.magnitude.ToString() + " + " + jerk.magnitude.ToString()); 
             mJerk += jerk;
+            print("New Jerk: " + mJerk.magnitude.ToString());
         }
 
         public override void ApplyDrag(float dt)
@@ -561,6 +563,10 @@ public class PhysicsApplier : MonoBehaviour
         // First update capped
         int cancelVelocity = mDirectionalForces.Update(Time.fixedDeltaTime);
 
+        if (mUncappedDirectionalForces.Jerk.magnitude > 0 || mUncappedDirectionalForces.Acceleration.magnitude > 0)
+        {
+            print("Dashin" + mUncappedDirectionalForces.Jerk.magnitude.ToString() + " " + mUncappedDirectionalForces.Acceleration.magnitude.ToString());
+        }
         // Then uncapped
         cancelVelocity += mUncappedDirectionalForces.Update(Time.fixedDeltaTime);
 
