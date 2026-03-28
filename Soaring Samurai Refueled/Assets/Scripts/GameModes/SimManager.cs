@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem.OnScreen;
 
 public class SimManager : MonoBehaviour
 {
@@ -68,6 +69,15 @@ public class SimManager : MonoBehaviour
                     mTestSlapDirection *= -1;
                 }
             }
+
+            //if (/*Input.GetKeyUp(KeyCode.G)*/true)
+            //{
+            //    GameObject dashButton = GameObject.Find("DashButton");
+            //    if (dashButton != null)
+            //    {
+            //        print("CurrStickMag" + dashButton.GetComponent<OnScreenButton>().control.EvaluateMagnitude().ToString());
+            //    }
+            //}
         }
     }
 

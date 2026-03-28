@@ -57,7 +57,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
     T mDoneStateName;
 
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected virtual void Awake()
     {
 
         // Gives each state it's parent context

@@ -15,7 +15,7 @@ public enum PlayerStates
 
 public class StateManagerPlayer : StateManagerEnum<PlayerStates>
 {
-    protected override void Start()
+    protected override void Awake()
     {
         print("PlayerStateStarted");
         // Create any states that are have specfiic code
@@ -33,6 +33,6 @@ public class StateManagerPlayer : StateManagerEnum<PlayerStates>
             mStateList[(int)currState].mStatesCancellableInto = mStateInfoList[(int)currState].mStatesCancellableInto;
         }
 
-        base.Start();
+        base.Awake();
     }
 }
