@@ -70,7 +70,7 @@ public class SimManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyUp(KeyCode.L))
+            if (Input.GetKeyUp(KeyCode.Minus))
             {
                 Exit();
             }
