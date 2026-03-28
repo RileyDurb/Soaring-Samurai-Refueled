@@ -250,10 +250,15 @@ public class TelemetryTracker : MonoBehaviour
         }
         mDataStream.Write("\n");
 
-        mDataStream.WriteLine("Sim Data\n");
-        mDataStream.WriteLine(mSimTrackingValues.GetHeaderLine());
-        mDataStream.WriteLine(mSimTrackingValues.GetValuesLine());
-        mDataStream.Write("\n");
+        // Write other values if there are any
+        if (mSimTrackingValues.IsEmpty() == false)
+        {
+            mDataStream.WriteLine("Sim Data\n");
+            mDataStream.WriteLine(mSimTrackingValues.GetHeaderLine());
+            mDataStream.WriteLine(mSimTrackingValues.GetValuesLine());
+            mDataStream.Write("\n");
+        }
+
 
 
 
