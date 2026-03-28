@@ -70,6 +70,10 @@ public class SimManager : MonoBehaviour
                 }
             }
 
+            if (Input.GetKeyUp(KeyCode.L))
+            {
+                Exit();
+            }
             //if (/*Input.GetKeyUp(KeyCode.G)*/true)
             //{
             //    GameObject dashButton = GameObject.Find("DashButton");

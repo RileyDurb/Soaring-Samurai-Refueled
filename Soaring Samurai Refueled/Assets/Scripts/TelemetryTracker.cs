@@ -234,7 +234,14 @@ public class TelemetryTracker : MonoBehaviour
 
     void EndOfGameWrite()
     {
-        mDataStream = new StreamWriter("SoaringSamuraiData.csv", true);
+        // Make a telemetry directory if it doesn't already exist
+        if (Directory.Exists("Telemetry") == false)
+        {
+            Directory.CreateDirectory("Telemetry");
+        }
+
+        // Make a writer for the telemetry dat
+        mDataStream = new StreamWriter("Telemetry/SoaringSamuraiData_P1.csv", true);
 
         mDataStream.WriteLine("Player Data\n");
         mDataStream.WriteLine("Timestamp, Linear Jerk,, Linear Acceleration,, Linear Velocity,, Angular Jerk, Angular Acceleration, Angular Velocity\n");
@@ -250,10 +257,15 @@ public class TelemetryTracker : MonoBehaviour
         }
         mDataStream.Write("\n");
 
-        mDataStream.WriteLine("Sim Data\n");
-        mDataStream.WriteLine(mSimTrackingValues.GetHeaderLine());
-        mDataStream.WriteLine(mSimTrackingValues.GetValuesLine());
-        mDataStream.Write("\n");
+        // Write other values if there are any
+        if (mSimTrackingValues.IsEmpty() == false)
+        {
+            mDataStream.WriteLine("Sim Data\n");
+            mDataStream.WriteLine(mSimTrackingValues.GetHeaderLine());
+            mDataStream.WriteLine(mSimTrackingValues.GetValuesLine());
+            mDataStream.Write("\n");
+        }
+
 
 
 

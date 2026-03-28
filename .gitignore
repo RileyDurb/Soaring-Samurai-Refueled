@@ -47,6 +47,9 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+# Player telemetry generated from the game
+/Soaring Samurai Refueled/Telemetry
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
