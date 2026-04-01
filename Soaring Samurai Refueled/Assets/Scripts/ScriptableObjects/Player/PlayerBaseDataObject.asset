@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlayerBaseDataObject
   m_EditorClassIdentifier: 
   mMovementStats:
-    MoveJerk: 18000
-    DashingJerk: 18000
+    MoveJerk: 400000
+    DashingJerk: 400000
     DashDuration: 0.3

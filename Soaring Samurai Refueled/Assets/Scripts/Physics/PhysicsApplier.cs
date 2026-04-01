@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -14,41 +15,61 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PhysicsApplier : MonoBehaviour
 {
+
+
+    // Class variables ///////////////////////////////////////////////////////
     public ActionList mActionList = new ActionList();
 
-    // Operator overloads to allow for generic groups
-    [System.Serializable]
-    
-    public abstract class IPhysicsGroup<T>
-    {
-        enum DampeningType
-        {
-            Percentage, // Percentage dampened each frame
-            Interpolation
-        }
-        protected T mGroupTypeZero; // The zero for the generic type used, to make setting values to 0 work with generics
-        public IPhysicsGroup(T groupTypeZero, GameObject parent)
-        {
-            mGroupTypeZero = groupTypeZero;
-            mParent = parent;
-        }
+    // Class definitions //////////////////////////////////////////////////////////
 
+    [CreateAssetMenu(fileName = "PhysicsStatsSet", menuName = "Scripts/ScriptableObjects/Physics/ForceStatSet")]
+    [System.Serializable]
+    public class PhysicsTuningStatSet : ScriptableObject
+    {
+        [Header("ForceMaxes")]
         public float mMaxVelocity;
         public float mMaxAcceleration;
         public float mMaxJerk;
+
+        [Header("Coefficients")]
         public float DampeningMultiplier = 0.9f;
         public float DragCoeff = 0.3f;
+
+        public float mDampeningZeroThreshold = 0.1f; // NOT used, may revisit zeroing out a force once it hits a certain low threshold after applying drag
+        public DampeningType mDampeningType = DampeningType.Percentage;
+        public float mMaxDampeningTime = 1.0f; // The time it takes to dampen when at max velocity. Lower velocities will take less time
+
+    }
+    public enum DampeningType
+    {
+        Percentage, // Percentage dampened each frame
+        Interpolation
+    }
+
+
+    // Operator overloads to allow for generic groups
+    [System.Serializable]
+    public abstract class IPhysicsGroup<T>
+    {
+
+
+    // Class variables ///////////////////////////////////////////////////////
+
+
+        public IPhysicsGroup(GameObject parent)
+        {
+            mParent = parent;
+        }
+
+
+        [SerializeField] protected PhysicsTuningStatSet Stats;
+
+        // Tracked variables
         public bool InputBeingApplied = true;
 
         // Private variables
-        [SerializeField] float mDampeningZeroThreshold = 0.1f; // NOT used, may revisit zeroing out a force once it hits a certain low threshold after applying drag
-        [SerializeField] DampeningType mDampeningType = DampeningType.Percentage;
         bool mInputAppliedLastFrame = true;
         protected GameObject mParent;
-
-        // Interpolated dampening variables
-        // TODO: probably make this interp velocity instead, bnecause interpint acceleration doesn't really do anything if it doesn't make the acceleration go in the opposite direction as the velocity
-        [SerializeField] float mMaxDampeningTime = 1.0f; // The time it takes to dampen when at max velocity. Lower velocities will take less time
 
         // Handling when velocity is set before initialization
         protected T mPreInitVelocity;
@@ -68,26 +89,26 @@ public class PhysicsApplier : MonoBehaviour
 
 
 
-        public int Update(float dt)
+        public int PhysicsUpdate(float dt)
         {            
             Rigidbody2D physics = mParent.GetComponent<Rigidbody2D>();
 
             // Apply jerk for this frame
             if (mActiveMaxForceUnlocks.Count <=  0) // If no max force unlocks
             {
-                mJerk = Clamp(mJerk, mMaxJerk);
+                mJerk = Clamp(mJerk, Stats.mMaxJerk);
             }
             mAcceleration = Add(mAcceleration, Scale(mJerk, dt));
 
             // Apply acceleration
             if (mActiveMaxForceUnlocks.Count <= 0) // if no max force unlocks
             {
-                mAcceleration = Clamp(mAcceleration, mMaxAcceleration);
+                mAcceleration = Clamp(mAcceleration, Stats.mMaxAcceleration);
             }
             T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
 
             // Always allow for clamping clamp max velocity, weird stuff if we don't
-            currVelocity = Clamp(currVelocity, mMaxVelocity);
+            currVelocity = Clamp(currVelocity, Stats.mMaxVelocity);
 
             // Apply new velocity
             if (physics != null)
@@ -95,7 +116,7 @@ public class PhysicsApplier : MonoBehaviour
                 SetVelocity(currVelocity);
             }
 
-            mJerk = mGroupTypeZero; // Cancel out jerk, does not carry over to the next frame
+            mJerk = default; // Cancel out jerk, does not carry over to the next frame
 
 
 
@@ -120,17 +141,17 @@ public class PhysicsApplier : MonoBehaviour
 
         int ApplyDampening(float dt)
         {
-            if (mDampeningType == DampeningType.Percentage)
+            if (Stats.mDampeningType == DampeningType.Percentage)
             {
                 // Apply dampening to acceleration
-                mAcceleration = Add(mAcceleration, Scale(Scale(Subtract(mGroupTypeZero, mAcceleration), DampeningMultiplier), dt));
+                mAcceleration = Add(mAcceleration, Scale(Scale(Subtract(default, mAcceleration), Stats.DampeningMultiplier), dt));
 
                 // Cut off acceleration at a predefined threshold
                 // Do this to prevent infinite drifting, and potential oscillations in the direction of acceleration, which drag can cause at small values
                 // TODO: Probably switch this to instead of hard stopping everything, switch to linear dampening, with a constant, or adjustable amount, so that it will actually hit 0, but isn't so abrupt. Could just lerp, or decay depending on the amount
-                if (Abs(mAcceleration) <= mDampeningZeroThreshold)
+                if (Abs(mAcceleration) <= Stats.mDampeningZeroThreshold)
                 {
-                    mAcceleration = mGroupTypeZero; // Cancel acceleration
+                    mAcceleration = default; // Cancel acceleration
                     return 1;
                 }
                 return 0;
@@ -142,7 +163,7 @@ public class PhysicsApplier : MonoBehaviour
                 // If newly starting 
                 if (mInputAppliedLastFrame == true && InputBeingApplied == false)
                 {
-                    mParent.GetComponent<PhysicsApplier>().mActionList.AddAction(new Action_DampenDirectional(mParent, 0.0f, mMaxDampeningTime * (Abs(Velocity) / mMaxVelocity)));
+                    mParent.GetComponent<PhysicsApplier>().mActionList.AddAction(new Action_DampenDirectional(mParent, 0.0f, Stats.mMaxDampeningTime * (Abs(Velocity) / Stats.mMaxVelocity)));
                 }
                 return 0;
             }
@@ -150,7 +171,7 @@ public class PhysicsApplier : MonoBehaviour
 
         void HandleDampeningInputChange()
         {
-            if (mDampeningType == DampeningType.Interpolation)
+            if (Stats.mDampeningType == DampeningType.Interpolation)
             {
                 if (mInputAppliedLastFrame == false && InputBeingApplied == true)
                 {
@@ -181,24 +202,20 @@ public class PhysicsApplier : MonoBehaviour
         public abstract void ApplyJerk(T jerk);
         public void DirectionChangeForceModify()
         {
-            mAcceleration = mGroupTypeZero;
-            mJerk = mGroupTypeZero;
+            mAcceleration = default;
+            mJerk = default;
         }
 
         public void ClearAllForces()
         {
-            SetVelocity(mGroupTypeZero);
-            mAcceleration = mGroupTypeZero;
-            mJerk = mGroupTypeZero;
+            SetVelocity(default);
+            mAcceleration = default;
+            mJerk = default;
         }
 
         public void TransferForceModifiers(IPhysicsGroup<T> other)
         {
-            mMaxVelocity = other.mMaxVelocity;
-            mMaxAcceleration = other.mMaxAcceleration;
-            mMaxJerk = other.mMaxJerk;
-            DampeningMultiplier = other.DampeningMultiplier;
-            DragCoeff = other.DragCoeff;
+            Stats = other.Stats;
         }
 
         // Getters and setters
@@ -228,7 +245,7 @@ public class PhysicsApplier : MonoBehaviour
             get { return mJerk; }
             set
             {
-                mJerk = Clamp(value, mMaxJerk);
+                mJerk = Clamp(value, Stats.mMaxJerk);
             }
         }
         public void SetParent(GameObject parent)
@@ -266,7 +283,7 @@ public class PhysicsApplier : MonoBehaviour
     public class PhysicsVectorGroup : IPhysicsGroup<Vector2>
     {
         //float dragZeroThreshold = 0.05f;
-        public PhysicsVectorGroup(Vector2 zeroVec, GameObject parent = null) : base(zeroVec, parent)
+        public PhysicsVectorGroup(GameObject parent = null) : base(parent)
         {
         }
 
@@ -331,7 +348,7 @@ public class PhysicsApplier : MonoBehaviour
 
         public override void ApplyDrag(float dt)
         {
-            float drag = DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Square(Velocity) / 2) * dt;
+            float drag = Stats.DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Square(Velocity) / 2) * dt;
             Vector2 dragVec = Velocity.normalized * -1 * drag;
 
             //// Set to 0 if drag would make the object change directions
@@ -386,7 +403,7 @@ public class PhysicsApplier : MonoBehaviour
     {
         float dragZeroThreshold = 7.0f;
         public float mStaticFrictionThreshold = 0.5f;
-        public PhysicsFloatGroup(float zero, GameObject parent = null) : base(zero, parent)
+        public PhysicsFloatGroup(GameObject parent = null) : base(parent)
         {
         }
 
@@ -433,7 +450,7 @@ public class PhysicsApplier : MonoBehaviour
         public override void ApplyForce(float acceleration)
         {
             mAcceleration += acceleration;
-            mAcceleration = Clamp(mAcceleration, mMaxAcceleration);
+            mAcceleration = Clamp(mAcceleration, this.Stats.mMaxAcceleration);
         }
 
         public override void ApplyJerk(float jerk)
@@ -443,7 +460,7 @@ public class PhysicsApplier : MonoBehaviour
 
         public override void ApplyDrag(float dt)
         {
-            float angularDragMag = DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Mathf.Pow(Velocity, 2) / 2) * dt;
+            float angularDragMag = Stats.DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Mathf.Pow(Velocity, 2) / 2) * dt;
             float angularDrag = Mathf.Sign(Velocity) * -1 * angularDragMag;
 
             float ogSign = Mathf.Sign(mAcceleration);
@@ -451,8 +468,8 @@ public class PhysicsApplier : MonoBehaviour
 
             if (Mathf.Sign(mAcceleration) != ogSign && Abs(mAcceleration) <= dragZeroThreshold)
             {
-                SetVelocity(mGroupTypeZero);
-                mAcceleration = mGroupTypeZero;
+                SetVelocity(default);
+                mAcceleration = default;
             }
         }
 
@@ -484,17 +501,23 @@ public class PhysicsApplier : MonoBehaviour
 
     }
 
-    public PhysicsVectorGroup mDirectionalForces = new PhysicsVectorGroup(Vector2.zero);
-    public PhysicsVectorGroup mUncappedDirectionalForces = new PhysicsVectorGroup(Vector2.zero);
+    public PhysicsVectorGroup mDirectionalForces = new PhysicsVectorGroup();
+    public PhysicsVectorGroup mUncappedDirectionalForces = new PhysicsVectorGroup();
 
-    public PhysicsFloatGroup mRotationalForces = new PhysicsFloatGroup(0.0f);
+    public PhysicsFloatGroup mRotationalForces = new PhysicsFloatGroup();
 
     // Debug stuff
     public bool mDebugDraw = true;
 
+    private void Awake()
+    {
+
+    }
     // Start is called before the first frame update
     void Start()
     {
+
+
         mDirectionalForces.SetParent(gameObject);
         if (mDirectionalForces.PreInitted == true)
         {
@@ -561,14 +584,14 @@ public class PhysicsApplier : MonoBehaviour
         mDirectionalForces.ApplyDrag(Time.fixedDeltaTime);
 
         // First update capped
-        int cancelVelocity = mDirectionalForces.Update(Time.fixedDeltaTime);
+        int cancelVelocity = mDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
 
         if (mUncappedDirectionalForces.Jerk.magnitude > 0 || mUncappedDirectionalForces.Acceleration.magnitude > 0)
         {
             print("Dashin" + mUncappedDirectionalForces.Jerk.magnitude.ToString() + " " + mUncappedDirectionalForces.Acceleration.magnitude.ToString());
         }
         // Then uncapped
-        cancelVelocity += mUncappedDirectionalForces.Update(Time.fixedDeltaTime);
+        cancelVelocity += mUncappedDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
 
         if (cancelVelocity >= 2)
         {
@@ -582,7 +605,7 @@ public class PhysicsApplier : MonoBehaviour
             mRotationalForces.ApplyDrag(Time.fixedDeltaTime);
 
         }
-        cancelVelocity = mRotationalForces.Update(Time.fixedDeltaTime);
+        cancelVelocity = mRotationalForces.PhysicsUpdate(Time.fixedDeltaTime);
         if (cancelVelocity >= 1)
         {
             GetComponent<Rigidbody2D>().angularVelocity =  0.0f;
