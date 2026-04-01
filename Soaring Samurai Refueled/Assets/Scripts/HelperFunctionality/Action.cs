@@ -777,6 +777,11 @@ class Action_EqualizedKnockback : Action_
 
         mLastPercentDone = mPercentDone; // Save current percent done for next frame
 
+        if (mPercentDone > 1000000.0f)
+        {
+            Debug.Log("Hmmmm");
+        }
+
 
         // If interpolation is complete
         if (mPercentDone == 1)

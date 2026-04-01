@@ -107,15 +107,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mPlayerBaseStats: {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
   mDashAttackStats: {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
-  DashAttackChargeTime: 1
-  DashAttackRecoveryTime: 0.5
-  DashAttackJerk: 1200
   DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   mActionAesthetics:
     DashStretchMin: 0.8
     DashStretchMax: 1.6
     DashStrechEasing: 0
   playerIndex: -1
+  mHealthBar: {fileID: 0}
 --- !u!50 &8127609608215675805
 Rigidbody2D:
   serializedVersion: 4
@@ -156,36 +154,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mDirectionalForces:
-    mMaxVelocity: 6
-    mMaxAcceleration: 50
-    mMaxJerk: 1000
-    DampeningMultiplier: 3
-    DragCoeff: 3
-    InputBeingApplied: 1
-    mDampeningZeroThreshold: 0.1
-    mDampeningType: 0
-    mMaxDampeningTime: 1
+    Stats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
+    InputBeingApplied: 0
   mUncappedDirectionalForces:
-    mMaxVelocity: 100
-    mMaxAcceleration: 0
-    mMaxJerk: 0
-    DampeningMultiplier: 6
-    DragCoeff: 6
-    InputBeingApplied: 1
-    mDampeningZeroThreshold: 0.1
-    mDampeningType: 0
-    mMaxDampeningTime: 1
+    Stats: {fileID: 11400000, guid: b282f329416721b43a61ce625b234179, type: 2}
+    InputBeingApplied: 0
   mRotationalForces:
-    mMaxVelocity: 0
-    mMaxAcceleration: 0
-    mMaxJerk: 0
-    DampeningMultiplier: 0.9
-    DragCoeff: 0.3
-    InputBeingApplied: 1
-    mDampeningZeroThreshold: 0.1
-    mDampeningType: 0
-    mMaxDampeningTime: 1
-    mStaticFrictionThreshold: 0.5
+    Stats: {fileID: 11400000, guid: cd7ad9cd60b356345b25c10885691c41, type: 2}
+    InputBeingApplied: 0
+    mStaticFrictionThreshold: 0
   mDebugDraw: 1
 --- !u!70 &1457328239894749921
 CapsuleCollider2D:
