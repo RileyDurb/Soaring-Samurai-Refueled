@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: PlayerCappedMoveForces
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsApplier/PhysicsTuningStatSet
-  mMaxVelocity: 6
-  mMaxAcceleration: 40
+  mMaxVelocity: 12
+  mMaxAcceleration: 80
   mMaxJerk: 10000
   DampeningMultiplier: 3
   DragCoeff: 3

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Xml;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -22,7 +23,7 @@ public class PhysicsApplier : MonoBehaviour
 
     // Class definitions //////////////////////////////////////////////////////////
 
-    [CreateAssetMenu(fileName = "PhysicsStatsSet", menuName = "Scripts/ScriptableObjects/Physics/ForceStatSet")]
+    [CreateAssetMenu(fileName = "PhysicsStatsSet", menuName = "Scripts/ScriptableObjects/Player/ForceStatSet")]
     [System.Serializable]
     public class PhysicsTuningStatSet : ScriptableObject
     {
@@ -37,7 +38,7 @@ public class PhysicsApplier : MonoBehaviour
 
         public float mDampeningZeroThreshold = 0.1f; // NOT used, may revisit zeroing out a force once it hits a certain low threshold after applying drag
         public DampeningType mDampeningType = DampeningType.Percentage;
-        public float mMaxDampeningTime = 1.0f; // The time it takes to dampen when at max velocity. Lower velocities will take less time
+        public float mMaxDampeningTime = 1.0f; // Only for interpolation dampening. The time it takes to dampen when at max velocity. Lower velocities will take less time
 
     }
     public enum DampeningType
@@ -105,6 +106,8 @@ public class PhysicsApplier : MonoBehaviour
             {
                 mAcceleration = Clamp(mAcceleration, Stats.mMaxAcceleration);
             }
+            print("New Acceleration: " + mAcceleration.ToString());
+            
             T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
 
             // Always allow for clamping clamp max velocity, weird stuff if we don't
@@ -289,6 +292,15 @@ public class PhysicsApplier : MonoBehaviour
 
         public override Vector2 Add(Vector2 left, Vector2 right)
         {
+            Vector2 newValue = left + right;
+            if (float.IsNaN(newValue.magnitude))
+            {
+                print("OOf");
+            }
+            if ((left + right).magnitude > 10000000000.0f)
+            {
+                print("tooMuch!");
+            }
             return left + right;
         }
 
@@ -388,6 +400,10 @@ public class PhysicsApplier : MonoBehaviour
 
         protected override void SetVelocity(Vector2 newValue)
         {
+            if (newValue.IsUnityNull())
+            {
+                print("BreakHere?");
+            }
             if (mParent == null)
             {
                 mPreInitVelocity = newValue;
@@ -590,8 +606,29 @@ public class PhysicsApplier : MonoBehaviour
         {
             print("Dashin" + mUncappedDirectionalForces.Jerk.magnitude.ToString() + " " + mUncappedDirectionalForces.Acceleration.magnitude.ToString());
         }
+        Vector2 mCurrAcceleration = mDirectionalForces.Acceleration;
+        if (float.IsNaN(mCurrAcceleration.x) || float.IsNaN(mCurrAcceleration.y))
+        {
+            print("We have a problem");
+        }
+        Vector2 mCurrVelocity = mDirectionalForces.Velocity;
+        if (float.IsNaN(mCurrVelocity.x) || float.IsNaN(mCurrVelocity.y))
+        {
+            print("We have a problem");
+        }
         // Then uncapped
         cancelVelocity += mUncappedDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
+
+        mCurrAcceleration = mUncappedDirectionalForces.Acceleration;
+        if (float.IsNaN(mCurrAcceleration.x) || float.IsNaN(mCurrAcceleration.y))
+        {
+            print("We have a problem");
+        }
+        mCurrVelocity = mUncappedDirectionalForces.Velocity;
+        if (float.IsNaN(mCurrVelocity.x) || float.IsNaN(mCurrVelocity.y))
+        {
+            print("We have a problem");
+        }
 
         if (cancelVelocity >= 2)
         {

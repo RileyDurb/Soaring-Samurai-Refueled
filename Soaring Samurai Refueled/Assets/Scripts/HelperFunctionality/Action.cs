@@ -74,7 +74,14 @@ public abstract class Action_
         }
 
         // Updates percent done
-        mPercentDone = Easing(mTime / mDuration, mEasingType);
+        if (mDuration == 0.0f)
+        {
+            mPercentDone = 1.0f;
+        }
+        else
+        {
+            mPercentDone = Easing(mTime / mDuration, mEasingType);
+        }
 
         return true;
     }
@@ -132,6 +139,11 @@ public abstract class Action_
 
     }
 
+    // Getters and setters
+    public float Duration
+    {
+        get { return mDuration; }
+    }
 }
 
 // Derived actions
@@ -777,10 +789,6 @@ class Action_EqualizedKnockback : Action_
 
         mLastPercentDone = mPercentDone; // Save current percent done for next frame
 
-        if (mPercentDone > 1000000.0f)
-        {
-            Debug.Log("Hmmmm");
-        }
 
 
         // If interpolation is complete

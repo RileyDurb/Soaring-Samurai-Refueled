@@ -439,7 +439,11 @@ public class PlayerCombatController : MonoBehaviour
         {
             Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
         }
-        mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
+
+        if (attackData.Knockback.magnitude > 0.0f)
+        {
+            mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
+        }
 
         if (baseAttackInfo.UseCustomHitSquishCurve)
         {

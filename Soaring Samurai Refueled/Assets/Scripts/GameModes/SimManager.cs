@@ -85,6 +85,11 @@ public class SimManager : MonoBehaviour
         }
     }
 
+    //private void OnApplicationQuit()
+    //{
+    //    CallGameEnd();
+    //}
+
     // Getters and setters //////////////////////////////////////////////////////////////////////////////////
     public GameObject GetPrefab(string name)
     {
@@ -123,12 +128,6 @@ public class SimManager : MonoBehaviour
     void Exit()
     {
 
-        // Calls game end event
-        if (GameEnd != null)
-        {
-            GameEnd.Invoke();
-        }
-
         // Does proper exit, based on if in editor or a build
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -136,6 +135,15 @@ public class SimManager : MonoBehaviour
         Application.Quit();
 #endif
 
+    }
+
+    void CallGameEnd()
+    {
+        // Calls game end event
+        if (GameEnd != null)
+        {
+            GameEnd.Invoke();
+        }
     }
 
 
