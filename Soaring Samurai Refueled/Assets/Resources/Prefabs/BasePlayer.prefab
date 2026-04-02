@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mDirectionalForces:
     Stats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
-    InputBeingApplied: 0
+    InputBeingApplied: 1
   mUncappedDirectionalForces:
     Stats: {fileID: 11400000, guid: b282f329416721b43a61ce625b234179, type: 2}
     InputBeingApplied: 0

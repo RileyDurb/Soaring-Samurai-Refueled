@@ -23,24 +23,7 @@ public class PhysicsApplier : MonoBehaviour
 
     // Class definitions //////////////////////////////////////////////////////////
 
-    [CreateAssetMenu(fileName = "PhysicsStatsSet", menuName = "Scripts/ScriptableObjects/Player/ForceStatSet")]
-    [System.Serializable]
-    public class PhysicsTuningStatSet : ScriptableObject
-    {
-        [Header("ForceMaxes")]
-        public float mMaxVelocity;
-        public float mMaxAcceleration;
-        public float mMaxJerk;
 
-        [Header("Coefficients")]
-        public float DampeningMultiplier = 0.9f;
-        public float DragCoeff = 0.3f;
-
-        public float mDampeningZeroThreshold = 0.1f; // NOT used, may revisit zeroing out a force once it hits a certain low threshold after applying drag
-        public DampeningType mDampeningType = DampeningType.Percentage;
-        public float mMaxDampeningTime = 1.0f; // Only for interpolation dampening. The time it takes to dampen when at max velocity. Lower velocities will take less time
-
-    }
     public enum DampeningType
     {
         Percentage, // Percentage dampened each frame
@@ -106,7 +89,6 @@ public class PhysicsApplier : MonoBehaviour
             {
                 mAcceleration = Clamp(mAcceleration, Stats.mMaxAcceleration);
             }
-            print("New Acceleration: " + mAcceleration.ToString());
             
             T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
 
@@ -292,15 +274,6 @@ public class PhysicsApplier : MonoBehaviour
 
         public override Vector2 Add(Vector2 left, Vector2 right)
         {
-            Vector2 newValue = left + right;
-            if (float.IsNaN(newValue.magnitude))
-            {
-                print("OOf");
-            }
-            if ((left + right).magnitude > 10000000000.0f)
-            {
-                print("tooMuch!");
-            }
             return left + right;
         }
 
@@ -353,9 +326,7 @@ public class PhysicsApplier : MonoBehaviour
 
         public override void ApplyJerk(Vector2 jerk)
         {
-            print ("Adding jerk: " + mJerk.magnitude.ToString() + " + " + jerk.magnitude.ToString()); 
             mJerk += jerk;
-            print("New Jerk: " + mJerk.magnitude.ToString());
         }
 
         public override void ApplyDrag(float dt)
@@ -400,10 +371,6 @@ public class PhysicsApplier : MonoBehaviour
 
         protected override void SetVelocity(Vector2 newValue)
         {
-            if (newValue.IsUnityNull())
-            {
-                print("BreakHere?");
-            }
             if (mParent == null)
             {
                 mPreInitVelocity = newValue;
@@ -602,33 +569,8 @@ public class PhysicsApplier : MonoBehaviour
         // First update capped
         int cancelVelocity = mDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
 
-        if (mUncappedDirectionalForces.Jerk.magnitude > 0 || mUncappedDirectionalForces.Acceleration.magnitude > 0)
-        {
-            print("Dashin" + mUncappedDirectionalForces.Jerk.magnitude.ToString() + " " + mUncappedDirectionalForces.Acceleration.magnitude.ToString());
-        }
-        Vector2 mCurrAcceleration = mDirectionalForces.Acceleration;
-        if (float.IsNaN(mCurrAcceleration.x) || float.IsNaN(mCurrAcceleration.y))
-        {
-            print("We have a problem");
-        }
-        Vector2 mCurrVelocity = mDirectionalForces.Velocity;
-        if (float.IsNaN(mCurrVelocity.x) || float.IsNaN(mCurrVelocity.y))
-        {
-            print("We have a problem");
-        }
         // Then uncapped
         cancelVelocity += mUncappedDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
-
-        mCurrAcceleration = mUncappedDirectionalForces.Acceleration;
-        if (float.IsNaN(mCurrAcceleration.x) || float.IsNaN(mCurrAcceleration.y))
-        {
-            print("We have a problem");
-        }
-        mCurrVelocity = mUncappedDirectionalForces.Velocity;
-        if (float.IsNaN(mCurrVelocity.x) || float.IsNaN(mCurrVelocity.y))
-        {
-            print("We have a problem");
-        }
 
         if (cancelVelocity >= 2)
         {
