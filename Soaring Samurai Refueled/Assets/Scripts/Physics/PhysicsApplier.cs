@@ -484,13 +484,27 @@ public class PhysicsApplier : MonoBehaviour
 
     }
 
+
     public PhysicsVectorGroup mDirectionalForces = new PhysicsVectorGroup();
     public PhysicsVectorGroup mUncappedDirectionalForces = new PhysicsVectorGroup();
 
     public PhysicsFloatGroup mRotationalForces = new PhysicsFloatGroup();
 
     // Debug stuff
+    [SerializeField] private GameObject mDebugPrintPrefab;
+    private GameObject mDebugPrintObjectRef;
+
+    [SerializeField] Vector3 mDebugPrintCornerOffset = new Vector3(746, 406, 0);
+    Vector2[] mDebugPrintOffsetDirections =
+        { 
+        new Vector2(-1, 1 ),
+        new Vector2(1, 1 ),
+        new Vector2(-1, -1),
+        new Vector2(-1, 1)
+        };
+
     public bool mDebugDraw = true;
+
 
     private void Awake()
     {
@@ -519,6 +533,41 @@ public class PhysicsApplier : MonoBehaviour
         {
             mRotationalForces.SetStartingVelocity(mRotationalForces.PreVelocity);
         }
+
+        // Set up debug print (Relies on player name having a number to denote which player it is)
+        string debugPrinterName = name + "PhysicsDebugPrinter";
+        GameObject debugPrinter = GameObject.Find(debugPrinterName); // Try to find an existing printer that was created
+
+
+        if (debugPrinter == null) // If no debug printer exists
+        {
+            if (mDebugPrintPrefab == null)
+            {
+                print("PhysicsApplier: No Debug Printer Prefab Set");
+            }
+            // Spawn new printer
+            debugPrinter = Instantiate(mDebugPrintPrefab, GameObject.Find("Canvas").transform);
+            debugPrinter.name = debugPrinterName;
+
+            // Get player number from the object name (Expects the format Player1, Player2, ect)
+            int playerNumber = int.Parse(name.Substring(6, 1));
+
+            // Gets the direction to put the offset in, to make p1 upper left corner, p2 upper right, etc.
+            Vector3 spawnPos = mDebugPrintCornerOffset;
+            Vector2 offsetDirection = mDebugPrintOffsetDirections[playerNumber - 1]; // Uses player number - 1 to index into the direction vector list
+
+            // Sets the new position of the debug drawer based on the offset
+            spawnPos.Set(mDebugPrintCornerOffset.x * offsetDirection.x, mDebugPrintCornerOffset.y * offsetDirection.y, mDebugPrintCornerOffset.z);
+            debugPrinter.GetComponent<RectTransform>().anchoredPosition = spawnPos;
+        }
+
+        mDebugPrintObjectRef = debugPrinter; // Saves reference to the debug printer
+
+        // Set up debug printing based on whether debug mode is active
+        OnDebugModeChanged(SimManager.Instance.DebugModeOn);
+
+        SimManager.Instance.DebugModeStateChanged += OnDebugModeChanged;
+
     }
 
     // Update is called once per frame
@@ -532,10 +581,6 @@ public class PhysicsApplier : MonoBehaviour
 
         if (mDebugDraw == true)
         {
-
-            
-            if (name == "Player")
-            {
                 // Draw debug lines for each force and derivative
                 Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.GetVelocity().x, mDirectionalForces.GetVelocity().y, 0), Color.green, 0, false);
                 Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Acceleration.x, mDirectionalForces.Acceleration.y, 0), Color.red, 0, false);
@@ -545,7 +590,7 @@ public class PhysicsApplier : MonoBehaviour
                 Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Acceleration.x, mUncappedDirectionalForces.Acceleration.y, 0), Color.grey, 0, false);
                 Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Jerk.x, mUncappedDirectionalForces.Jerk.y, 0), Color.magenta, 0, false);
 
-                TextMeshProUGUI tmp = GameObject.Find("PhysicsDebugPrinter").GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI tmp = mDebugPrintObjectRef.GetComponent<TextMeshProUGUI>();
 
                 if (tmp != null)
                 {
@@ -556,7 +601,6 @@ public class PhysicsApplier : MonoBehaviour
                                "Acceleration: " + mRotationalForces.Acceleration + "\n" +
                                "Jerk: " + mRotationalForces.Jerk;
                 }
-            }
         }
 
 
@@ -601,6 +645,11 @@ public class PhysicsApplier : MonoBehaviour
 
     }
 
+    public void OnDestroy()
+    {
+        SimManager.Instance.DebugModeStateChanged -= OnDebugModeChanged; // Unsubscribe responding to debug mode change now that we're being destroyed
+    }
+
     public void ResetForces()
     {
         mDirectionalForces.ClearAllForces();
@@ -616,6 +665,12 @@ public class PhysicsApplier : MonoBehaviour
         mRotationalForces.TransferForceModifiers(physics.mRotationalForces);
 
         mDebugDraw = physics.mDebugDraw;
+    }
+
+    public void OnDebugModeChanged(bool newDebugActive)
+    {
+        mDebugPrintObjectRef.SetActive(newDebugActive);
+        mDebugDraw = newDebugActive;
     }
 }
 

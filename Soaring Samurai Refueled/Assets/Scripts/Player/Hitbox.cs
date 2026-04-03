@@ -92,7 +92,7 @@ public class Hitbox : MonoBehaviour
 
         // Enables debug draw if in debug mode, disables if not
         // NOTE: Size not accurate at the moment
-        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugMode;
+        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugModeOn;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
-using System;
 using UnityEngine.InputSystem.OnScreen;
 
 public class SimManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class SimManager : MonoBehaviour
 
     // Events /////////////////////////////////////////////////////////////////////////////////////////////
     public Action GameEnd;
+    public Action<bool> DebugModeStateChanged;
 
     // Instance ///////////////////////////////////////////////////////////////////////////////////////////
     public static SimManager Instance;
@@ -26,6 +28,7 @@ public class SimManager : MonoBehaviour
     // Debug related
     bool mDebugMode = false;
     bool mAllowDebug = true;
+
     Vector2 mTestSlapDirection = Vector2.left;
 
     /* Debug hotkeys
@@ -33,8 +36,7 @@ public class SimManager : MonoBehaviour
     // X - test slap your player with side to side knockback
     */
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Instance = this;
 
@@ -50,14 +52,14 @@ public class SimManager : MonoBehaviour
         // DEBUG KEY: Toggle debug mode
         if (Input.GetKeyUp(KeyCode.Slash))
         {
-            DebugMode = !mDebugMode;
+            DebugModeOn = !mDebugMode;
         }
 
         if (mAllowDebug == true)
         {
             if (Input.GetKeyUp(KeyCode.X))
             {
-                GameObject player = GameObject.Find("Player");
+                GameObject player = GameObject.Find("Player1");
                 if (player != null)
                 {
                     player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackCurrentData(mTestSlapDirection * TestSlapStrength), mDebugSlapStats.mStats);
@@ -95,24 +97,23 @@ public class SimManager : MonoBehaviour
     {
         return mPrefabs[name];
     }
-    public bool DebugMode
+    public bool DebugModeOn
     { get { return mDebugMode; }
       set
         {
-            // NOTE: when functionality needs to respond to debug mode being turned on/ off, can add an event call here to handle that
+            bool lastDebugModeState = mDebugMode;
             mDebugMode = value;
+
+            if (lastDebugModeState != mDebugMode)
+            {
+                if (DebugModeStateChanged != null)
+                {
+                    DebugModeStateChanged.Invoke(mDebugMode);
+                }
+            }
         } 
     }
-    public void SetDebugMode(bool debugOn)
-    {
 
-        mDebugMode = debugOn;
-    }
-
-    public bool IsDebugMode()
-    {
-        return mDebugMode;
-    }
     // Helper functions /////////////////////////////////////////////////////////////////////////////////////
     void LoadPrefabs()
     {

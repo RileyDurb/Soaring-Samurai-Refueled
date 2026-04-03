@@ -44,7 +44,7 @@ public class CameraFollow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mDebugFirstPlayer = GameObject.Find("Player");
+        mDebugFirstPlayer = GameObject.Find("Player1");
         mBaseOrthographicSize = GetComponent<Camera>().orthographicSize;
 
         // Add each player as a follow object
@@ -61,7 +61,7 @@ public class CameraFollow : MonoBehaviour
     {
         if (mDebugFirstPlayer == null)
         {
-            mDebugFirstPlayer = GameObject.Find("Player");
+            mDebugFirstPlayer = GameObject.Find("Player1");
             if (mDebugFirstPlayer == null )
             {
                 return;

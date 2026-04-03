@@ -435,7 +435,7 @@ public class PlayerCombatController : MonoBehaviour
     {
         GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
 
-        if (SimManager.Instance.DebugMode)
+        if (SimManager.Instance.DebugModeOn)
         {
             Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
         }
