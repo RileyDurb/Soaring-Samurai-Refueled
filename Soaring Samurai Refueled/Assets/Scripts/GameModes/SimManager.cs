@@ -24,6 +24,7 @@ public class SimManager : MonoBehaviour
 
     // Private Variables //////////////////////////////////////////////////////////////////////////////////
     Dictionary<string, GameObject> mPrefabs = new Dictionary<string, GameObject>();
+    GameObject mTempPauseMenuSpawnedPrefab;
 
     // Debug related
     bool mDebugMode = false;
@@ -72,9 +73,17 @@ public class SimManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyUp(KeyCode.Minus))
+            if (Input.GetKeyUp(KeyCode.Minus) || Input.GetKeyUp(KeyCode.Escape))
             {
-                Exit();
+                if (mTempPauseMenuSpawnedPrefab == null)
+                {
+                    mTempPauseMenuSpawnedPrefab = Instantiate(mPrefabs["PauseMenu"], GameObject.Find("Canvas").transform);
+                }
+                else
+                {
+                    Destroy(mTempPauseMenuSpawnedPrefab);
+                    mTempPauseMenuSpawnedPrefab = null;
+                }
             }
             //if (/*Input.GetKeyUp(KeyCode.G)*/true)
             //{
@@ -125,10 +134,20 @@ public class SimManager : MonoBehaviour
         }
     }
 
-    // Misc usage functions /////////////////////////////////////////////////////////////////////////////////
-    void Exit()
+    void CallGameEnd()
     {
+        // Calls game end event
+        if (GameEnd != null)
+        {
+            GameEnd.Invoke();
+        }
+    }
 
+
+    // Misc usage functions /////////////////////////////////////////////////////////////////////////////////
+    public void Exit()
+    {
+        CallGameEnd();
         // Does proper exit, based on if in editor or a build
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -138,14 +157,6 @@ public class SimManager : MonoBehaviour
 
     }
 
-    void CallGameEnd()
-    {
-        // Calls game end event
-        if (GameEnd != null)
-        {
-            GameEnd.Invoke();
-        }
-    }
 
 
 }
