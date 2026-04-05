@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class PauseMenuButtonFunctions : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] GameObject DebugMenuPrefab;
     public void ExitGame()
     {
         SimManager.Instance.Exit();
+    }
+
+    public void OpenDebugMenu()
+    {
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushMenu(DebugMenuPrefab);
     }
 }

@@ -75,34 +75,72 @@ public class MenuManager : MonoBehaviour
 
     }
 
+    // Helper functions ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Creates an object from the given prefab, and puts it as the front of the menu layer
+    public void PushItem(UILayer layer, GameObject uiPrefabToUse)
+    {
+        // Spawms the new object as a child of the menu layer parent
+        GameObject newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)layer].mLayerParentRef.transform);
+
+        // Hide current layer if any
+        if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
+        {
+            GameObject currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
+            currTopItem.SetActive(false);
+        }
+
+        mMenuLayers[(int)layer].mLayerItems.Push(newUIObject);
+    }
 
 
-    // Public usage functions
+    // Removes and destroys top item on the menu layer
+    public void PopItem(UILayer layer)
+    {
+        // Destroys and removes top UI object
+        GameObject currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
+
+        mMenuLayers[(int)layer].mLayerItems.Pop();
+
+        Destroy(currTopItem);
+
+        // Activate new top layer if any
+        if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
+        {
+            currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
+            currTopItem.SetActive(true);
+        }
+    }
+
+
+    public int NumItemsInLayer(UILayer layer)
+    {
+        return mMenuLayers[(int)layer].mLayerItems.Count;
+    }
+
+
+    // Public usage functions ///////////////////////////////////////////////////////////////////////////////////////////
 
 
     // Creates an object from the given prefab, and puts it as the front of the menu layer
     public void PushMenu(GameObject uiPrefabToUse)
     {
-        // Spawms the new object as a child of the menu layer parent
-        GameObject newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)UILayer.Menu].mLayerParentRef.transform);
-
-        mMenuLayers[(int)UILayer.Menu].mLayerItems.Push(newUIObject);
+        PushItem(UILayer.Menu, uiPrefabToUse);
     }
 
     // Removes and destroys top item on the menu layer
     public void PopMenu()
     {
-        // Destroys and removes top UI object
-        GameObject currTopMenu = mMenuLayers[(int)UILayer.Menu].mLayerItems.Peek();
-
-        mMenuLayers[(int)UILayer.Menu].mLayerItems.Pop();
-
-        Destroy(currTopMenu);
+        PopItem(UILayer.Menu);
     }
 
     // Returns number of items in the menu layer
     public int NumItemsInMenu()
     {
-        return mMenuLayers[(int)UILayer.Menu].mLayerItems.Count;
+        return NumItemsInLayer(UILayer.Menu);
     }
+
+
+
+
 }
