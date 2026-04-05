@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
@@ -73,16 +74,16 @@ public class SimManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyUp(KeyCode.Minus) || Input.GetKeyUp(KeyCode.Escape))
+            if (Input.GetKeyUp(KeyCode.Minus) || Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
             {
-                if (mTempPauseMenuSpawnedPrefab == null)
+                MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
+                if (menuManager.NumItemsInMenu() == 0)
                 {
-                    mTempPauseMenuSpawnedPrefab = Instantiate(mPrefabs["PauseMenu"], GameObject.Find("Canvas").transform);
+                    menuManager.PushMenu(mPrefabs["PauseMenu"]);
                 }
                 else
                 {
-                    Destroy(mTempPauseMenuSpawnedPrefab);
-                    mTempPauseMenuSpawnedPrefab = null;
+                    menuManager.PopMenu();
                 }
             }
             //if (/*Input.GetKeyUp(KeyCode.G)*/true)
