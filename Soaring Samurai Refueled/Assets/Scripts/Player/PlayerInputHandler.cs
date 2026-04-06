@@ -36,13 +36,13 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
 
-        GameObject joystick = GameObject.Find("TestMobileJoystick");
-        OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
+        //GameObject joystick = GameObject.Find("TestMobileJoystick");
+        //OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
 
-        GameObject northButton = GameObject.Find("UpRightAttackButton");
-        OnScreenButton buttonCom = northButton.GetComponent<OnScreenButton>();
+        //GameObject northButton = GameObject.Find("UpRightAttackButton");
+        //OnScreenButton buttonCom = northButton.GetComponent<OnScreenButton>();
 
-        InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
+        //InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
         //InputUser.PerformPairingWithDevice(buttonCom.control.device, input.user);
 
         //PlayerInputManager inputManager = GameObject.Find("PlayerManager").GetComponent<PlayerInputManager>();

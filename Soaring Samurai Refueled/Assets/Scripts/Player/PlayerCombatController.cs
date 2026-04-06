@@ -243,6 +243,13 @@ public class PlayerCombatController : MonoBehaviour
     // Action functions
     public void OnMove(InputAction.CallbackContext context)
     {
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.MovementAction))
+        {
+            mMoveInput = Vector2.zero; // Stop any previous movement input
+            return;
+        }
+
         switch (context.phase)
         {
             case InputActionPhase.Performed:
@@ -287,6 +294,13 @@ public class PlayerCombatController : MonoBehaviour
         {
             return;
         }
+
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
+        {
+            return;
+        }
+
         if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
@@ -311,6 +325,13 @@ public class PlayerCombatController : MonoBehaviour
         {
             return;
         }
+
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
+        {
+            return;
+        }
+
         if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
@@ -338,6 +359,13 @@ public class PlayerCombatController : MonoBehaviour
         {
             return;
         }
+
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
+        {
+            return;
+        }
+
         if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
@@ -365,6 +393,12 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
+        {
+            return;
+        }
+
         if (inputPhase == InputActionPhase.Started)
         {
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
@@ -387,6 +421,12 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.MovementAction))
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Canceled)
         {
             mStateManager.EnterState(PlayerStates.Dash, mPlayerBaseStats.mMovementStats.DashDuration, PlayerStates.Ready);
@@ -396,6 +436,11 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDashAttack(InputAction.CallbackContext context)
     {
+        // If combat actions are blocked, don't attack
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
+        {
+            return;
+        }
 
         if (context.phase == InputActionPhase.Performed)
         {
@@ -433,7 +478,8 @@ public class PlayerCombatController : MonoBehaviour
     // Combat related functions
     public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
-        GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
+        bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
+
 
         if (SimManager.Instance.DebugModeOn)
         {
@@ -454,6 +500,13 @@ public class PlayerCombatController : MonoBehaviour
             mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f); // Don't ease, just scale linearly
         }
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), .1f, .1f);
+
+
+        // Notify match of the player being defeated
+        if (wasDefeated)
+        {
+            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerDefeated.Invoke(playerIndex);
+        }
     }
 
 

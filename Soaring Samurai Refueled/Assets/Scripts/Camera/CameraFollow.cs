@@ -48,7 +48,7 @@ public class CameraFollow : MonoBehaviour
         mBaseOrthographicSize = GetComponent<Camera>().orthographicSize;
 
         // Add each player as a follow object
-        List<PlayerCombatController> players = GameObject.Find("MatchManager").GetComponent<MatchStateManager>().PlayerList;
+        List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
 
         foreach (PlayerCombatController player in players)
         {

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7955435158807744145}
   - component: {fileID: 791299954412446147}
   - component: {fileID: -5343045980092088303}
+  - component: {fileID: 2524533964964330955}
+  - component: {fileID: 6965499727050373144}
   m_Layer: 0
   m_Name: LevelScopeManagersHolder
   m_TagString: Untagged
@@ -55,5 +57,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1837faeaef2d0444a68d3f95c441dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2524533964964330955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a1c099a111ede14282ee61f24fb3da0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mMatchStats: {fileID: 11400000, guid: 81b200f92de64a949a9ebe28e484fc30, type: 2}
+--- !u!114 &6965499727050373144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a85c969fb7c3984c8a87bc8ef93398f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

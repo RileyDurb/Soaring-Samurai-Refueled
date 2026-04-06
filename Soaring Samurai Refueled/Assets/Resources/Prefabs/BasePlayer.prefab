@@ -164,6 +164,7 @@ MonoBehaviour:
     InputBeingApplied: 0
     mStaticFrictionThreshold: 0
   mDebugPrintPrefab: {fileID: 4349414876807131180, guid: 50e06c8efcc97db42bbdaae501facada, type: 3}
+  mDebugPrintCornerOffset: {x: 746, y: 406, z: 0}
   mDebugDraw: 1
 --- !u!70 &1457328239894749921
 CapsuleCollider2D:
@@ -286,7 +287,7 @@ MonoBehaviour:
   - mName: 1
     mStatesCancellableInto: 0000000002000000
   - mName: 2
-    mStatesCancellableInto: 000000000100000003000000
+    mStatesCancellableInto: 0000000001000000
   - mName: 3
     mStatesCancellableInto: 00000000
   mStartingState: 0

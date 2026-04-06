@@ -142,7 +142,15 @@ public class PoolContainer : MonoBehaviour
 
             return justEmptied;
         }
+
+        public virtual void ResetPool()
+        {
+            PoolCurr = PoolMax;
+            RegenDelayTimer = -1.0f;
+            lastPoolValue = PoolCurr;
+        }
     }
+
 
     [SerializeField]
     List<Pool> mPoolList = new List<Pool>();

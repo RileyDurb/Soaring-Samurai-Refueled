@@ -17,7 +17,6 @@ public class StateManagerPlayer : StateManagerEnum<PlayerStates>
 {
     protected override void Awake()
     {
-        print("PlayerStateStarted");
         // Create any states that are have specfiic code
         mStateList.Add(new State_Ready());
 

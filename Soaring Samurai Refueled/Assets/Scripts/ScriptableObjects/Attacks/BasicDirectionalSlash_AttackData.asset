@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BasicDirectionalSlash_AttackData
   m_EditorClassIdentifier: 
   mStats:
-    mDamage: 5
+    mDamage: 10
     mActiveTime: 0.3
     mAttackOffsetDistance: 0.6
     mHitboxScaleFromPlayer: {x: 0.5, y: 0.5}

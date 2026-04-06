@@ -597,6 +597,8 @@ public class PhysicsApplier : MonoBehaviour
                     tmp.text = "Velocity: \n" + mDirectionalForces.Velocity + "\n" +
                                "Acceleration: \n" + mDirectionalForces.Acceleration + "\n" +
                                "Jerk: \n" + mDirectionalForces.Jerk + "\n" +
+                               "UncapAcceleration: \n" + mUncappedDirectionalForces.Acceleration + "\n" +
+                               "UncapJerk: \n" + mUncappedDirectionalForces.Jerk + "\n" +
                                "Velocity: " + mRotationalForces.Velocity + "\n" +
                                "Acceleration: " + mRotationalForces.Acceleration + "\n" +
                                "Jerk: " + mRotationalForces.Jerk;

@@ -36,7 +36,7 @@ public class BehaviourMovementBounds : MonoBehaviour
         mCurrPlayersCenter = mCamRef.GetComponent<CameraFollow>().CurrFollowTarget;
 
         // Update Scale
-        List<PlayerCombatController> mPlayers = GameObject.Find("MatchManager").GetComponent<MatchStateManager>().PlayerList; // Get player list
+        List<PlayerCombatController> mPlayers = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList; // Get player list
 
         //mCamRef.GetComponent<Camera>().orthographicSize
 
