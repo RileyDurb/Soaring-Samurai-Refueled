@@ -290,4 +290,6 @@ MonoBehaviour:
     mStatesCancellableInto: 0000000001000000
   - mName: 3
     mStatesCancellableInto: 00000000
+  - mName: 4
+    mStatesCancellableInto: 
   mStartingState: 0

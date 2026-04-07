@@ -29,9 +29,11 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
 
         // Public functions
 
+        public State(T stateName) => mName = stateName; // Make derived classes define a constructor that sets the state name, so each state is unique
         public virtual void OnEnter() { }
         public virtual void OnUpdate(float dt) { }
         public virtual void OnExit() { }
+
 
         // Private Variables ///////////////////////////////////////////////////
 
@@ -66,10 +68,31 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
             currState.mParentObject = this.gameObject;
         }
 
+        //// Set Starting state
+        //if (Enum.IsDefined(mStartingState.GetType(), mStartingState)) // if starting state not blank
+        //{
+        //    EnterState(mStartingState);
+        //}
+        //else // If no starting state given
+        //{
+        //    if (mStateList.Count == 0)
+        //    {
+        //        print("StateManagerStart: State Manager on object " + name + " has no states at initialization");
+        //        mCurrState = null;
+        //    }
+        //    else
+        //    {
+        //        mCurrState = mStateList[0];
+        //    }
+        //}
+    }
+
+    protected virtual void Start()
+    {
         // Set Starting state
         if (Enum.IsDefined(mStartingState.GetType(), mStartingState)) // if starting state not blank
         {
-            mCurrState = GetState(mStartingState);
+            EnterState(mStartingState);
         }
         else // If no starting state given
         {
@@ -109,6 +132,8 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
                 mCurrStateTimer = -1;
             }
         }
+
+        mCurrState.OnUpdate(Time.deltaTime);
     }
 
     // Interface functions ////////////////////////////////////////////////////////////////////////////////////
@@ -130,14 +155,40 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         }
 
         // State is valid, call events
-        if (mCurrState.mOnStateExitEvent != null)
-            mCurrState.mOnStateExitEvent.Invoke(newStateName);
 
-        T prevStateName = mCurrState.mName; // Save previous name
+        // Call exit event/ function on last state, if any (could be no previous state if this is the first state set)
+        if (mCurrState != null)
+        {
+            mCurrState.OnExit();
+
+            if (mCurrState.mOnStateExitEvent != null)
+            {
+                mCurrState.mOnStateExitEvent.Invoke(newStateName);
+            }
+        }
+
+
+        State prevState = mCurrState; // Save previous state
+        
         mCurrState = newState;                   // Set new state
 
+
+        // Call on enter event/ function
+
+        mCurrState.OnEnter();
         if (mCurrState.mOnStateEnterEvent != null)
+        {
+            // Gets previous state if any
+            T prevStateName = default;
+            if (prevState != null)
+            {
+                prevStateName = prevState.mName;
+            }
+
             mCurrState.mOnStateEnterEvent.Invoke(prevStateName);
+        }
+
+
 
 
 
@@ -178,9 +229,28 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         targetState.mOnStateExitEvent += callback;
     }
 
+    public bool HasState(T stateName)
+    {
+        if (mStateList.Count == 0)
+        {
+            return false;
+        }
+
+        State foundState = mStateList.Find(state => state.mName.CompareTo(stateName) == 0);
+
+        if (foundState == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
 
     // Helper functions //////////////////////////////////////////////////////////////////////////////////////
-    State GetState(T stateName)
+    protected State GetState(T stateName)
     {
         if (mStateList.Count == 0)
         {
@@ -197,4 +267,6 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
 
         return foundState;
     }
+
+
 }

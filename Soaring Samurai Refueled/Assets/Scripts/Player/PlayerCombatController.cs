@@ -101,7 +101,7 @@ public class PlayerCombatController : MonoBehaviour
         mOGScale = transform.localScale;
 
         // Subscribe state change functions
-        mStateManager.AddOnEnter(PlayerStates.Ready, StartIdle);
+        //mStateManager.AddOnEnter(PlayerStates.Ready, StartIdle);
 
         mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
@@ -506,6 +506,8 @@ public class PlayerCombatController : MonoBehaviour
         if (wasDefeated)
         {
             LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerDefeated.Invoke(playerIndex);
+
+            GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Defeated);
         }
     }
 
@@ -526,10 +528,6 @@ public class PlayerCombatController : MonoBehaviour
 
     // State functions
 
-    void StartIdle(PlayerStates prevState)
-    {
-        mAnimationController.SetAnimationState("Player_Idle");
-    }
 
     void StartDash(PlayerStates prevState)
     {

@@ -5,6 +5,9 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class State_Ready : StateManagerPlayer.State
 {
+
+    public State_Ready() : base(PlayerStates.Ready) { }
+
     PlayerCombatController mCombatControllerRef;
     public override void OnEnter()
     {
@@ -15,15 +18,15 @@ public class State_Ready : StateManagerPlayer.State
 
     public override void OnUpdate(float dt)
     {
-        
-        if (mCombatControllerRef.OpponentRef.transform.position.x < mParentObject.transform.position.x)
-        {
-            mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Left);
-        }
-        else
-        {
-            mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Right);
-        }
+        // Commmented out, cause we're still doing this for dashing in the main combat controller. Make this an individual state thing when we move dashing to it's own state
+        //if (mCombatControllerRef.OpponentRef.transform.position.x < mParentObject.transform.position.x)
+        //{
+        //    mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Left);
+        //}
+        //else
+        //{
+        //    mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Right);
+        //}
     }
 
 }

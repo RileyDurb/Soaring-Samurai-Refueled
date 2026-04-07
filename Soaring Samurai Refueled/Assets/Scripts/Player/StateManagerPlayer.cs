@@ -10,26 +10,28 @@ public enum PlayerStates
     Ready,
     SlashAttack,
     Dash,
-    DashAttack
+    DashAttack,
+    Defeated
 }
 
 public class StateManagerPlayer : StateManagerEnum<PlayerStates>
 {
     protected override void Awake()
     {
-        // Create any states that are have specfiic code
+        // Create any states that are have specfiic code NOTE: Make sure states are added in the same order as the enum, so they get named properly
         mStateList.Add(new State_Ready());
+        mStateList.Add(new State_Defeated());
 
         // Copies info for each state into the derived class
         foreach (PlayerStates currState in Enum.GetValues(typeof(PlayerStates)))
         {
             // If this slot hasn't been filled with a state, create a default one for it
-            if (mStateList.Count <= (int)currState)
+            if (HasState(currState) == false)
             {
-                mStateList.Add(new State());
+                mStateList.Add(new State(currState));
             }
-            mStateList[(int)currState].mName = currState;
-            mStateList[(int)currState].mStatesCancellableInto = mStateInfoList[(int)currState].mStatesCancellableInto;
+
+            GetState(currState).mStatesCancellableInto = mStateInfoList[(int)currState].mStatesCancellableInto;
         }
 
         base.Awake();
