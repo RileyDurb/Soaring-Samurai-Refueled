@@ -45,9 +45,9 @@ public class PlayerInputHandler : MonoBehaviour
         //InputUser.PerformPairingWithDevice(joystickComp.control.device, input.user);
         //InputUser.PerformPairingWithDevice(buttonCom.control.device, input.user);
 
-        //PlayerInputManager inputManager = GameObject.Find("PlayerManager").GetComponent<PlayerInputManager>();
+        //PlayerInputManager inputManager = LevelScopeManagers.Instance.GetComponent<PlayerInputManager>();
         //inputManager.JoinPlayer(1, -1, "GamePad", joystickComp.control.device);
-  
+
         //spawnedMobileInput = true;
 
     }

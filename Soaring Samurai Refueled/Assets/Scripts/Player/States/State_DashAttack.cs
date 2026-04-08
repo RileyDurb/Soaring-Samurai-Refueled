@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerCombatController;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class State_DashAttack : StateManagerPlayer.State
@@ -54,6 +55,17 @@ public class State_DashAttack : StateManagerPlayer.State
     public override void OnUpdate(float dt)
     {
         mDashAttackActionList.Update(dt);
+
+        //  Face opponent
+        if (mCombatController.OpponentRef.transform.position.x < mParentObject.transform.position.x)
+        {
+            mCombatController.SetFacingDirection(FacingDirection.Left);
+        }
+        else
+        {
+            mCombatController.SetFacingDirection(FacingDirection.Right);
+        }
+
 
         // Calculate triggering move after ready and releasing the inputt
         if (mCurrDashAttackState == DashAttackStates.Ready && mDashAttackInputReleased == true)

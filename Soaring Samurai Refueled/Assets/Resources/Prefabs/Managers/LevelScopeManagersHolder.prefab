@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: -5343045980092088303}
   - component: {fileID: 2524533964964330955}
   - component: {fileID: 6965499727050373144}
+  - component: {fileID: 7718653242447094906}
+  - component: {fileID: 1484640635900181618}
   m_Layer: 0
   m_Name: LevelScopeManagersHolder
   m_TagString: Untagged
@@ -84,3 +86,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a85c969fb7c3984c8a87bc8ef93398f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7718653242447094906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NotificationBehavior: 2
+  m_MaxPlayerCount: 2
+  m_AllowJoining: 1
+  m_JoinBehavior: 0
+  m_PlayerJoinedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_PlayerLeftEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_JoinAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: dfd7c093-bcd8-43e7-aaa0-0bff1f947ddf
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_PlayerPrefab: {fileID: 2898222890073545663, guid: b7b7d59a79c8c354bb1d4a8985049777, type: 3}
+  m_SplitScreen: 0
+  m_MaintainAspectRatioInSplitScreen: 0
+  m_FixedNumberOfSplitScreens: -1
+  m_SplitScreenRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &1484640635900181618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f8d613a2b019f4a99a7d73d493b5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MobileControllerPrefab: {fileID: 3669667871348055061, guid: 2c94ebc7fce58554bba572cd4d1ea3ce, type: 3}

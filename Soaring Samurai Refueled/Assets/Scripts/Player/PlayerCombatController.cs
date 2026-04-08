@@ -98,7 +98,7 @@ public class PlayerCombatController : MonoBehaviour
         // Subscribe state change functions
         //mStateManager.AddOnEnter(PlayerStates.Ready, StartIdle);
 
-        mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
+        //mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
         //mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
 
@@ -114,38 +114,11 @@ public class PlayerCombatController : MonoBehaviour
     {
         mActionList.Update(Time.deltaTime);
 
-        // Face opponent while idling
-        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.DashAttack)
-        {
-            if (mOpponentRef.transform.position.x < transform.position.x)
-            {
-                SetFacingDirection(FacingDirection.Left);
-            }
-            else
-            {
-                SetFacingDirection(FacingDirection.Right);
-
-            }
-        }
 
 
         // Apply movement from current input value
-        float currSpeed = mPlayerBaseStats.mMovementStats.MoveJerk;
-
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
 
-
-        Vector2 moveVec = mMoveInput * currSpeed;
-
-        //if (mMoveInput.magnitude > 0)
-        //{
-        //    print(mMoveInput.magnitude.ToString()); 
-        //}
-
-        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.SlashAttack)
-        {
-            ApplyCappedMovementJerk(moveVec, Time.deltaTime);
-        }
 
         // Since things like dampening can be applied differently based in if input is being given, tell the physics the current state
         if (mMoveInput == Vector2.zero)
@@ -270,7 +243,6 @@ public class PlayerCombatController : MonoBehaviour
             SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
-
             SetFacingDirection(FacingDirection.Left);
 
             mAnimationController.SetAnimationState("Player_URNormalAttack");
@@ -304,7 +276,6 @@ public class PlayerCombatController : MonoBehaviour
             SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
-
             SetFacingDirection(FacingDirection.Right);
 
             mAnimationController.SetAnimationState("Player_DRNormalAttack");
@@ -337,7 +308,6 @@ public class PlayerCombatController : MonoBehaviour
             SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
 
             // Set animation and facing direction
-
             SetFacingDirection(FacingDirection.Right);
 
             mAnimationController.SetAnimationState("Player_URNormalAttack");
@@ -465,61 +435,5 @@ public class PlayerCombatController : MonoBehaviour
 
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
     }
-    // Helper functions
-
-
-
-    // State functions
-
-
-    void StartDash(PlayerStates prevState)
-    {
-        // Do squash and stretch
-        float timeElapsed = 0.0f;
-
-        // Scale down to min
-        float currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 4;
-        mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x * 1.2f, mOGScale.y * mActionAesthetics.DashStretchMin), currDashStageTime, 0.0f, Action_.EasingTypes.EaseInSmall);
-        timeElapsed += currDashStageTime;
-
-        // up to max
-        currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 2;
-        mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x * mActionAesthetics.DashStretchMin, mOGScale.y * mActionAesthetics.DashStretchMax), currDashStageTime,  timeElapsed, Action_.EasingTypes.EaseInBounce);
-        timeElapsed += currDashStageTime;
-
-        // Scale back to normal
-        currDashStageTime = mPlayerBaseStats.mMovementStats.DashDuration / 4;
-        mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), currDashStageTime, timeElapsed, Action_.EasingTypes.EaseOutMedium);
-
-        // Nothing needed gameplay wise, movememnt update speeds up while in dash state
-    }
-
-    //void StartDashAttackCharge(PlayerStates prevState)
-    //{
-    //    mAnimationController.SetAnimationState("Player_DashAttackCharge");
-
-    //    // Initialize variables
-    //    mCurrDashAttackState = DashAttackStates.Charge;
-    //    mDashAttackInputReleased = false;
-
-    //    mActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
-    //}
-
-    //void StartDashAttackRecovery()
-    //{
-    //    mCurrDashAttackState = DashAttackStates.Recovery;
-
-    //    mAnimationController.SetAnimationState("Player_DashAttackRecoverySheathed");
-
-    //    mActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
-    //}
-
-    //void EndDashAttackRecovery()
-    //{
-    //    if (mStateManager.CanEnterState(PlayerStates.Ready))
-    //    {
-    //        mStateManager.EnterState(PlayerStates.Ready);
-    //    }
-    //}
 }
 

@@ -68,7 +68,7 @@ public class AIBehaviour : MonoBehaviour
                     break;
                 }
                 Vector2 opponentMoveInput = mCombatControllerRef.OpponentRef.CurrMoveInput;
-                mCombatControllerRef.OpponentRef.CurrMoveInput = opponentMoveInput;
+                mCombatControllerRef.CurrMoveInput = opponentMoveInput;
 
                 break;
             }

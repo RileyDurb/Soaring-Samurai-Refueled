@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
     public enum UILayer
     {
         HUD,
+        Controls,
         Menu,
         Popups
     }
@@ -78,7 +79,7 @@ public class MenuManager : MonoBehaviour
     // Helper functions ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Creates an object from the given prefab, and puts it as the front of the menu layer
-    public void PushItem(UILayer layer, GameObject uiPrefabToUse)
+    public GameObject PushItem(UILayer layer, GameObject uiPrefabToUse)
     {
         // Spawms the new object as a child of the menu layer parent
         GameObject newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)layer].mLayerParentRef.transform);
@@ -91,6 +92,8 @@ public class MenuManager : MonoBehaviour
         }
 
         mMenuLayers[(int)layer].mLayerItems.Push(newUIObject);
+
+        return newUIObject;
     }
 
 
@@ -123,15 +126,26 @@ public class MenuManager : MonoBehaviour
 
 
     // Creates an object from the given prefab, and puts it as the front of the menu layer
-    public void PushMenu(GameObject uiPrefabToUse)
+    public GameObject PushMenu(GameObject uiPrefabToUse)
     {
-        PushItem(UILayer.Menu, uiPrefabToUse);
+        return PushItem(UILayer.Menu, uiPrefabToUse);
     }
 
     // Removes and destroys top item on the menu layer
     public void PopMenu()
     {
         PopItem(UILayer.Menu);
+    }
+
+    public GameObject PushControls(GameObject controlsPrefabToUse)
+    {
+        return PushItem(UILayer.Controls, controlsPrefabToUse);
+    }
+
+
+    public void PopControls()
+    {
+        PopItem(UILayer.Controls);
     }
 
     // Returns number of items in the menu layer

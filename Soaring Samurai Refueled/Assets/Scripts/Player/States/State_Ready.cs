@@ -18,15 +18,22 @@ public class State_Ready : StateManagerPlayer.State
 
     public override void OnUpdate(float dt)
     {
-        // Commmented out, cause we're still doing this for dashing in the main combat controller. Make this an individual state thing when we move dashing to it's own state
-        //if (mCombatControllerRef.OpponentRef.transform.position.x < mParentObject.transform.position.x)
-        //{
-        //    mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Left);
-        //}
-        //else
-        //{
-        //    mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Right);
-        //}
+        // Face right direction
+        if (mCombatControllerRef.OpponentRef.transform.position.x < mParentObject.transform.position.x)
+        {
+            mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Left);
+        }
+        else
+        {
+            mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Right);
+        }
+
+        float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
+
+        Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
+
+        mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
+
     }
 
 }
