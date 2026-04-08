@@ -22,6 +22,7 @@ public class StateManagerPlayer : StateManagerEnum<PlayerStates>
         mStateList.Add(new State_Ready());
         mStateList.Add(new State_Defeated());
         mStateList.Add(new State_DashAttack());
+        mStateList.Add(new State_Dash());
 
         // Copies info for each state into the derived class
         foreach (PlayerStates currState in Enum.GetValues(typeof(PlayerStates)))

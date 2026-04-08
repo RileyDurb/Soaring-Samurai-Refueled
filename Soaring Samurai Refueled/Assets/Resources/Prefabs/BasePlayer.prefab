@@ -287,7 +287,7 @@ MonoBehaviour:
   - mName: 1
     mStatesCancellableInto: 0000000002000000
   - mName: 2
-    mStatesCancellableInto: 0000000001000000
+    mStatesCancellableInto: 000000000100000003000000
   - mName: 3
     mStatesCancellableInto: 00000000
   - mName: 4

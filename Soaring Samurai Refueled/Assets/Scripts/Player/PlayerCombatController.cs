@@ -27,7 +27,7 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Editor Accessible variables  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    [SerializeField] PlayerBaseDataObject mPlayerBaseStats;
+    public PlayerBaseDataObject mPlayerBaseStats;
     public DashAttackDataObject mDashAttackStats;
 
 
@@ -51,6 +51,12 @@ public class PlayerCombatController : MonoBehaviour
     {
         get { return mLastDirectionalMoveInput; }
     }
+    
+    public Vector2 OGScale
+    {
+        get { return mOGScale; }
+    }
+
     // Private variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 mMoveInput;
     Vector2 mLastDirectionalMoveInput;
@@ -127,10 +133,6 @@ public class PlayerCombatController : MonoBehaviour
         float currSpeed = mPlayerBaseStats.mMovementStats.MoveJerk;
 
         PhysicsApplier physics = GetComponent<PhysicsApplier>();
-        if (mStateManager.CurrStateName == PlayerStates.Dash)
-        {
-            currSpeed = mPlayerBaseStats.mMovementStats.DashingJerk;
-        }
 
 
         Vector2 moveVec = mMoveInput * currSpeed;
@@ -140,12 +142,7 @@ public class PlayerCombatController : MonoBehaviour
         //    print(mMoveInput.magnitude.ToString()); 
         //}
 
-        if (mStateManager.CurrStateName == PlayerStates.Dash)
-        {
-            // Applies jerk
-            ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
-        }
-        else if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.SlashAttack)
+        if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.SlashAttack)
         {
             ApplyCappedMovementJerk(moveVec, Time.deltaTime);
         }

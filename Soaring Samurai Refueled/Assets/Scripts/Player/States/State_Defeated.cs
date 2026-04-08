@@ -11,11 +11,6 @@ public class State_Defeated : StateManagerPlayer.State
         mParentObject.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public override void OnExit()
     {
