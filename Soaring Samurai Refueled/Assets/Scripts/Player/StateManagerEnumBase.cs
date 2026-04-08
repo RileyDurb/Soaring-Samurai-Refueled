@@ -248,9 +248,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         }
 
     }
-
-    // Helper functions //////////////////////////////////////////////////////////////////////////////////////
-    protected State GetState(T stateName)
+    public State GetState(T stateName)
     {
         if (mStateList.Count == 0)
         {
@@ -268,5 +266,5 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         return foundState;
     }
 
-
+    // Helper functions //////////////////////////////////////////////////////////////////////////////////////
 }

@@ -1,9 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,13 +10,7 @@ public class PlayerCombatController : MonoBehaviour
         Right
     }
 
-    enum DashAttackStates
-    {
-        Charge,
-        Ready,
-        Active,
-        Recovery
-    }
+
 
     // TODO: make player use a scriptable object with base stats instead of the straight variables
 
@@ -40,7 +28,7 @@ public class PlayerCombatController : MonoBehaviour
 
     // Editor Accessible variables  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     [SerializeField] PlayerBaseDataObject mPlayerBaseStats;
-    [SerializeField] DashAttackDataObject mDashAttackStats;
+    public DashAttackDataObject mDashAttackStats;
 
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
@@ -59,6 +47,10 @@ public class PlayerCombatController : MonoBehaviour
         set { mMoveInput = value; }
     }
 
+    public Vector2 LastDirectionalMoveInput
+    {
+        get { return mLastDirectionalMoveInput; }
+    }
     // Private variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 mMoveInput;
     Vector2 mLastDirectionalMoveInput;
@@ -77,9 +69,6 @@ public class PlayerCombatController : MonoBehaviour
 
     [SerializeField] GameObject mHealthBar;
 
-    // Dash attack variables
-    DashAttackStates mCurrDashAttackState = DashAttackStates.Charge;
-    bool mDashAttackInputReleased = false;
 
     void Start()
     {
@@ -105,7 +94,7 @@ public class PlayerCombatController : MonoBehaviour
 
         mStateManager.AddOnEnter(PlayerStates.Dash, StartDash);
 
-        mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
+        //mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
 
         // Set up health bar
         if (mHealthBar != null)
@@ -134,24 +123,6 @@ public class PlayerCombatController : MonoBehaviour
         }
 
 
-        // Dash attack state update
-        if (mStateManager.CurrStateName == PlayerStates.DashAttack)
-        {
-            if (mCurrDashAttackState == DashAttackStates.Ready && mDashAttackInputReleased == true)
-            {
-                mCurrDashAttackState = DashAttackStates.Active;
-
-                mAnimationController.SetAnimationState("Player_DashAttackActive"); // Play animation
-
-                // Spawns attack hitbox right around the player
-                SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats);
-
-                // Set to go into recovery after active time is done
-                mActionList.AddActionCallback(() => StartDashAttackRecovery(), mDashAttackStats.mStats.ActiveTime);
-            }
-        }
-
-
         // Apply movement from current input value
         float currSpeed = mPlayerBaseStats.mMovementStats.MoveJerk;
 
@@ -160,44 +131,7 @@ public class PlayerCombatController : MonoBehaviour
         {
             currSpeed = mPlayerBaseStats.mMovementStats.DashingJerk;
         }
-        else if (mStateManager.CurrStateName == PlayerStates.DashAttack)
-        {
-            currSpeed = mDashAttackStats.DashingJerk;
 
-            // Modify ability to move based on state of the attack
-
-            // If not attackng, can't move
-            if (mCurrDashAttackState == DashAttackStates.Charge || mCurrDashAttackState == DashAttackStates.Ready || mCurrDashAttackState == DashAttackStates.Recovery)
-            {
-                currSpeed = 0.0f;
-
-                physics.mUncappedDirectionalForces.ClearAllForces();
-                physics.mDirectionalForces.ClearAllForces();
-            }
-            else if (mCurrDashAttackState == DashAttackStates.Active) // If attacking, force movement
-            {
-                if (mMoveInput == Vector2.zero) // if not inputting a direction
-                {
-                    if (mLastDirectionalMoveInput == Vector2.zero) // if last move input isn't anything
-                    {
-                        // Use facing direction for movement
-                        if (transform.localScale.x > 0) // if facing right
-                        {
-                            mMoveInput = Vector2.right; // Go right
-                        }
-                        else // If facing left
-                        {
-                            mMoveInput = Vector2.left; // go left
-                        }
-                    }
-                    else // Last directional move input is valid
-                    {
-                        mMoveInput = mLastDirectionalMoveInput.normalized; // use last directional input
-                    }
-                }
-
-            }
-        }
 
         Vector2 moveVec = mMoveInput * currSpeed;
 
@@ -206,14 +140,14 @@ public class PlayerCombatController : MonoBehaviour
         //    print(mMoveInput.magnitude.ToString()); 
         //}
 
-        if (mStateManager.CurrStateName == PlayerStates.Dash || mStateManager.CurrStateName == PlayerStates.DashAttack)
+        if (mStateManager.CurrStateName == PlayerStates.Dash)
         {
             // Applies jerk
-            physics.mUncappedDirectionalForces.ApplyJerk(moveVec * Time.deltaTime);
+            ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
         }
-        else
+        else if (mStateManager.CurrStateName == PlayerStates.Ready || mStateManager.CurrStateName == PlayerStates.SlashAttack)
         {
-            physics.mDirectionalForces.ApplyJerk(moveVec * Time.deltaTime);
+            ApplyCappedMovementJerk(moveVec, Time.deltaTime);
         }
 
         // Since things like dampening can be applied differently based in if input is being given, tell the physics the current state
@@ -455,13 +389,14 @@ public class PlayerCombatController : MonoBehaviour
         {
             if (mStateManager.CurrStateName == PlayerStates.DashAttack)
             {
-                mDashAttackInputReleased = true;
+                State_DashAttack dashAttackState = mStateManager.GetState(PlayerStates.DashAttack) as State_DashAttack;
+                dashAttackState.DashAttackInputReleased = true;
             }
         }
     }
 
 
-    // Public interface
+    // Public interface /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void SetFacingDirection(FacingDirection newDirection)
     {
         if (newDirection == FacingDirection.Left)
@@ -474,8 +409,19 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
+    public void ApplyCappedMovementJerk(Vector2 moveVec, float dt)
+    {
+        PhysicsApplier physics = GetComponent<PhysicsApplier>();
+        physics.mDirectionalForces.ApplyJerk(moveVec * dt);
+    }
 
-    // Combat related functions
+    public void ApplyUncappedMovementJerk(Vector2 moveVec, float dt)
+    {
+        PhysicsApplier physics = GetComponent<PhysicsApplier>();
+        physics.mUncappedDirectionalForces.ApplyJerk(moveVec * dt);
+    }
+
+    // Combat related functions //////////////////////////////////////////////////////////////////////////////////////////////////////
     public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
         bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
@@ -511,9 +457,7 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
-
-    // Helper functions
-    void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo)
+    public void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo)
     {
         GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox_V2"), transform); // Spawn a hitbox
 
@@ -524,6 +468,8 @@ public class PlayerCombatController : MonoBehaviour
 
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
     }
+    // Helper functions
+
 
 
     // State functions
@@ -551,32 +497,32 @@ public class PlayerCombatController : MonoBehaviour
         // Nothing needed gameplay wise, movememnt update speeds up while in dash state
     }
 
-    void StartDashAttackCharge(PlayerStates prevState)
-    {
-        mAnimationController.SetAnimationState("Player_DashAttackCharge");
+    //void StartDashAttackCharge(PlayerStates prevState)
+    //{
+    //    mAnimationController.SetAnimationState("Player_DashAttackCharge");
 
-        // Initialize variables
-        mCurrDashAttackState = DashAttackStates.Charge;
-        mDashAttackInputReleased = false;
+    //    // Initialize variables
+    //    mCurrDashAttackState = DashAttackStates.Charge;
+    //    mDashAttackInputReleased = false;
 
-        mActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
-    }
+    //    mActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
+    //}
 
-    void StartDashAttackRecovery()
-    {
-        mCurrDashAttackState = DashAttackStates.Recovery;
+    //void StartDashAttackRecovery()
+    //{
+    //    mCurrDashAttackState = DashAttackStates.Recovery;
 
-        mAnimationController.SetAnimationState("Player_DashAttackRecoverySheathed");
+    //    mAnimationController.SetAnimationState("Player_DashAttackRecoverySheathed");
 
-        mActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
-    }
+    //    mActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
+    //}
 
-    void EndDashAttackRecovery()
-    {
-        if (mStateManager.CanEnterState(PlayerStates.Ready))
-        {
-            mStateManager.EnterState(PlayerStates.Ready);
-        }
-    }
+    //void EndDashAttackRecovery()
+    //{
+    //    if (mStateManager.CanEnterState(PlayerStates.Ready))
+    //    {
+    //        mStateManager.EnterState(PlayerStates.Ready);
+    //    }
+    //}
 }
 
