@@ -32,7 +32,7 @@ public class MenuManager : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Save a reference to the canvas to put UI on to
         Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
@@ -146,6 +146,17 @@ public class MenuManager : MonoBehaviour
     public void PopControls()
     {
         PopItem(UILayer.Controls);
+    }
+
+    public GameObject PushHUDItem(GameObject hudUIPrefabToUse)
+    {
+        return PushItem(UILayer.HUD, hudUIPrefabToUse);
+    }
+
+
+    public void PopHUDItem()
+    {
+        PopItem(UILayer.HUD);
     }
 
     // Returns number of items in the menu layer

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /*
@@ -41,7 +42,7 @@ public class AnimationController : MonoBehaviour
 
     public void SetAnimationState(string animationName)
     {
-        mAnimator.Play(animationName);
+        mAnimator.Play(animationName, 0, 0);
 
         mCurrAnimation = animationName;
     }

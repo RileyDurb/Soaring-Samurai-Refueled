@@ -95,6 +95,11 @@ public class State_DashAttack : StateManagerPlayer.State
 
             physics.mUncappedDirectionalForces.ClearAllForces();
             physics.mDirectionalForces.ClearAllForces();
+
+            if (mCurrDashAttackState == DashAttackStates.Recovery)
+            {
+                mCombatController.CurrMoveInput = Vector2.zero; // Set move input to 0 so we don't have lingering input that keeps the player moving after recovery ends, if the player isn't holding a direction when recovery ends
+            }
         }
         else if (mCurrDashAttackState == DashAttackStates.Active) // If attacking, force movement
         {

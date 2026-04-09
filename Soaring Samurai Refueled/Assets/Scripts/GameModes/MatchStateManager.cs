@@ -22,6 +22,9 @@ public class MatchStateManager : MonoBehaviour
     ActionList mActionList = new ActionList();
     MatchState mCurrMatchState = MatchState.PreRound;
 
+    [SerializeField]GameObject mMatchStartMessagePrefab;
+    GameObject mMatchStartMessageObject;
+
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
 
@@ -82,7 +85,7 @@ public class MatchStateManager : MonoBehaviour
 
             // Do other restarting stuff as needed
 
-            // Rotate spawn vec TODO: left off here
+            // Rotate spawn vec
             currSpawnVec = Quaternion.Euler(0, 0, playerOffsetAngle) * currSpawnVec;
         }
 
@@ -96,6 +99,16 @@ public class MatchStateManager : MonoBehaviour
         // Block all combat actions
         LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().BlockInputType(InputBlockingManager.InputType.CombatAction);
 
+        if (mMatchStartMessageObject == null)
+        {
+            mMatchStartMessageObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mMatchStartMessagePrefab);
+
+            // Animation plays automatically on spawn, so don't need to trigger state
+        }
+        else
+        {
+            mMatchStartMessageObject.GetComponent<AnimationController>().SetAnimationState("MatchStartSequence");
+        }
 
         // Begin the round after a delay
         mActionList.AddActionCallback(() => { BeginRound(); }, mMatchStats.PreRoundLength);
