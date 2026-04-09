@@ -61,6 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1837faeaef2d0444a68d3f95c441dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LayerSettings:
+  - LayerToApplyTo: 1
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}
 --- !u!114 &2524533964964330955
 MonoBehaviour:
   m_ObjectHideFlags: 0

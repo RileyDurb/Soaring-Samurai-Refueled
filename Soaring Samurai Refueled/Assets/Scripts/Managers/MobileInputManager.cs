@@ -25,7 +25,7 @@ public class MobileInputManager : MonoBehaviour
             return;
         }
 
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 || Input.GetKey(KeyCode.Equals))
         {
             GameObject newMobileControls = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushControls(MobileControllerPrefab);
 

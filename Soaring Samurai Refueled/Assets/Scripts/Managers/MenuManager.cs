@@ -23,10 +23,22 @@ public class MenuManager : MonoBehaviour
         public GameObject mLayerParentRef = null; // Parent to instantiate it's objects onto
     }
 
+    [System.Serializable]
+    private class UILayerSettings
+    {
+        public UILayer LayerToApplyTo;
+        public Vector2 AnchorMin;
+        public Vector2 AnchorMax;
+        public Vector2 Pivot;
+    }
 
+
+    [SerializeField] List<UILayerSettings> LayerSettings;
 
     List<MenuLayer> mMenuLayers = new List<MenuLayer>();
 
+
+    // References
     GameObject mCanvasRef;
 
 
@@ -66,8 +78,18 @@ public class MenuManager : MonoBehaviour
             else
             {
                 // Creates a new object under the canvas to be the parent of the layer that we just created
-                newLayer.mLayerParentRef = new GameObject(layerParentName);
+                newLayer.mLayerParentRef = new GameObject(layerParentName, typeof(RectTransform));
                 newLayer.mLayerParentRef.transform.SetParent(mCanvasRef.transform, false);
+            }
+
+            // Apply layer settings if any
+            UILayerSettings layerSettings = LayerSettings.Find((UILayerSettings settings) => { return settings.LayerToApplyTo == layer; });
+            if (layerSettings != null)
+            {
+                RectTransform layerTransform = newLayer.mLayerParentRef.GetComponent<RectTransform>();
+                layerTransform.anchorMin = layerSettings.AnchorMin;
+                layerTransform.anchorMax = layerSettings.AnchorMax;
+                layerTransform.pivot = layerSettings.Pivot;QualityLevel1
             }
         }
 
