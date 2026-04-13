@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using System;
 
 public class MatchStateManager : MonoBehaviour
 {
+    // Private class and enum definitions ////////////////////////////////////////////////////////
     enum MatchState
     {
         PreRound,
@@ -13,20 +15,29 @@ public class MatchStateManager : MonoBehaviour
         GameEnd
     }
 
+    // Events //////////////////////////////////////////////////////////////////////////////////////
     public Action<int> PlayerDefeated;
 
 
-    // Private variables
+    // Private variables ///////////////////////////////////////////////////////////////////////////
     private List<PlayerCombatController> mPlayers = new List<PlayerCombatController>();
     [SerializeField] MatchTuningStats mMatchStats;
     ActionList mActionList = new ActionList();
     MatchState mCurrMatchState = MatchState.PreRound;
 
+    // Round Start Message Variables
     [SerializeField]GameObject mMatchStartMessagePrefab;
     GameObject mMatchStartMessageObject;
+    
+    // Round timer variables
+    [SerializeField] GameObject mRoundTimerPrefab;
+    float mCurrMatchTimer = -1.0f;
+    Dictionary<int, int> mRoundWins = new Dictionary<int, int>(); // Number of round wins, keyed by which player won them
 
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
+
+    public int CurrRoundTimeTrimmed {  get { return (int)mCurrMatchTimer; } }
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +55,9 @@ public class MatchStateManager : MonoBehaviour
         // Subscribe player defeated function to player defeated event
         PlayerDefeated += HandlePlayerDefeated;
 
+        // Create round timer
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mRoundTimerPrefab);
+
         RestartMatch();
     }
 
@@ -51,6 +65,11 @@ public class MatchStateManager : MonoBehaviour
     void Update()
     {
         mActionList.Update(Time.deltaTime);
+
+        if (mCurrMatchState == MatchState.InProgress)
+        {
+            mCurrMatchTimer -= Time.deltaTime;
+        }
     }
 
     // Helper functions
@@ -89,10 +108,12 @@ public class MatchStateManager : MonoBehaviour
             currSpawnVec = Quaternion.Euler(0, 0, playerOffsetAngle) * currSpawnVec;
         }
 
+        InitRoundState(); // Inits state info like the timer
+
         StartPreRound();
     }
 
-    public void StartPreRound()
+    void StartPreRound()
     {
         mCurrMatchState = MatchState.PreRound;
         
@@ -101,7 +122,7 @@ public class MatchStateManager : MonoBehaviour
 
         if (mMatchStartMessageObject == null)
         {
-            mMatchStartMessageObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mMatchStartMessagePrefab);
+            mMatchStartMessageObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPopup(mMatchStartMessagePrefab);
 
             // Animation plays automatically on spawn, so don't need to trigger state
         }
@@ -114,17 +135,62 @@ public class MatchStateManager : MonoBehaviour
         mActionList.AddActionCallback(() => { BeginRound(); }, mMatchStats.PreRoundLength);
     }
 
-    public void BeginRound()
+    void BeginRound()
     {
         // Unblock combat actions
         LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().UnblockInputType(InputBlockingManager.InputType.CombatAction);
+
+        mCurrMatchState = MatchState.InProgress;
     }
 
-    // Event subscriptions
+    void InitRoundState()
+    {
+        mCurrMatchTimer = mMatchStats.MaxRoundTime;
+    }
+
+
+    // Event subscriptions //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void HandlePlayerDefeated(int playerID)
     {
         // TODO: make this handle more than 2 players if we want that
 
+        PlayerCombatController winningPlayer = null; 
+        // Find winning player
+        foreach (PlayerCombatController player in mPlayers)
+        {
+            if (player.GetComponent<PoolContainer>().GetPool("Health").PoolValue > 0.0f) // If player is still alove
+            {
+                winningPlayer = player;
+                break;
+            }
+        }
+
+        if (winningPlayer == null)
+        {
+            print("MatchStateManager: HandlePlayerDefeated: No live player could be found to count as winner");
+
+        }
+        else // Inrement number of player wins
+        {
+            int winningPlayerID = winningPlayer.PlayerIndex;
+
+            int currWins = 0;
+            if (mRoundWins.ContainsKey(winningPlayerID))
+            {
+                currWins = mRoundWins[winningPlayerID];
+                currWins++;
+            }
+            else
+            {
+                mRoundWins.Add(winningPlayerID, 1);
+            }
+        }
+
+        // TODO> handle round advancing
+
+        // TODO: Handle ending the round instead of transitioning to post round and restarting
+
+        mCurrMatchState = MatchState.PostRound;
         // TODO: Make the restart of the match require some sort of confirming, and also make it round based
         mActionList.AddActionCallback(() => { RestartMatch(); }, mMatchStats.MatchEndRestartDelay);
     }

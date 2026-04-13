@@ -62,10 +62,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayerSettings:
+  - LayerToApplyTo: 0
+    AnchorMin: {x: 0.5, y: 1}
+    AnchorMax: {x: 0.5, y: 1}
+    Pivot: {x: 0.5, y: 1}
   - LayerToApplyTo: 1
     AnchorMin: {x: 0.5, y: 0}
     AnchorMax: {x: 0.5, y: 0}
     Pivot: {x: 0.5, y: 0}
+  - LayerToApplyTo: 2
+    AnchorMin: {x: 0.5, y: 0.5}
+    AnchorMax: {x: 0.5, y: 0.5}
+    Pivot: {x: 0.5, y: 0.5}
+  - LayerToApplyTo: 3
+    AnchorMin: {x: 0.5, y: 0.5}
+    AnchorMax: {x: 0.5, y: 0.5}
+    Pivot: {x: 0.5, y: 0.5}
+  mUseDebugNames: 0
 --- !u!114 &2524533964964330955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMatchStats: {fileID: 11400000, guid: 81b200f92de64a949a9ebe28e484fc30, type: 2}
   mMatchStartMessagePrefab: {fileID: 833353422835981834, guid: 2628754687c5e784792808b310b31808, type: 3}
+  mRoundTimerPrefab: {fileID: 689383211063943229, guid: fa0468b1d4cf9de46bef43e35d1276c2, type: 3}
 --- !u!114 &6965499727050373144
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -39,5 +39,6 @@ public class MobileInputManager : MonoBehaviour
 
             mNumMobileControllersSpawned++;
         }
+
     }
 }

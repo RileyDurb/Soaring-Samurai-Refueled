@@ -12,10 +12,15 @@ public class PublicMenuFunctions : ScriptableObject
 
         if (currentMenuManager == null)
         {
-            Console.Write("PublicMenuFunctions:GoBackInMenu: nN level scope manager could be found by the static go back in menu function, so no context to go back from. Make sure one exists in the scene, likely by adding the LevelScopeManagersHolder prefab");
+            Console.Write("PublicMenuFunctions:GoBackInMenu: level scope manager could be found by the static go back in menu function, so no context to go back from. Make sure one exists in the scene, likely by adding the LevelScopeManagersHolder prefab");
             return;
         }
 
         currentMenuManager.PopMenu();
+    }
+
+    public void ExitGame()
+    {
+        SimManager.Instance.Exit();
     }
 };

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using UnityEngine;
 
 public class MenuManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class MenuManager : MonoBehaviour
     {
         public Stack<GameObject> mLayerItems = new Stack<GameObject>();
         public GameObject mLayerParentRef = null; // Parent to instantiate it's objects onto
+        public List<int> mAdditiveLevelCounts = new List<int>();
     }
 
     [System.Serializable]
@@ -37,10 +39,12 @@ public class MenuManager : MonoBehaviour
 
     List<MenuLayer> mMenuLayers = new List<MenuLayer>();
 
+    int mNumUIItems = 0;
+    [SerializeField] bool mUseDebugNames = false;
+
 
     // References
     GameObject mCanvasRef;
-
 
 
     // Start is called before the first frame update
@@ -89,7 +93,7 @@ public class MenuManager : MonoBehaviour
                 RectTransform layerTransform = newLayer.mLayerParentRef.GetComponent<RectTransform>();
                 layerTransform.anchorMin = layerSettings.AnchorMin;
                 layerTransform.anchorMax = layerSettings.AnchorMax;
-                layerTransform.pivot = layerSettings.Pivot;QualityLevel1
+                layerTransform.pivot = layerSettings.Pivot;
             }
         }
 
@@ -101,39 +105,84 @@ public class MenuManager : MonoBehaviour
     // Helper functions ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Creates an object from the given prefab, and puts it as the front of the menu layer
-    public GameObject PushItem(UILayer layer, GameObject uiPrefabToUse)
+    public GameObject PushItem(UILayer layer, GameObject uiPrefabToUse, bool additiveToTopLayer = false)
     {
+        mNumUIItems++;
+
         // Spawms the new object as a child of the menu layer parent
         GameObject newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)layer].mLayerParentRef.transform);
-
-        // Hide current layer if any
-        if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
+        if (mUseDebugNames)
         {
-            GameObject currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
-            currTopItem.SetActive(false);
+            newUIObject.name = newUIObject.name + "UI " + mNumUIItems.ToString();
         }
 
+        // Handles adding an additive item to the current level, or moving past the current level and hiding everything in the previous one
+        List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
+        if (additiveToTopLayer == true)
+        {
+            if (additiveCounts.Count == 0)
+            {
+                additiveCounts.Add(1);
+            }
+            else
+            {
+                additiveCounts[additiveCounts.Count - 1]++; // Increments the count of the number of additive items for this level in the layer
+            }
+        }
+        else
+        {
+            // Hide previous top layer if any
+            if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
+            {
+                for (int i = additiveCounts[additiveCounts.Count - 1]; i > 0; i--) // For however many items were in the previous level
+                {
+                    GameObject currItemToHide = mMenuLayers[(int)layer].mLayerItems.ElementAt(i - 1);
+                    currItemToHide.SetActive(false);
+                }
+            }
+
+            mMenuLayers[(int)layer].mAdditiveLevelCounts.Add(1); // Add an empty additive count for this new level
+
+        }
+
+        // Adds new UI item to the layer
         mMenuLayers[(int)layer].mLayerItems.Push(newUIObject);
 
         return newUIObject;
     }
 
 
-    // Removes and destroys top item on the menu layer
+    // Removes and destroys top level of the UI layer
     public void PopItem(UILayer layer)
     {
-        // Destroys and removes top UI object
-        GameObject currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
+        List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
 
-        mMenuLayers[(int)layer].mLayerItems.Pop();
+        // For all the UI elements added in the current top level
+        for (int i = additiveCounts[additiveCounts.Count - 1]; i > 0; i--)
+        {
+            // Destroys and removes the current UI item
+            GameObject currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
 
-        Destroy(currTopItem);
+            mMenuLayers[(int)layer].mLayerItems.Pop();
 
-        // Activate new top layer if any
+            Destroy(currTopItem);
+
+            mNumUIItems--; // Update number of UI items
+        }
+
+        additiveCounts.RemoveAt(additiveCounts.Count - 1); // Removes the additive count for this level
+
+
+        // Activate new top level if any
         if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
         {
-            currTopItem = mMenuLayers[(int)layer].mLayerItems.Peek();
-            currTopItem.SetActive(true);
+            int numItemsInCurrentLevel = additiveCounts[additiveCounts.Count - 1];
+
+            for (int i = additiveCounts[additiveCounts.Count - 1]; i > 0; i--) // For however many items were in the previous level
+            {
+                GameObject currItemToHide = mMenuLayers[(int)layer].mLayerItems.ElementAt(i - 1);
+                currItemToHide.SetActive(true);
+            }
         }
     }
 
@@ -147,8 +196,8 @@ public class MenuManager : MonoBehaviour
     // Public usage functions ///////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // Creates an object from the given prefab, and puts it as the front of the menu layer
-    public GameObject PushMenu(GameObject uiPrefabToUse)
+    // Creates an UI object from the given prefab. By default, puts it in the front of the menu layer
+    public GameObject PushMenu(GameObject uiPrefabToUse, bool addToCurrentLayerLevel = false)
     {
         return PushItem(UILayer.Menu, uiPrefabToUse);
     }
@@ -159,9 +208,10 @@ public class MenuManager : MonoBehaviour
         PopItem(UILayer.Menu);
     }
 
-    public GameObject PushControls(GameObject controlsPrefabToUse)
+    // Creates an UI object from the given prefab. By default, puts it active with the top level of the Controls UI layer
+    public GameObject PushControls(GameObject controlsPrefabToUse, bool addToCurrentLayerLevel = true)
     {
-        return PushItem(UILayer.Controls, controlsPrefabToUse);
+        return PushItem(UILayer.Controls, controlsPrefabToUse, addToCurrentLayerLevel);
     }
 
 
@@ -170,15 +220,21 @@ public class MenuManager : MonoBehaviour
         PopItem(UILayer.Controls);
     }
 
-    public GameObject PushHUDItem(GameObject hudUIPrefabToUse)
+    // Creates an UI object from the given prefab. By default, puts it active with the top level of the HUD layer
+    public GameObject PushHUDItem(GameObject hudUIPrefabToUse, bool addToCurrentLayerLevel = true)
     {
-        return PushItem(UILayer.HUD, hudUIPrefabToUse);
+        return PushItem(UILayer.HUD, hudUIPrefabToUse, addToCurrentLayerLevel);
     }
 
-
-    public void PopHUDItem()
+    // Creates an UI object from the given prefab. By default, puts it above the current top layer and hides the previous top
+    public GameObject PushPopup(GameObject controlsPrefabToUse, bool addToCurrentLayerLevel = false)
     {
-        PopItem(UILayer.HUD);
+        return PushItem(UILayer.Popups, controlsPrefabToUse, addToCurrentLayerLevel);
+    }
+
+    public void PopPopup()
+    {
+        PopItem(UILayer.Popups);
     }
 
     // Returns number of items in the menu layer
