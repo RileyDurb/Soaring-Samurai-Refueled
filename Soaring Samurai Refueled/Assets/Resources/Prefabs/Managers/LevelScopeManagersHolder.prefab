@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMatchStats: {fileID: 11400000, guid: 81b200f92de64a949a9ebe28e484fc30, type: 2}
   mMatchStartMessagePrefab: {fileID: 833353422835981834, guid: 2628754687c5e784792808b310b31808, type: 3}
+  mMatchWinMenuPrefab: {fileID: 53818224331509458, guid: 935fede1868c36144b2c26edf7ac6cc7, type: 3}
   mRoundTimerPrefab: {fileID: 689383211063943229, guid: fa0468b1d4cf9de46bef43e35d1276c2, type: 3}
 --- !u!114 &6965499727050373144
 MonoBehaviour:

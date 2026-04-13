@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class MatchStateManager : MonoBehaviour
@@ -28,11 +30,18 @@ public class MatchStateManager : MonoBehaviour
     // Round Start Message Variables
     [SerializeField]GameObject mMatchStartMessagePrefab;
     GameObject mMatchStartMessageObject;
+
+    // Match win menu variables
+    [SerializeField] GameObject mMatchWinMenuPrefab;
+    GameObject mMatchWinMenuObject;
     
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
     float mCurrMatchTimer = -1.0f;
-    Dictionary<int, int> mRoundWins = new Dictionary<int, int>(); // Number of round wins, keyed by which player won them
+    Dictionary<int, int> mCurrRoundWins = new Dictionary<int, int>(); // Number of round wins for the current match, keyed by which player won them
+    Dictionary<int, int> mTotalRoundWins = new Dictionary<int, int>(); // Number of total round wins for all consecutive matches played in this matchup, keyed by which player won them
+
+    int mCurrRoundNumber = 0;
 
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
@@ -73,7 +82,7 @@ public class MatchStateManager : MonoBehaviour
     }
 
     // Helper functions
-    void RestartMatch()
+    void RestartRound()
     {
         int numPlayers = mPlayers.Count;
         Vector2 currSpawnVec = Vector2.left * mMatchStats.PlayerStartOffsetDistance;
@@ -84,11 +93,23 @@ public class MatchStateManager : MonoBehaviour
         {
             PlayerCombatController currPlayer = mPlayers[i];
 
-            if (mMatchStats.ResetPositions)
+            if (mCurrRoundNumber == 0) // If on the first round
             {
-                // Reset player position
-                currPlayer.GetComponent<Rigidbody2D>().MovePosition(currSpawnVec);
+                if (mMatchStats.ResetPositionsOnMatchStart)
+                {
+                    // Reset player position
+                    currPlayer.GetComponent<Rigidbody2D>().MovePosition(currSpawnVec);
+                }
             }
+            else // For subsequent rounds
+            {
+                if (mMatchStats.ResetPositionsOnRoundStart)
+                {
+                    // Reset player position
+                    currPlayer.GetComponent<Rigidbody2D>().MovePosition(currSpawnVec);
+                }
+            }
+
 
             if (mMatchStats.ClearForcesOnRestart)
             {
@@ -113,6 +134,7 @@ public class MatchStateManager : MonoBehaviour
         StartPreRound();
     }
 
+
     void StartPreRound()
     {
         mCurrMatchState = MatchState.PreRound;
@@ -128,11 +150,38 @@ public class MatchStateManager : MonoBehaviour
         }
         else
         {
-            mMatchStartMessageObject.GetComponent<AnimationController>().SetAnimationState("MatchStartSequence");
+            if (mCurrRoundNumber == 0)
+            {
+                mMatchStartMessageObject.GetComponent<AnimationController>().SetAnimationState("MatchStartSequence");
+            }
+            else
+            {
+                mMatchStartMessageObject.GetComponent<AnimationController>().SetAnimationState("MatchRound2StartSequence");
+            }
         }
 
         // Begin the round after a delay
-        mActionList.AddActionCallback(() => { BeginRound(); }, mMatchStats.PreRoundLength);
+        float currPreRoundLength = mCurrRoundNumber == 0 ? mMatchStats.FirstPreRoundLength : mMatchStats.SubsequentPreRoundsLength;
+        mActionList.AddActionCallback(() => { BeginRound(); }, currPreRoundLength);
+    }
+
+
+
+    void InitMatch()
+    {
+        // Reset current round wins
+        int[] playersWithRoundWins = mCurrRoundWins.Keys.ToArray();
+        foreach (int playerID in playersWithRoundWins)
+        {
+            mCurrRoundWins[playerID] = 0;
+        }
+
+        mCurrRoundNumber = 0;
+
+    }
+    void InitRoundState()
+    {
+        mCurrMatchTimer = mMatchStats.MaxRoundTime;
     }
 
     void BeginRound()
@@ -142,12 +191,19 @@ public class MatchStateManager : MonoBehaviour
 
         mCurrMatchState = MatchState.InProgress;
     }
-
-    void InitRoundState()
+    void TriggerRoundAdvanceSequence()
     {
-        mCurrMatchTimer = mMatchStats.MaxRoundTime;
+        // TODO: Make the restart of the match require some sort of confirming, and also make it round based
+        mActionList.AddActionCallback(() => { RestartRound(); }, mMatchStats.MatchEndRestartDelay);
     }
 
+    void TriggerMatchEndSequence(int winningPlayerID)
+    {
+        print("Match be won");
+
+        mMatchWinMenuObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushMenu(mMatchWinMenuPrefab);
+        mMatchWinMenuObject.GetComponent<MatchEndMenuFeatures>().SetWinnerNameMessage("Player " + (winningPlayerID + 1).ToString() + " Has Won This Fight");
+    }
 
     // Event subscriptions //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void HandlePlayerDefeated(int playerID)
@@ -168,32 +224,54 @@ public class MatchStateManager : MonoBehaviour
         if (winningPlayer == null)
         {
             print("MatchStateManager: HandlePlayerDefeated: No live player could be found to count as winner");
-
+            return;
         }
-        else // Inrement number of player wins
+
+        // Inrement number of player wins
+
+        int winningPlayerID = winningPlayer.PlayerIndex;
+
+        if (mCurrRoundWins.ContainsKey(winningPlayerID))
         {
-            int winningPlayerID = winningPlayer.PlayerIndex;
-
-            int currWins = 0;
-            if (mRoundWins.ContainsKey(winningPlayerID))
-            {
-                currWins = mRoundWins[winningPlayerID];
-                currWins++;
-            }
-            else
-            {
-                mRoundWins.Add(winningPlayerID, 1);
-            }
+            mCurrRoundWins[winningPlayerID]++;
+            mTotalRoundWins[winningPlayerID]++;
+        }
+        else
+        {
+            mCurrRoundWins.Add(winningPlayerID, 1);
+            mTotalRoundWins.Add(winningPlayerID, 1);
         }
 
-        // TODO> handle round advancing
+        // Increment number of rounds
+        mCurrRoundNumber++;
+        
 
-        // TODO: Handle ending the round instead of transitioning to post round and restarting
+        // handle round advancing
+        
+        if (mCurrRoundWins[winningPlayerID] >= mMatchStats.NumRoundsToWin) // If match has been won
+        {
+            // trigger match end
+            mCurrMatchState = MatchState.GameEnd;
 
-        mCurrMatchState = MatchState.PostRound;
-        // TODO: Make the restart of the match require some sort of confirming, and also make it round based
-        mActionList.AddActionCallback(() => { RestartMatch(); }, mMatchStats.MatchEndRestartDelay);
+            // TODO: Handle ending the round instead of transitioning to post round and restarting
+            TriggerMatchEndSequence(winningPlayerID);
+        }
+        else
+        {
+            mCurrMatchState = MatchState.PostRound;
+            TriggerRoundAdvanceSequence();
+        }
+
+
+
     }
 
+    // Public interface /////////////////////////////////////////////////////////////////////////////////
+    public void RestartMatch()
+    {
+        InitMatch();
+
+        RestartRound();
+    }
 
 }

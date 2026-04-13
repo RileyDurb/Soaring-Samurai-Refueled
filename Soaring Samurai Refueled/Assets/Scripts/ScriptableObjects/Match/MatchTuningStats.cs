@@ -7,7 +7,8 @@ using UnityEngine;
 public class MatchTuningStats : ScriptableObject
 {
     [Header("Round Start Behaviour")]
-    public bool ResetPositions = true;
+    public bool ResetPositionsOnMatchStart = true;
+    public bool ResetPositionsOnRoundStart = true;
     public float PlayerStartOffsetDistance = 1.05f;
     public bool ClearForcesOnRestart = true;
 
@@ -17,6 +18,7 @@ public class MatchTuningStats : ScriptableObject
 
     [Header("Balance Related Aesthetics")]
     public float MatchEndRestartDelay = 5.0f;
-    public float PreRoundLength = 4.0f;
+    public float FirstPreRoundLength = 4.0f;
+    public float SubsequentPreRoundsLength = 3.0f;
 
 }

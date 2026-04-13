@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cdf0631832c53948a96e6af8df5d817, type: 3}
   m_Name: MainMatchTuningStats
   m_EditorClassIdentifier: 
-  ResetPositions: 0
+  ResetPositionsOnMatchStart: 1
+  ResetPositionsOnRoundStart: 0
   PlayerStartOffsetDistance: 2.55
   ClearForcesOnRestart: 1
+  MaxRoundTime: 45
+  NumRoundsToWin: 2
   MatchEndRestartDelay: 5
-  PreRoundLength: 4
+  FirstPreRoundLength: 4
+  SubsequentPreRoundsLength: 3
