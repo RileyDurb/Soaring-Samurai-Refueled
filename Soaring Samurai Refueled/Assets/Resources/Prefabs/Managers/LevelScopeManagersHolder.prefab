@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6965499727050373144}
   - component: {fileID: 7718653242447094906}
   - component: {fileID: 1484640635900181618}
+  - component: {fileID: -1159165677199331076}
   m_Layer: 0
   m_Name: LevelScopeManagersHolder
   m_TagString: Untagged
@@ -164,3 +165,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MobileControllerPrefab: {fileID: 3669667871348055061, guid: 2c94ebc7fce58554bba572cd4d1ea3ce, type: 3}
+--- !u!114 &-1159165677199331076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c87ae3554af0f84baf37e4ec2a3e0f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

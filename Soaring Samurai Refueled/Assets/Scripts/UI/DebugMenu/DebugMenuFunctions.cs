@@ -18,4 +18,9 @@ public class DebugMenuFunctions : MonoBehaviour
         // Toggle debug mode state
         SimManager.Instance.DebugModeOn = !SimManager.Instance.DebugModeOn;
     }
+
+    public void SetAllPlayersToLowHealth()
+    {
+        LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().DebugSetPlayerHealthToLow();
+    }
 }

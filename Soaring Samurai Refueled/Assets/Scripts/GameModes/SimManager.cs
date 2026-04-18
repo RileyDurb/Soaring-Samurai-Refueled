@@ -27,6 +27,7 @@ public class SimManager : MonoBehaviour
     Dictionary<string, GameObject> mPrefabs = new Dictionary<string, GameObject>();
     GameObject mTempPauseMenuSpawnedPrefab;
 
+    bool mInPause = false;
     // Debug related
     bool mDebugMode = false;
     bool mAllowDebug = true;
@@ -51,13 +52,16 @@ public class SimManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // DEBUG KEY: Toggle debug mode
-        if (Input.GetKeyUp(KeyCode.Slash))
-        {
-            DebugModeOn = !mDebugMode;
-        }
 
-        if (mAllowDebug == true)
+        //if (/*Input.GetKeyUp(KeyCode.G)*/true)
+        //{
+        //    GameObject dashButton = GameObject.Find("DashButton");
+        //    if (dashButton != null)
+        //    {
+        //        print("CurrStickMag" + dashButton.GetComponent<OnScreenButton>().control.EvaluateMagnitude().ToString());
+        //    }
+        //}
+        if (DebugModeOn == true)
         {
             if (Input.GetKeyUp(KeyCode.X))
             {
@@ -74,26 +78,20 @@ public class SimManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyUp(KeyCode.Minus) || Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
+            if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
             {
                 MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
-                if (menuManager.NumItemsInMenu() == 0)
+                if (mInPause == false)
                 {
                     menuManager.PushMenu(mPrefabs["PauseMenu"]);
+                    mInPause = true;
                 }
                 else
                 {
                     menuManager.PopMenu();
+                    mInPause = false;
                 }
             }
-            //if (/*Input.GetKeyUp(KeyCode.G)*/true)
-            //{
-            //    GameObject dashButton = GameObject.Find("DashButton");
-            //    if (dashButton != null)
-            //    {
-            //        print("CurrStickMag" + dashButton.GetComponent<OnScreenButton>().control.EvaluateMagnitude().ToString());
-            //    }
-            //}
         }
     }
 
