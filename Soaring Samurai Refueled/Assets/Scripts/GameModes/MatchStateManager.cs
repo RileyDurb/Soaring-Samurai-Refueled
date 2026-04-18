@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class MatchStateManager : MonoBehaviour
@@ -19,6 +17,8 @@ public class MatchStateManager : MonoBehaviour
 
     // Events //////////////////////////////////////////////////////////////////////////////////////
     public Action<int> PlayerDefeated;
+    public Action<int, int> PlayerRoundWin; // Event for saying a player has won, sends the player index as the 1st parameter, and the new number of round wins in this match as the second parameter
+    public Action OnInitMatch;
 
 
     // Private variables ///////////////////////////////////////////////////////////////////////////
@@ -178,6 +178,10 @@ public class MatchStateManager : MonoBehaviour
 
         mCurrRoundNumber = 0;
 
+        if (OnInitMatch != null)
+        {
+            OnInitMatch.Invoke();
+        }
     }
     void InitRoundState()
     {
@@ -244,10 +248,14 @@ public class MatchStateManager : MonoBehaviour
 
         // Increment number of rounds
         mCurrRoundNumber++;
-        
+
+        // Call player event for things like round win indicators to respond
+        if (PlayerRoundWin != null)
+        {
+            PlayerRoundWin.Invoke(winningPlayerID, mCurrRoundWins[winningPlayerID]);
+        }
 
         // handle round advancing
-        
         if (mCurrRoundWins[winningPlayerID] >= mMatchStats.NumRoundsToWin) // If match has been won
         {
             // trigger match end

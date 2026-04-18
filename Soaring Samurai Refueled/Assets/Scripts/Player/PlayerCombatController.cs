@@ -74,7 +74,16 @@ public class PlayerCombatController : MonoBehaviour
     StateManagerPlayer mStateManager;
 
     [SerializeField] GameObject mHealthBar;
+    [SerializeField] GameObject mRoundWinsIndicator;
 
+    private void Awake()
+    {
+        // Set this as the parent of this player's round win indicator
+        if (mRoundWinsIndicator != null)
+        {
+            mRoundWinsIndicator.GetComponent<RoundWinIndicator>().OwningPlayer = this;
+        }
+    }
 
     void Start()
     {
