@@ -68,7 +68,7 @@ public class SimManager : MonoBehaviour
                 GameObject player = GameObject.Find("Player1");
                 if (player != null)
                 {
-                    player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackCurrentData(mTestSlapDirection * TestSlapStrength), mDebugSlapStats.mStats);
+                    player.GetComponent<PlayerCombatController>().TakeDamage(new Hitbox.AttackCurrentData(mTestSlapDirection * TestSlapStrength, 1), mDebugSlapStats.mStats);
                     PlayerCombatController combatCont = player.GetComponent<PlayerCombatController>();
                     Vector2 currScale = player.transform.localScale;
                     combatCont.mActionList.AddActionScale(player, new Vector2(currScale.x, currScale.y * 1.2f), .1f);
@@ -77,20 +77,19 @@ public class SimManager : MonoBehaviour
                     mTestSlapDirection *= -1;
                 }
             }
-
-            if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
+        }
+        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
+        {
+            MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
+            if (mInPause == false)
             {
-                MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
-                if (mInPause == false)
-                {
-                    menuManager.PushMenu(mPrefabs["PauseMenu"]);
-                    mInPause = true;
-                }
-                else
-                {
-                    menuManager.PopMenu();
-                    mInPause = false;
-                }
+                menuManager.PushMenu(mPrefabs["PauseMenu"]);
+                mInPause = true;
+            }
+            else
+            {
+                menuManager.PopMenu();
+                mInPause = false;
             }
         }
     }

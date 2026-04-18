@@ -23,4 +23,15 @@ public class DebugMenuFunctions : MonoBehaviour
     {
         LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().DebugSetPlayerHealthToLow();
     }
+
+    public void SetRoundTimeToLow()
+    {
+        LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().SetRoundTime(3.0f);
+    }
+
+    public void ResetRoundTime()
+    {
+        MatchStateManager matchStateMan = LevelScopeManagers.Instance.GetComponent<MatchStateManager>();
+        LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().SetRoundTime(matchStateMan.MatchStats.MaxRoundTime);
+    }
 }

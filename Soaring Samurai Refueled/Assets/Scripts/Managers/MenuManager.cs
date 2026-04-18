@@ -157,6 +157,10 @@ public class MenuManager : MonoBehaviour
     {
         List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
 
+        //if (additiveCounts.Count > 0)
+        //{
+
+        //}
         // For all the UI elements added in the current top level
         for (int i = additiveCounts[additiveCounts.Count - 1]; i > 0; i--)
         {

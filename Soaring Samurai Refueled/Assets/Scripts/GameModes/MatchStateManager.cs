@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MatchStateManager : MonoBehaviour
 {
     // Private class and enum definitions ////////////////////////////////////////////////////////
-    enum MatchState
+    public enum MatchState
     {
         PreRound,
         InProgress,
@@ -26,6 +27,7 @@ public class MatchStateManager : MonoBehaviour
     [SerializeField] MatchTuningStats mMatchStats;
     ActionList mActionList = new ActionList();
     MatchState mCurrMatchState = MatchState.PreRound;
+    bool mInSuddenDeath = false;
 
     // Round Start Message Variables
     [SerializeField]GameObject mMatchStartMessagePrefab;
@@ -47,6 +49,12 @@ public class MatchStateManager : MonoBehaviour
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
 
     public int CurrRoundTimeTrimmed {  get { return (int)mCurrMatchTimer; } }
+
+    public MatchState CurrMatchState { get { return mCurrMatchState; } }
+
+    public float RoundTimeUntrimmed { set { mCurrMatchTimer = value; } }
+
+    public MatchTuningStats MatchStats { get { return mMatchStats; } }  
 
     // Start is called before the first frame update
     void Start()
@@ -75,9 +83,15 @@ public class MatchStateManager : MonoBehaviour
     {
         mActionList.Update(Time.deltaTime);
 
-        if (mCurrMatchState == MatchState.InProgress)
+        if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false)
         {
             mCurrMatchTimer -= Time.deltaTime;
+
+            if (mCurrMatchTimer <= 0.0f) // If time is up
+            {
+                // Handle timeout win
+                HandleTimerUp();   
+            }
         }
     }
 
@@ -178,6 +192,8 @@ public class MatchStateManager : MonoBehaviour
 
         mCurrRoundNumber = 0;
 
+        mInSuddenDeath = false;
+
         if (OnInitMatch != null)
         {
             OnInitMatch.Invoke();
@@ -209,6 +225,189 @@ public class MatchStateManager : MonoBehaviour
         mMatchWinMenuObject.GetComponent<MatchEndMenuFeatures>().SetWinnerNameMessage("Player " + (winningPlayerID + 1).ToString() + " Has Won This Fight");
     }
 
+    void HandleTimerUp()
+    {
+        // Find highest health remaining, or all highest healths if it's a tie
+        List<Tuple<int, float>> mCurrentHighestHealths = new List<Tuple<int, float>>();
+
+        foreach (PlayerCombatController player in mPlayers)
+        {
+            float currHealth = player.GetComponent<PoolContainer>().GetPool("Health").PoolValue;
+
+            if (mCurrentHighestHealths.Count <= 0) // If no current highest health
+            {
+                // Save this as current highest
+                mCurrentHighestHealths.Add(new Tuple<int, float>(player.PlayerIndex, currHealth));
+            }
+            else
+            {
+                if (mCurrentHighestHealths[0].Item2 < currHealth) // If this player has the new highest health
+                {
+                    mCurrentHighestHealths.Clear(); // Remove all highest healths
+
+                    mCurrentHighestHealths.Add(new Tuple<int, float>(player.PlayerIndex, currHealth)); // Add this as the new highest health
+                }
+                else if (mCurrentHighestHealths[0].Item2 == currHealth) // If this player's health is the same as current highestr
+                {
+                    mCurrentHighestHealths.Add(new Tuple<int, float>(player.PlayerIndex, currHealth)); // Add this to the current highest count, for a potential tie or sudden death
+                }
+
+                // If it wasn't added to the highest list by here, not the current highest health, move on
+            }
+        }
+
+        if (mCurrentHighestHealths.Count == 0)
+        {
+            print("MatchStateManager:Update: Timer ended, but no player with the highest health could be found. Investigate");
+        }
+        else if (mCurrentHighestHealths.Count == 1) // We have 1 winner
+        {
+            HandlePlayerWin(mCurrentHighestHealths[0].Item1); // Handle player win, giving the player with the current highest health the win
+        }
+        else // If there is a tie for the highest healths
+        {
+            // Make a list of all players that tied for the win
+            int[] tieingPlayerIndicies = new int[mCurrentHighestHealths.Count];
+            for (int i = 0; i < mCurrentHighestHealths.Count; i++)
+            {
+                tieingPlayerIndicies[i] = mCurrentHighestHealths[i].Item1;
+            }
+
+            // Call handling of the tie for the winning players
+            HandleRoundTie(tieingPlayerIndicies);
+        }
+    }
+    void HandlePlayerWin(int winningPlayerID)
+    {
+        // Inrement number of player wins
+
+        if (mCurrRoundWins.ContainsKey(winningPlayerID))
+        {
+            mCurrRoundWins[winningPlayerID]++;
+            mTotalRoundWins[winningPlayerID]++;
+        }
+        else
+        {
+            mCurrRoundWins.Add(winningPlayerID, 1);
+            mTotalRoundWins.Add(winningPlayerID, 1);
+        }
+
+
+
+        // Call player event for things like round win indicators to respond
+        if (PlayerRoundWin != null)
+        {
+            PlayerRoundWin.Invoke(winningPlayerID, mCurrRoundWins[winningPlayerID]);
+        }
+
+        // Increment number of rounds
+        mCurrRoundNumber++;
+
+        // handle round advancing
+        if (mCurrRoundWins[winningPlayerID] >= mMatchStats.NumRoundsToWin) // If match has been won
+        {
+            // trigger match end
+            mCurrMatchState = MatchState.GameEnd;
+
+            // TODO: Handle ending the round instead of transitioning to post round and restarting
+            TriggerMatchEndSequence(winningPlayerID);
+        }
+        else
+        {
+            mCurrMatchState = MatchState.PostRound;
+            TriggerRoundAdvanceSequence();
+        }
+    }
+
+    void HandleRoundTie(int[] winningPlayerIndices)
+    {
+        // If all players are 1 win away, go into sudden death
+        bool allPlayersOneWinAway = true;
+        for (int i = 0; i < winningPlayerIndices.Length; i++)
+        {
+            // If index is less than 0, it's an unassigned player, likely a debug situation, skip
+            if (winningPlayerIndices[i] < 0)
+            {
+                continue;
+            }
+
+            if (mCurrRoundWins.ContainsKey(winningPlayerIndices[i]) == false ||
+                mCurrRoundWins[winningPlayerIndices[i]] < mMatchStats.NumRoundsToWin - 1) // If more than one round win away from winning the match
+            {
+                allPlayersOneWinAway = false;
+                break;
+            }
+        }
+
+        if (allPlayersOneWinAway)
+        {
+            TriggerSuddenDeath(winningPlayerIndices);
+            return;
+        }
+
+
+        // Give each player a win unless they are only 1 win away from a match win
+        // This means a win can't happen off of a tie, but each player will get closer to the match win, or a sudden death
+        for (int i = 0; i < winningPlayerIndices.Length; i++)
+        {
+            // If index is less than 0, it's an unassigned player, likely a debug situation, skip
+            if (winningPlayerIndices[i] < 0)
+            {
+                continue;
+            }
+            if (mCurrRoundWins.ContainsKey(winningPlayerIndices[i]) == false ||
+            mCurrRoundWins[winningPlayerIndices[i]] < mMatchStats.NumRoundsToWin - 1) // If more than one round win away from winning the match
+            {
+                if (mCurrRoundWins.ContainsKey(winningPlayerIndices[i]))
+                {
+                    mCurrRoundWins[winningPlayerIndices[i]]++;
+                    mTotalRoundWins[winningPlayerIndices[i]]++;
+                }
+                else
+                {
+                    mCurrRoundWins.Add(winningPlayerIndices[i], 1);
+                    mTotalRoundWins.Add(winningPlayerIndices[i], 1);
+                }
+            }
+        }
+
+
+        // Call player event for things like round win indicators to respond
+        if (PlayerRoundWin != null)
+        {
+            for (int i = 0; i < winningPlayerIndices.Length; i++)
+            {
+                // If index is less than 0, it's an unassigned player, likely a debug situation, skip
+                if (winningPlayerIndices[i] < 0)
+                {
+                    continue;
+                }
+                PlayerRoundWin.Invoke(winningPlayerIndices[i], mCurrRoundWins[winningPlayerIndices[i]]);
+            }
+        }
+
+        // Increment number of rounds
+        mCurrRoundNumber++;
+
+        // Move to next round
+        mCurrMatchState = MatchState.PostRound;
+        TriggerRoundAdvanceSequence();
+    }
+
+    void TriggerSuddenDeath(int[] suddenDeathPlayers)
+    {
+        for (int i = 0; i < mPlayers.Count; i++)
+        {
+            PoolContainer.Pool currHealthPool = mPlayers[i].GetComponent<PoolContainer>().GetPool("Health");
+            if (currHealthPool.PoolValue > 0.0f)
+            {
+                currHealthPool.PoolValue = mMatchStats.SuddenDeathHealthValue;
+            }
+        }
+
+        mInSuddenDeath = true;
+    }
+
     // Event subscriptions //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void HandlePlayerDefeated(int playerID)
     {
@@ -231,47 +430,7 @@ public class MatchStateManager : MonoBehaviour
             return;
         }
 
-        // Inrement number of player wins
-
-        int winningPlayerID = winningPlayer.PlayerIndex;
-
-        if (mCurrRoundWins.ContainsKey(winningPlayerID))
-        {
-            mCurrRoundWins[winningPlayerID]++;
-            mTotalRoundWins[winningPlayerID]++;
-        }
-        else
-        {
-            mCurrRoundWins.Add(winningPlayerID, 1);
-            mTotalRoundWins.Add(winningPlayerID, 1);
-        }
-
-        // Increment number of rounds
-        mCurrRoundNumber++;
-
-        // Call player event for things like round win indicators to respond
-        if (PlayerRoundWin != null)
-        {
-            PlayerRoundWin.Invoke(winningPlayerID, mCurrRoundWins[winningPlayerID]);
-        }
-
-        // handle round advancing
-        if (mCurrRoundWins[winningPlayerID] >= mMatchStats.NumRoundsToWin) // If match has been won
-        {
-            // trigger match end
-            mCurrMatchState = MatchState.GameEnd;
-
-            // TODO: Handle ending the round instead of transitioning to post round and restarting
-            TriggerMatchEndSequence(winningPlayerID);
-        }
-        else
-        {
-            mCurrMatchState = MatchState.PostRound;
-            TriggerRoundAdvanceSequence();
-        }
-
-
-
+        HandlePlayerWin(winningPlayer.PlayerIndex);
     }
 
     // Public interface /////////////////////////////////////////////////////////////////////////////////

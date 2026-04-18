@@ -16,6 +16,9 @@ public class MatchTuningStats : ScriptableObject
     public float MaxRoundTime = 45.0f;
     public int NumRoundsToWin = 2;
 
+    [Header("Sudden Death")]
+    public float SuddenDeathHealthValue = 2.0f;
+
     [Header("Balance Related Aesthetics")]
     public float MatchEndRestartDelay = 5.0f;
     public float FirstPreRoundLength = 4.0f;

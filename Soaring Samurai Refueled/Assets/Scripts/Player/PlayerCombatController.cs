@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -56,6 +57,9 @@ public class PlayerCombatController : MonoBehaviour
     {
         get { return mOGScale; }
     }
+
+    // Public variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public Action<int, int> OnDamageTaken; // Event called when taking damage, 1st parameter is the player index who took the damage, 2nd paramater is who gave the damage
 
     // Private variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 mMoveInput;
@@ -400,6 +404,12 @@ public class PlayerCombatController : MonoBehaviour
     // Combat related functions //////////////////////////////////////////////////////////////////////////////////////////////////////
     public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
+        // Only allow damage while the match is in progress
+        if (LevelScopeManagers.Instance.GetComponent<MatchStateManager>().CurrMatchState != MatchStateManager.MatchState.InProgress)
+        {
+            return;
+        }
+
         bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
 
 
@@ -431,6 +441,11 @@ public class PlayerCombatController : MonoBehaviour
 
             GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Defeated);
         }
+
+        if (OnDamageTaken != null)
+        {
+            OnDamageTaken(PlayerIndex, attackData.AttackingSourcePlayerID);
+        }
     }
 
     public void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo)
@@ -440,7 +455,7 @@ public class PlayerCombatController : MonoBehaviour
 
         newHitbox.transform.localScale = new Vector3(newHitbox.transform.localScale.x * attackInfo.HitboxScale.x, newHitbox.transform.localScale.y * attackInfo.HitboxScale.y, 1.0f); // Sets scale equal to a multiplier of the player's scale
         newHitbox.transform.localPosition += new Vector3(offsetFromPlayer.x, offsetFromPlayer.y); // Adds the given offset
-        newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo);
+        newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo, PlayerIndex);
 
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
     }

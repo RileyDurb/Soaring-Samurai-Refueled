@@ -28,6 +28,11 @@ public class DebugHotkeyManager : MonoBehaviour
                 DebugSetPlayerHealthToLow();
             }
 
+            // Sets round time to finish soon
+            if (Input.GetKeyUp(KeyCode.Alpha0))
+            {
+                SetRoundTime(3.0f);
+            }
         }
 
     }
@@ -48,5 +53,10 @@ public class DebugHotkeyManager : MonoBehaviour
             player.GetComponent<PoolContainer>().GetPool("Health").PoolValue = 5.0f;
         }
 
+    }
+
+    public void SetRoundTime(float newRoundTime)
+    {
+        LevelScopeManagers.Instance.GetComponent<MatchStateManager>().RoundTimeUntrimmed = newRoundTime;
     }
 }

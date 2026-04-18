@@ -47,14 +47,17 @@ public class Hitbox : MonoBehaviour
     [System.Serializable]
     public class AttackCurrentData
     {
-        public AttackCurrentData(Vector2 knockbackVec) 
+        public AttackCurrentData(Vector2 knockbackVec, int attackingPlayerSourceID) 
         {
             mKnockbackVec = knockbackVec;
+            mAttackingPlayerID = attackingPlayerSourceID;
         }
 
         Vector2 mKnockbackVec = Vector2.zero;
+        int mAttackingPlayerID = -1;
         // Getters
         public Vector2 Knockback { get { return mKnockbackVec; } }
+        public int AttackingSourcePlayerID {  get { return mAttackingPlayerID; } }
     }
 
     // Editor accessible variables
@@ -67,6 +70,7 @@ public class Hitbox : MonoBehaviour
     bool mAlreadyHit = false; // Whether this hitbox has already hit an opponent
     float mCurrLifeTimer = 0.0f;
     AttackDefinition mAttackInfo = new AttackDefinition();
+    int mOwningPlayerID = -1;
 
 
     // Start is called before the first frame update
@@ -119,7 +123,7 @@ public class Hitbox : MonoBehaviour
 
             // Sends attack
             // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec), mAttackInfo);
+            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID), mAttackInfo);
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;
@@ -128,9 +132,10 @@ public class Hitbox : MonoBehaviour
 
     // Getters and setters
 
-    public void InitAttack(AttackDefinition attack)
+    public void InitAttack(AttackDefinition attack, int owningPlayerID)
     {
         mAttackInfo = attack;
         mCurrLifeTimer = 0.0f;
+        mOwningPlayerID = owningPlayerID;
     }
 }
