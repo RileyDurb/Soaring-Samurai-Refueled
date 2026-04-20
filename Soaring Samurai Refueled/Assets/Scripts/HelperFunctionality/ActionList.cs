@@ -113,9 +113,9 @@ public class ActionList
         mActions.Add(new Action_FadeText(parent, endAlpha, duration, delay, easingType));
     }
 
-    public void AddActionFadeCanvasObject(GameObject parent, float endAlpha, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None)
+    public void AddActionFadeCanvasObject(GameObject parent, float endAlpha, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None, bool looping = false)
     {
-        mActions.Add(new Action_FadeCanvasObject(parent, endAlpha, duration, delay, easingType));
+        mActions.Add(new Action_FadeCanvasObject(parent, endAlpha, duration, delay, easingType, looping));
     }
 
     // Scale

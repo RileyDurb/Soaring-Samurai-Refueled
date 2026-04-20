@@ -125,11 +125,13 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
                 else
                 {
                     print("StateManager(" + name + "): State timer elapsed, but could not enter the done state");
+
+                    // Reset variables
+                    mDoneStateName = default;
+                    mCurrStateTimer = -1;
                 }
 
-                // Reset variables
-                mDoneStateName = default;
-                mCurrStateTimer = -1;
+
             }
         }
 
@@ -192,12 +194,9 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
 
 
 
-        // Set state timer, if given a time
-        if (stateTime > 0)
-        {
-            mCurrStateTimer = stateTime;
-            mDoneStateName = doneStateName;
-        }
+        // Set state timer, defaults to being off if given default arguments
+        mCurrStateTimer = stateTime;
+        mDoneStateName = doneStateName;
     }
 
     // Getters and setters ///////////////////////////////////////////////////////////////////////////////////

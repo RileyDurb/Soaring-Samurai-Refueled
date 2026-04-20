@@ -27,7 +27,7 @@ public class MatchStateManager : MonoBehaviour
     [SerializeField] MatchTuningStats mMatchStats;
     ActionList mActionList = new ActionList();
     MatchState mCurrMatchState = MatchState.PreRound;
-    bool mInSuddenDeath = false;
+
 
     // Round Start Message Variables
     [SerializeField]GameObject mMatchStartMessagePrefab;
@@ -36,7 +36,13 @@ public class MatchStateManager : MonoBehaviour
     // Match win menu variables
     [SerializeField] GameObject mMatchWinMenuPrefab;
     GameObject mMatchWinMenuObject;
-    
+
+
+    // Sudden death variables
+    [SerializeField] GameObject mSuddenDeathMessagePrefab;
+    GameObject mSuddenDeathMessageObject;
+    bool mInSuddenDeath = false;
+
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
     float mCurrMatchTimer = -1.0f;
@@ -292,6 +298,11 @@ public class MatchStateManager : MonoBehaviour
             mTotalRoundWins.Add(winningPlayerID, 1);
         }
 
+        if (mInSuddenDeath)
+        {
+            LevelScopeManagers.Instance.GetComponent<MenuManager>().PopHudItem();
+            mSuddenDeathMessageObject = null;
+        }
 
 
         // Call player event for things like round win indicators to respond
@@ -404,6 +415,8 @@ public class MatchStateManager : MonoBehaviour
                 currHealthPool.PoolValue = mMatchStats.SuddenDeathHealthValue;
             }
         }
+
+        mSuddenDeathMessageObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mSuddenDeathMessagePrefab);
 
         mInSuddenDeath = true;
     }

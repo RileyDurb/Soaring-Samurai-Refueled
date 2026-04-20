@@ -41,6 +41,12 @@ public class SimManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
         Instance = this;
 
         // Singleton, keep around until game shutdown

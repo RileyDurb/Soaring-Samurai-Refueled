@@ -569,7 +569,7 @@ class Action_FadeCanvasObject : Action_
     float mEndAlpha = 0.0f;
     bool mAlphaInitted = false;
 
-    public Action_FadeCanvasObject(GameObject parent, float endAlpha, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None)
+    public Action_FadeCanvasObject(GameObject parent, float endAlpha, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None, bool looping = false)
     {
         mParentObj = parent;
 
@@ -579,6 +579,8 @@ class Action_FadeCanvasObject : Action_
         mDelay = delay;
 
         mEasingType = easingType;
+
+        mLooping = looping;
     }
 
     public override bool Update(float dt)

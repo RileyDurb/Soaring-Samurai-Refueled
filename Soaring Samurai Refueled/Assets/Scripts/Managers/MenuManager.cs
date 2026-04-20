@@ -230,6 +230,11 @@ public class MenuManager : MonoBehaviour
         return PushItem(UILayer.HUD, hudUIPrefabToUse, addToCurrentLayerLevel);
     }
 
+    public void PopHudItem()
+    {
+        PopItem(UILayer.HUD);
+    }
+
     // Creates an UI object from the given prefab. By default, puts it above the current top layer and hides the previous top
     public GameObject PushPopup(GameObject controlsPrefabToUse, bool addToCurrentLayerLevel = false)
     {
