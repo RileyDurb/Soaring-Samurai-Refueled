@@ -43,6 +43,10 @@ public class MatchStateManager : MonoBehaviour
     GameObject mSuddenDeathMessageObject;
     bool mInSuddenDeath = false;
 
+    // Round Win message variables
+    [SerializeField] GameObject mRoundWinMessagePrefab;
+    GameObject mRoundWinMessageObject;
+
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
     float mCurrMatchTimer = -1.0f;
@@ -219,7 +223,7 @@ public class MatchStateManager : MonoBehaviour
     }
     void TriggerRoundAdvanceSequence()
     {
-        // TODO: Make the restart of the match require some sort of confirming, and also make it round based
+        mRoundWinMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundWinMessagePrefab); // Add round win message
         mActionList.AddActionCallback(() => { RestartRound(); }, mMatchStats.MatchEndRestartDelay);
     }
 

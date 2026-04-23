@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7718653242447094906}
   - component: {fileID: 1484640635900181618}
   - component: {fileID: -1159165677199331076}
+  - component: {fileID: 3680314576665779589}
   m_Layer: 0
   m_Name: LevelScopeManagersHolder
   m_TagString: Untagged
@@ -96,6 +97,7 @@ MonoBehaviour:
   mMatchStartMessagePrefab: {fileID: 833353422835981834, guid: 2628754687c5e784792808b310b31808, type: 3}
   mMatchWinMenuPrefab: {fileID: 53818224331509458, guid: 935fede1868c36144b2c26edf7ac6cc7, type: 3}
   mSuddenDeathMessagePrefab: {fileID: 122320547184230791, guid: c7cd7cfd86b168b47940fff88c9a0487, type: 3}
+  mRoundWinMessagePrefab: {fileID: 122320547184230791, guid: aac34eecd9a9b6944b8ca418e68822d8, type: 3}
   mRoundTimerPrefab: {fileID: 689383211063943229, guid: fa0468b1d4cf9de46bef43e35d1276c2, type: 3}
 --- !u!114 &6965499727050373144
 MonoBehaviour:
@@ -178,3 +180,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c87ae3554af0f84baf37e4ec2a3e0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3680314576665779589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68c629fb42790f43b8c43707653041a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mHudLayerSettings:
+  - LayerToApplyTo: 0
+    AnchorMin: {x: 0.5, y: 1}
+    AnchorMax: {x: 0.5, y: 1}
+    Pivot: {x: 0.5, y: 1}
+  - LayerToApplyTo: 1
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}

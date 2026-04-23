@@ -18,6 +18,7 @@ MonoBehaviour:
   ClearForcesOnRestart: 1
   MaxRoundTime: 45
   NumRoundsToWin: 2
+  SuddenDeathHealthValue: 2
   MatchEndRestartDelay: 5
   FirstPreRoundLength: 4
-  SubsequentPreRoundsLength: 3
+  SubsequentPreRoundsLength: 4
