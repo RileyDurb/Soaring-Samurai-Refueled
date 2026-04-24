@@ -24,17 +24,18 @@ public class PlayerInputHandler : MonoBehaviour
         PlayerCombatController[] controllerList = FindObjectsOfType<PlayerCombatController>();
         foreach (PlayerCombatController controller in controllerList)
         {
-            if (controller.PlayerIndex < 0) // If unassigned player found
+            if (controller.PlayerIndex == input.playerIndex) // If unassigned player found
             {
 
                 playerController = controller; // Saves player object for controlling
-                controller.PlayerIndex = input.playerIndex; // Gives the player this input handler's index
-
+                controller.SetPlayerIndex(input.playerIndex, true); // Gives the player this input handler's index, and marks the player as now being player controlled
 
                 break;
             }
         }
 
+        // TODO: add a case for no player with a matching index existing, and if that's the case, spawn a new player (need to make player spawning, and make that spawn UI elements for the new player)
+        
 
         //GameObject joystick = GameObject.Find("TestMobileJoystick");
         //OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();

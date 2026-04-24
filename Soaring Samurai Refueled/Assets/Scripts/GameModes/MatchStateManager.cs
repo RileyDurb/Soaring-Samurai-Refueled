@@ -47,6 +47,12 @@ public class MatchStateManager : MonoBehaviour
     [SerializeField] GameObject mRoundWinMessagePrefab;
     GameObject mRoundWinMessageObject;
 
+    // Round Tie message variables
+    [SerializeField] GameObject mRoundTieMessagePrefab;
+    GameObject mRoundTieMessageObject;
+
+
+
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
     float mCurrMatchTimer = -1.0f;
@@ -73,9 +79,14 @@ public class MatchStateManager : MonoBehaviour
 
         // Makes a list of all current players
         PlayerCombatController[] players = FindObjectsOfType<PlayerCombatController>();
+        int i = 0;
         foreach (PlayerCombatController player in players)
         {
+            player.SetPlayerIndex(i, false); // Set player index, defaulting to making the player non player controlled until posessed by an input manager
+
             mPlayers.Add(player);
+
+            i++;
         }
 
 
@@ -221,9 +232,17 @@ public class MatchStateManager : MonoBehaviour
 
         mCurrMatchState = MatchState.InProgress;
     }
-    void TriggerRoundAdvanceSequence()
+    void TriggerRoundAdvanceSequence(bool wasTie)
     {
-        mRoundWinMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundWinMessagePrefab); // Add round win message
+        if (wasTie)
+        {
+            mRoundTieMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundTieMessagePrefab); // Add round tie message
+        }
+        else
+        {
+            mRoundWinMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundWinMessagePrefab); // Add round win message
+        }
+
         mActionList.AddActionCallback(() => { RestartRound(); }, mMatchStats.MatchEndRestartDelay);
     }
 
@@ -330,7 +349,7 @@ public class MatchStateManager : MonoBehaviour
         else
         {
             mCurrMatchState = MatchState.PostRound;
-            TriggerRoundAdvanceSequence();
+            TriggerRoundAdvanceSequence(false);
         }
     }
 
@@ -406,7 +425,7 @@ public class MatchStateManager : MonoBehaviour
 
         // Move to next round
         mCurrMatchState = MatchState.PostRound;
-        TriggerRoundAdvanceSequence();
+        TriggerRoundAdvanceSequence(true);
     }
 
     void TriggerSuddenDeath(int[] suddenDeathPlayers)

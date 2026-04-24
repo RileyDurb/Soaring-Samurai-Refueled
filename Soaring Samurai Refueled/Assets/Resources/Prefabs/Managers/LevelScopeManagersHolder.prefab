@@ -90,6 +90,7 @@ MonoBehaviour:
   mMatchWinMenuPrefab: {fileID: 53818224331509458, guid: 935fede1868c36144b2c26edf7ac6cc7, type: 3}
   mSuddenDeathMessagePrefab: {fileID: 122320547184230791, guid: c7cd7cfd86b168b47940fff88c9a0487, type: 3}
   mRoundWinMessagePrefab: {fileID: 122320547184230791, guid: aac34eecd9a9b6944b8ca418e68822d8, type: 3}
+  mRoundTieMessagePrefab: {fileID: 122320547184230791, guid: ebf2069e0f914844a8de578330c09c61, type: 3}
   mRoundTimerPrefab: {fileID: 689383211063943229, guid: fa0468b1d4cf9de46bef43e35d1276c2, type: 3}
 --- !u!114 &6965499727050373144
 MonoBehaviour:

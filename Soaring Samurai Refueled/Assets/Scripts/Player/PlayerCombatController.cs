@@ -58,6 +58,12 @@ public class PlayerCombatController : MonoBehaviour
         get { return mOGScale; }
     }
 
+    public void SetIsNonPlayerControlled()
+    {
+        mNonPlayerControlled = true;
+    }
+
+
     // Public variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Action<int, int> OnDamageTaken; // Event called when taking damage, 1st parameter is the player index who took the damage, 2nd paramater is who gave the damage
 
@@ -69,6 +75,8 @@ public class PlayerCombatController : MonoBehaviour
 
     [SerializeField]
     private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
+
+    private bool mNonPlayerControlled = false;
 
     // Component references
     AnimationController mAnimationController;
@@ -152,9 +160,13 @@ public class PlayerCombatController : MonoBehaviour
     public int PlayerIndex
     {
         get { return playerIndex; }
-        set { playerIndex = value; }
     }
 
+    public void SetPlayerIndex(int newPlayerIndex, bool isPlayerControlled)
+    {
+        playerIndex = newPlayerIndex;
+        mNonPlayerControlled = !isPlayerControlled;
+    }
 
 
     // Action functions
