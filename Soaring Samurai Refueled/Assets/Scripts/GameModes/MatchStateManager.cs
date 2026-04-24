@@ -133,7 +133,7 @@ public class MatchStateManager : MonoBehaviour
                 if (mMatchStats.ResetPositionsOnMatchStart)
                 {
                     // Reset player position
-                    currPlayer.GetComponent<Rigidbody2D>().MovePosition(currSpawnVec);
+                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec;
                 }
             }
             else // For subsequent rounds
@@ -141,7 +141,7 @@ public class MatchStateManager : MonoBehaviour
                 if (mMatchStats.ResetPositionsOnRoundStart)
                 {
                     // Reset player position
-                    currPlayer.GetComponent<Rigidbody2D>().MovePosition(currSpawnVec);
+                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec;
                 }
             }
 

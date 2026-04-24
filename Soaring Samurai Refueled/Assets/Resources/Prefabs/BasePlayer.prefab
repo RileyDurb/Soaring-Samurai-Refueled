@@ -114,6 +114,7 @@ MonoBehaviour:
     DashStrechEasing: 0
   playerIndex: -1
   mHealthBar: {fileID: 0}
+  mRoundWinsIndicator: {fileID: 0}
 --- !u!50 &8127609608215675805
 Rigidbody2D:
   serializedVersion: 4
@@ -199,7 +200,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.61, y: 1.25}
+  m_Size: {x: 0.61, y: 1.1}
   m_Direction: 0
 --- !u!114 &-4621455244979845033
 MonoBehaviour:
