@@ -16,7 +16,7 @@ public class HUDManager : MonoBehaviour
     [System.Serializable]
     private class HUDLayerSettings
     {
-        public HUDLayers LayerToApplyTo = HUDLayers.Info;
+        public HUDLayers LayerToApplyTo = HUDLayers.MatchInfo;
         public Vector2 AnchorMin;
         public Vector2 AnchorMax;
         public Vector2 Pivot;
@@ -24,7 +24,7 @@ public class HUDManager : MonoBehaviour
 
     public enum HUDLayers
     {
-        Info,
+        MatchInfo,
         Controls
     }
 
@@ -102,7 +102,7 @@ public class HUDManager : MonoBehaviour
 
     void RemoveHudItem(HUDLayers layer, GameObject UIObjectRef)
     {
-        GameObject objectToRemove = mHUDLayers[(int)layer].mHUDObjects.Find((GameObject objectToFind) => { return objectToFind = UIObjectRef; });
+        GameObject objectToRemove = mHUDLayers[(int)layer].mHUDObjects.Find((GameObject objectToFind) => { return objectToFind == UIObjectRef; });
 
         if (objectToRemove != null)
         {
@@ -114,11 +114,21 @@ public class HUDManager : MonoBehaviour
     // Public interface //////////////////////////////////////////////////////////////////////////////////////////////////
     public GameObject AddInfoItem(GameObject UIPrefabToUse)
     {
-        return AddHudItem(HUDLayers.Info, UIPrefabToUse);
+        return AddHudItem(HUDLayers.MatchInfo, UIPrefabToUse);
     }
 
     public void RemoveInfoItem(GameObject UIObjectToRemove)
     {
-        RemoveHudItem(HUDLayers.Info, UIObjectToRemove);
+        RemoveHudItem(HUDLayers.MatchInfo, UIObjectToRemove);
+    }
+
+    public GameObject AddControlsItem(GameObject UIPrefabToUse)
+    {
+        return AddHudItem(HUDLayers.Controls, UIPrefabToUse);
+    }
+
+    public void RemoveControlsItem(GameObject UIObjectToRemove)
+    {
+        RemoveHudItem(HUDLayers.Controls, UIObjectToRemove);
     }
 }

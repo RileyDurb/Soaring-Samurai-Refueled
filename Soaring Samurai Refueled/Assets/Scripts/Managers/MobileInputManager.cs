@@ -8,6 +8,8 @@ public class MobileInputManager : MonoBehaviour
 {
     [SerializeField] GameObject MobileControllerPrefab;
 
+    List<GameObject> mSpawnedControlsObjects = new List<GameObject>();
+
     int mNumMobileControllersSpawned = 0;
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,8 @@ public class MobileInputManager : MonoBehaviour
 
         if (Input.touchCount > 0 || Input.GetKey(KeyCode.Equals))
         {
-            GameObject newMobileControls = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushControls(MobileControllerPrefab);
+            GameObject newMobileControls = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddControlsItem(MobileControllerPrefab);
+            mSpawnedControlsObjects.Add(newMobileControls);
 
             GameObject joystick = newMobileControls.transform.Find("MobileJoystick").gameObject;
             OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();

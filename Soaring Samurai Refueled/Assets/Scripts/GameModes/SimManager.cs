@@ -17,6 +17,7 @@ public class SimManager : MonoBehaviour
     // Events /////////////////////////////////////////////////////////////////////////////////////////////
     public Action GameEnd;
     public Action<bool> DebugModeStateChanged;
+    public Action<bool> OnPausedChange;
 
     // Instance ///////////////////////////////////////////////////////////////////////////////////////////
     public static SimManager Instance;
@@ -28,6 +29,10 @@ public class SimManager : MonoBehaviour
     GameObject mTempPauseMenuSpawnedPrefab;
 
     bool mInPause = false;
+    private bool IsPaused { 
+        get { return mInPause; } 
+        set { mInPause = value; if (OnPausedChange != null) { OnPausedChange(mInPause); } }
+    }
     // Debug related
     bool mDebugMode = false;
     bool mAllowDebug = true;
@@ -90,12 +95,12 @@ public class SimManager : MonoBehaviour
             if (mInPause == false)
             {
                 menuManager.PushMenu(mPrefabs["PauseMenu"]);
-                mInPause = true;
+                IsPaused = true;
             }
             else
             {
                 menuManager.PopMenu();
-                mInPause = false;
+                IsPaused = false;
             }
         }
     }
@@ -161,6 +166,10 @@ public class SimManager : MonoBehaviour
 
     }
 
-
+    // Public getter for changing what happens when wantimg to set paused publicly, vs within the sim manager
+    public void SetPaused(bool newPaused)
+    {
+        IsPaused = newPaused;
+    }
 
 }

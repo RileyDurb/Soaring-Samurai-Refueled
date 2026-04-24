@@ -83,7 +83,7 @@ public class MatchStateManager : MonoBehaviour
         PlayerDefeated += HandlePlayerDefeated;
 
         // Create round timer
-        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mRoundTimerPrefab);
+        LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundTimerPrefab);
 
         RestartMatch();
     }
@@ -304,7 +304,7 @@ public class MatchStateManager : MonoBehaviour
 
         if (mInSuddenDeath)
         {
-            LevelScopeManagers.Instance.GetComponent<MenuManager>().PopHudItem();
+            LevelScopeManagers.Instance.GetComponent<HUDManager>().RemoveInfoItem(mSuddenDeathMessageObject);
             mSuddenDeathMessageObject = null;
         }
 
@@ -420,7 +420,7 @@ public class MatchStateManager : MonoBehaviour
             }
         }
 
-        mSuddenDeathMessageObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushHUDItem(mSuddenDeathMessagePrefab);
+        mSuddenDeathMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mSuddenDeathMessagePrefab);
 
         mInSuddenDeath = true;
     }

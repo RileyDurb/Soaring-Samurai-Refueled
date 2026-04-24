@@ -65,18 +65,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LayerSettings:
   - LayerToApplyTo: 0
-    AnchorMin: {x: 0.5, y: 1}
-    AnchorMax: {x: 0.5, y: 1}
-    Pivot: {x: 0.5, y: 1}
-  - LayerToApplyTo: 1
-    AnchorMin: {x: 0.5, y: 0}
-    AnchorMax: {x: 0.5, y: 0}
-    Pivot: {x: 0.5, y: 0}
-  - LayerToApplyTo: 2
     AnchorMin: {x: 0.5, y: 0.5}
     AnchorMax: {x: 0.5, y: 0.5}
     Pivot: {x: 0.5, y: 0.5}
-  - LayerToApplyTo: 3
+  - LayerToApplyTo: 1
     AnchorMin: {x: 0.5, y: 0.5}
     AnchorMax: {x: 0.5, y: 0.5}
     Pivot: {x: 0.5, y: 0.5}
