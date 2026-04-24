@@ -120,7 +120,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
                 if (CanEnterState(mDoneStateName))
                 {
                     // Enter done state
-                    EnterState(mDoneStateName, default);
+                    EnterState(mDoneStateName);
                 }
                 else
                 {

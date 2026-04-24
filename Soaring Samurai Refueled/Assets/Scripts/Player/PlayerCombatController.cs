@@ -422,7 +422,13 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
-        bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(baseAttackInfo.Damage);
+        float currentDamage = baseAttackInfo.Damage;
+        if (attackData.IsClashing)
+        {
+            currentDamage = 0.0f;
+        }
+
+        bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(currentDamage);
 
 
         if (SimManager.Instance.DebugModeOn)

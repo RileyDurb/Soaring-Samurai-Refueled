@@ -47,21 +47,24 @@ public class Hitbox : MonoBehaviour
     [System.Serializable]
     public class AttackCurrentData
     {
-        public AttackCurrentData(Vector2 knockbackVec, int attackingPlayerSourceID) 
+        public AttackCurrentData(Vector2 knockbackVec, int attackingPlayerSourceID, bool isClashing = false) 
         {
             mKnockbackVec = knockbackVec;
             mAttackingPlayerID = attackingPlayerSourceID;
+            mIsClashing = isClashing;
         }
 
         Vector2 mKnockbackVec = Vector2.zero;
         int mAttackingPlayerID = -1;
+        bool mIsClashing = false;
         // Getters
         public Vector2 Knockback { get { return mKnockbackVec; } }
         public int AttackingSourcePlayerID {  get { return mAttackingPlayerID; } }
+        public bool IsClashing { get { return mIsClashing; } }
     }
 
     // Editor accessible variables
-
+    [SerializeField] LayerMask NonClashingLayers = new LayerMask();
 
     // Probably just handle destruction with an action, unless lifetime is set based on the animation
 
@@ -71,7 +74,7 @@ public class Hitbox : MonoBehaviour
     float mCurrLifeTimer = 0.0f;
     AttackDefinition mAttackInfo = new AttackDefinition();
     int mOwningPlayerID = -1;
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -106,7 +109,7 @@ public class Hitbox : MonoBehaviour
             return;
         }
 
-        if (collision.gameObject.tag.Contains("Player"))
+        if (collision.collider.gameObject.tag.Contains("Player"))
         {
             GameObject parentAttacker = transform.parent.gameObject;
             if (parentAttacker == null)
@@ -127,6 +130,47 @@ public class Hitbox : MonoBehaviour
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;
+        }
+        else if (collision.collider.gameObject.tag.Contains("Hitbox"))
+        {
+            //ContactFilter2D clashCheckParameters = new ContactFilter2D();
+            //clashCheckParameters.SetLayerMask(NonClashingLayers);
+            ContactPoint2D[] collisions = new ContactPoint2D[collision.contactCount];
+            collision.GetContacts(collisions);
+
+            //this.GetComponent<BoxCollider2D>().OverlapCollider(clashCheckParameters, collisions);
+
+            bool onlyHitboxCollision = true;
+            foreach (ContactPoint2D contact in collisions)
+            {
+                if (contact.collider.gameObject.tag.Contains("Hitbox") == false)
+                {
+                    onlyHitboxCollision = false;
+                    break;
+                }
+            }
+
+            if (onlyHitboxCollision == true) // If only hit another hitbox, trigger a clash
+            {
+                GameObject parentAttacker = transform.parent.gameObject;
+                if (parentAttacker == null)
+                {
+                    print("Hitbox:OnCollisionEnter2D: Hitbox with null parent collided with " + collision.gameObject.name);
+                    mAlreadyHit = true;
+                    return;
+                }
+
+                // Gets knockback vector
+                Vector2 vecToReceiver = collision.transform.position - parentAttacker.transform.position;
+                Vector2 knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+
+                // Sends attack
+                // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
+                collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID, true), mAttackInfo);
+
+                // Marks hitbox as already hit, so it doesn't trigger again
+                mAlreadyHit = true;
+            }
         }
     }
 
