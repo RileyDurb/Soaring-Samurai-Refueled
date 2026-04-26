@@ -64,9 +64,6 @@ public class Hitbox : MonoBehaviour
     }
 
     // Editor accessible variables
-    [SerializeField] LayerMask NonClashingLayers = new LayerMask();
-
-    // Probably just handle destruction with an action, unless lifetime is set based on the animation
 
 
     // private variables

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class HealthBarController : MonoBehaviour
     // Private variables
     [SerializeField] GameObject mBarImageObject; // Game object that holds the health bar image
     PoolContainer.Pool mPoolToTrack;
+    [SerializeField] TextMeshProUGUI mPlayerNameTextObject;
 
     float mCurrValue = 0.0f;
 
@@ -38,5 +40,10 @@ public class HealthBarController : MonoBehaviour
     public void ManualSetFillPercent(float newValue)
     {
         mCurrValue = newValue;
+    }
+
+    public void SetPlayerNameText(string newNameText)
+    {
+        mPlayerNameTextObject.text = newNameText;
     }
 }

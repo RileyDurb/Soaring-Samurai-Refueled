@@ -74,7 +74,7 @@ public class PlayerCombatController : MonoBehaviour
 
 
     [SerializeField]
-    private int playerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
+    private int mPlayerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
 
     private bool mNonPlayerControlled = false;
 
@@ -126,8 +126,12 @@ public class PlayerCombatController : MonoBehaviour
         // Set up health bar
         if (mHealthBar != null)
         {
-            mHealthBar.GetComponent<HealthBarController>().SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health"));
+            HealthBarController healthBar = mHealthBar.GetComponent<HealthBarController>();
+            healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health")); // Set the health pool to be represented by the health bar
+            healthBar.SetPlayerNameText("Player " + (mPlayerIndex + 1)); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
         }
+
+  
     }
 
     // Update is called once per frame
@@ -159,12 +163,12 @@ public class PlayerCombatController : MonoBehaviour
     // Getters and setters
     public int PlayerIndex
     {
-        get { return playerIndex; }
+        get { return mPlayerIndex; }
     }
 
     public void SetPlayerIndex(int newPlayerIndex, bool isPlayerControlled)
     {
-        playerIndex = newPlayerIndex;
+        mPlayerIndex = newPlayerIndex;
         mNonPlayerControlled = !isPlayerControlled;
     }
 
@@ -455,7 +459,7 @@ public class PlayerCombatController : MonoBehaviour
         // Notify match of the player being defeated
         if (wasDefeated)
         {
-            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerDefeated.Invoke(playerIndex);
+            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerDefeated.Invoke(mPlayerIndex);
 
             GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Defeated);
         }
