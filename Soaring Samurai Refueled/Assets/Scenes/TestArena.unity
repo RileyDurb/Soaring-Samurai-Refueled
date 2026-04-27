@@ -162,6 +162,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.5660378
       objectReference: {fileID: 0}
+    - target: {fileID: 2991329939210656334, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 7249342119992724074, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1222,7 +1226,7 @@ PrefabInstance:
     - target: {fileID: 1050537092335217878, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: fc28d57438ce91745afce83896b611c2, type: 3}
+      objectReference: {fileID: 21300000, guid: b7f530e2c6dd1e24f92851561b895b69, type: 3}
     - target: {fileID: 1555600065180160004, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_FillOrigin
       value: 1
@@ -1230,6 +1234,14 @@ PrefabInstance:
     - target: {fileID: 2257182744850444181, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Name
       value: Health bar Fill
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357844365845518597, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357844365845518597, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 190
       objectReference: {fileID: 0}
     - target: {fileID: 4389840815485633355, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_text
@@ -1335,6 +1347,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -78
       objectReference: {fileID: 0}
+    - target: {fileID: 6810321394342135069, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9af629632707284429b58e6dc6327db3, type: 3}
     - target: {fileID: 8049579416893964778, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Name
       value: Health bar Background
@@ -1343,9 +1359,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Health Bar P2
       objectReference: {fileID: 0}
+    - target: {fileID: 9062170998474961390, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9170497729600475579, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9170497729600475579, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -109.62
+      value: -56
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1544,6 +1568,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 855676995}
     m_Modifications:
+    - target: {fileID: 1050537092335217878, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b7f530e2c6dd1e24f92851561b895b69, type: 3}
+    - target: {fileID: 1050537092335217878, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 4389840815485633355, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
@@ -1648,6 +1680,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Health Bar P1
       objectReference: {fileID: 0}
+    - target: {fileID: 9170497729600475579, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1704,6 +1740,14 @@ PrefabInstance:
     - target: {fileID: 2991329939210656334, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991329939210656334, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7249342119992724074, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.47
       objectReference: {fileID: 0}
     - target: {fileID: 7249342119992724074, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_LocalPosition.x

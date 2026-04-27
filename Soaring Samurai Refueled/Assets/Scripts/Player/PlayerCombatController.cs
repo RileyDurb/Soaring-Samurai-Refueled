@@ -129,9 +129,30 @@ public class PlayerCombatController : MonoBehaviour
             HealthBarController healthBar = mHealthBar.GetComponent<HealthBarController>();
             healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health")); // Set the health pool to be represented by the health bar
             healthBar.SetPlayerNameText("Player " + (mPlayerIndex + 1)); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
+
+            switch (mPlayerIndex)
+            {
+                case 0:
+                    {
+                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.BluePlayer);
+                        break;
+                    }
+                case 1:
+                    {
+                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.RedPlayer);
+                        break;
+                    }
+                default:
+                    {
+                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.BluePlayer);
+                        break;
+                    }
+            }
+
+
         }
 
-  
+
     }
 
     // Update is called once per frame

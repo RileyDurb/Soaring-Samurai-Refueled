@@ -13,6 +13,7 @@ public class HealthBarController : MonoBehaviour
     [SerializeField] GameObject mBarImageObject; // Game object that holds the health bar image
     PoolContainer.Pool mPoolToTrack;
     [SerializeField] TextMeshProUGUI mPlayerNameTextObject;
+    [SerializeField] Image CharacterPortraitObject;
 
     float mCurrValue = 0.0f;
 
@@ -46,4 +47,11 @@ public class HealthBarController : MonoBehaviour
     {
         mPlayerNameTextObject.text = newNameText;
     }
+
+    public void SetPlayerPortrait(CharacterDataManager.Characters characterToBe)
+    {
+        CharacterVisuals.CharacterVisualData characterInfo = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe);
+        CharacterPortraitObject.sprite = characterInfo.HealthBarPortrait;
+    }
+
 }

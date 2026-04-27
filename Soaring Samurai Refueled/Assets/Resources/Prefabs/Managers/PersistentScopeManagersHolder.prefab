@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4543222770621856455}
   - component: {fileID: 7948981438847947414}
+  - component: {fileID: 3124919862833034643}
   m_Layer: 0
   m_Name: PersistentScopeManagersHolder
   m_TagString: Untagged
@@ -44,3 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d458a71f2785549821687ade18ebd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3124919862833034643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3082376905084446065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165c6a8ac4277a544b383499e17ad596, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mCharacterVisualData: {fileID: 11400000, guid: bad17f0f41ef7254282e5c320d968bd9, type: 2}
