@@ -8,12 +8,12 @@ public class State_Defeated : StateManagerPlayer.State
 
     public override void OnEnter()
     {
-        mParentObject.GetComponent<SpriteRenderer>().enabled = false;
+        mParentObject.GetComponent<PlayerCombatController>().SpriteObject.GetComponent<SpriteRenderer>().enabled = false;
     }
 
 
     public override void OnExit()
     {
-        mParentObject.GetComponent<SpriteRenderer>().enabled = true;
+        mParentObject.GetComponent<PlayerCombatController>().SpriteObject.GetComponent<SpriteRenderer>().enabled = true;
     }
 }

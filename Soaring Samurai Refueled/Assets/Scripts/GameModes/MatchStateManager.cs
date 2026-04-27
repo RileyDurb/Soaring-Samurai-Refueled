@@ -161,6 +161,7 @@ public class MatchStateManager : MonoBehaviour
             }
 
             currPlayer.GetComponent<PoolContainer>().GetPool("Health").ResetPool();
+            currPlayer.GetComponent<PoolContainer>().GetPool("Gas").ResetPool();
 
             currPlayer.GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Ready);
 
