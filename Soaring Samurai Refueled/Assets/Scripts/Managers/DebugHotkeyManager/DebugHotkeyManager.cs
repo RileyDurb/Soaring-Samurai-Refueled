@@ -33,6 +33,11 @@ public class DebugHotkeyManager : MonoBehaviour
             {
                 SetRoundTime(3.0f);
             }
+
+            if (Input.GetKeyUp(KeyCode.RightBracket))
+            {
+                SetTimerPaued(!LevelScopeManagers.Instance.GetComponent<MatchStateManager>().TimerPaused);
+            }
         }
 
     }
@@ -58,5 +63,15 @@ public class DebugHotkeyManager : MonoBehaviour
     public void SetRoundTime(float newRoundTime)
     {
         LevelScopeManagers.Instance.GetComponent<MatchStateManager>().RoundTimeUntrimmed = newRoundTime;
+    }
+
+    public void SetTimerPaued(bool newIsPaused)
+    {
+        LevelScopeManagers.Instance.GetComponent<MatchStateManager>().TimerPaused = newIsPaused;
+    }
+
+    public void ToggleTimerPaused()
+    {
+        SetTimerPaued(!LevelScopeManagers.Instance.GetComponent<MatchStateManager>().TimerPaused);
     }
 }

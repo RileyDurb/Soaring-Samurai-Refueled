@@ -47,7 +47,7 @@ public class State_DashAttack : StateManagerPlayer.State
 
 
         // Start charging animation
-        mParentObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackCharge");
+        mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackCharge");
         mDashAttackActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
     }
 
@@ -72,7 +72,7 @@ public class State_DashAttack : StateManagerPlayer.State
         {
             mCurrDashAttackState = DashAttackStates.Active;
 
-            mParentObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackActive"); // Play animation
+            mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackActive"); // Play animation
 
             // Spawns attack hitbox right around the player
             mParentObject.GetComponent<PlayerCombatController>().SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats);
@@ -151,7 +151,7 @@ public class State_DashAttack : StateManagerPlayer.State
     {
         mCurrDashAttackState = DashAttackStates.Recovery;
 
-        mParentObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackRecoverySheathed");
+        mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackRecoverySheathed");
 
         mDashAttackActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
     }

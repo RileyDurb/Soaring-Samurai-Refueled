@@ -9,9 +9,8 @@ public class PlayerMovementStats
     public float MoveJerk = 18000.0f;
     public float DashingJerk = 18000.0f;
     public float DashDuration = 0.3f;
+    public float DashGasCost = 25.0f;
 }
-
-
 
 
 [CreateAssetMenu(fileName = "PlayerBaseDataObject", menuName = "Scripts/ScriptableObjects/Player/PlayerBaseDataObject")]

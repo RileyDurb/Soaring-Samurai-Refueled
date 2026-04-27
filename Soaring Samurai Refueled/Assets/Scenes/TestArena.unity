@@ -154,6 +154,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b76ec6f617cbee345bbf0debb3eec266, type: 2}
+    - target: {fileID: 3090996212667434781, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b76ec6f617cbee345bbf0debb3eec266, type: 2}
     - target: {fileID: 7249342119992724074, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1223,6 +1227,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Health bar Fill
       objectReference: {fileID: 0}
+    - target: {fileID: 4038881748691692153, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_FillOrigin
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4357844365845518597, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -1335,10 +1343,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -78
       objectReference: {fileID: 0}
+    - target: {fileID: 6522049883443681571, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522049883443681571, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -126
+      objectReference: {fileID: 0}
     - target: {fileID: 6810321394342135069, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 9af629632707284429b58e6dc6327db3, type: 3}
+    - target: {fileID: 6973242761339098930, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8049579416893964778, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Name
       value: Health bar Background
@@ -1346,6 +1366,10 @@ PrefabInstance:
     - target: {fileID: 8092111095772961410, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_Name
       value: Health Bar P2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681844210112336555, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9062170998474961390, guid: 7c017447741a95b4dbb39ca7f10e31e9, type: 3}
       propertyPath: m_LocalScale.x

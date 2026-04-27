@@ -17,6 +17,7 @@ MonoBehaviour:
     mActiveTime: 0.7
     mAttackOffsetDistance: 0
     mHitboxScaleFromPlayer: {x: 1, y: 1}
+    mGasCost: 50
     mKnockbackStrength: 0
     mKnockbackEqualizationPercent: 1
     mKnockbackDuration: 0

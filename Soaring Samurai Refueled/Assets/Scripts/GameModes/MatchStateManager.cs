@@ -61,6 +61,8 @@ public class MatchStateManager : MonoBehaviour
 
     int mCurrRoundNumber = 0;
 
+    bool mTimerPaused = false;
+
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
 
@@ -71,6 +73,10 @@ public class MatchStateManager : MonoBehaviour
     public float RoundTimeUntrimmed { set { mCurrMatchTimer = value; } }
 
     public MatchTuningStats MatchStats { get { return mMatchStats; } }  
+    public bool TimerPaused { 
+        get { return mTimerPaused; }
+        set { mTimerPaused = value; } 
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -104,7 +110,7 @@ public class MatchStateManager : MonoBehaviour
     {
         mActionList.Update(Time.deltaTime);
 
-        if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false)
+        if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false && mTimerPaused == false)
         {
             mCurrMatchTimer -= Time.deltaTime;
 

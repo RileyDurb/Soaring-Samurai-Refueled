@@ -24,6 +24,10 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mActiveTime = 1.0f;
         [SerializeField] float mAttackOffsetDistance = 1.0f;
         [SerializeField] Vector2 mHitboxScaleFromPlayer = new Vector2(1.0f, 1.0f);
+        [Header("Resources")]
+        [SerializeField] float mGasCost = 0.0f;
+        [SerializeField] float mGasGainOnUse = 0.0f;
+        [SerializeField] float mGasGainOnHit = 15.0f;
         [Header("Knockback")]
         [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
@@ -36,6 +40,9 @@ public class Hitbox : MonoBehaviour
         public float Damage { get { return mDamage; } }
         public float KnockbackStrength { get { return mKnockbackStrength; } }
         public float ActiveTime { get { return mActiveTime; } }
+        public float GasCost {  get { return mGasCost; } }
+        public float GasGainOnHit {  get { return mGasGainOnHit; } }
+        public float GasGainOnUse {  get { return mGasGainOnUse; } }
         public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
         public float KnockbackDuration { get { return mKnockbackDuration; } }
         public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
@@ -106,7 +113,7 @@ public class Hitbox : MonoBehaviour
             return;
         }
 
-        if (collision.collider.gameObject.tag.Contains("Player"))
+        if (collision.collider.gameObject.tag.Contains("Player")) // If hit player's body, send a hit
         {
             GameObject parentAttacker = transform.parent.gameObject;
             if (parentAttacker == null)
@@ -123,20 +130,23 @@ public class Hitbox : MonoBehaviour
 
             // Sends attack
             // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID), mAttackInfo);
+            AttackCurrentData currAttackData = new AttackCurrentData(knockbackVec, mOwningPlayerID);
+            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(currAttackData, mAttackInfo);
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;
+
+
+            // Tell the attacking player it hit an opponent, for things like meter gain on attack hitr
+            transform.parent.GetComponent<PlayerCombatController>().HitOpponentWithAttack(currAttackData, mAttackInfo);
+
         }
-        else if (collision.collider.gameObject.tag.Contains("Hitbox"))
+        else if (collision.collider.gameObject.tag.Contains("Hitbox")) // If hit only another hitbox, trigger a clash
         {
-            //ContactFilter2D clashCheckParameters = new ContactFilter2D();
-            //clashCheckParameters.SetLayerMask(NonClashingLayers);
             ContactPoint2D[] collisions = new ContactPoint2D[collision.contactCount];
             collision.GetContacts(collisions);
 
-            //this.GetComponent<BoxCollider2D>().OverlapCollider(clashCheckParameters, collisions);
-
+            // Check if we only hit hitboxes
             bool onlyHitboxCollision = true;
             foreach (ContactPoint2D contact in collisions)
             {

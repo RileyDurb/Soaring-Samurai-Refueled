@@ -34,6 +34,8 @@ public class PlayerCombatController : MonoBehaviour
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
+    [SerializeField] GasMeterStats GasMeterData;
+
     [Header("Aesthetics")]
     public ActionAesthetics mActionAesthetics = new ActionAesthetics();
 
@@ -63,6 +65,8 @@ public class PlayerCombatController : MonoBehaviour
         mNonPlayerControlled = true;
     }
 
+    public GameObject SpriteObject {  get { return mSpriteObject; } }
+
 
     // Public variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Action<int, int> OnDamageTaken; // Event called when taking damage, 1st parameter is the player index who took the damage, 2nd paramater is who gave the damage
@@ -85,6 +89,10 @@ public class PlayerCombatController : MonoBehaviour
 
     StateManagerPlayer mStateManager;
 
+    PoolContainer mPoolContainer;
+
+    GameObject mSpriteObject;
+
     [SerializeField] GameObject mHealthBar;
     [SerializeField] GameObject mRoundWinsIndicator;
 
@@ -95,14 +103,18 @@ public class PlayerCombatController : MonoBehaviour
         {
             mRoundWinsIndicator.GetComponent<RoundWinIndicator>().OwningPlayer = this;
         }
+
+        mSpriteObject = transform.Find("PlayerSprite").gameObject;
     }
 
     void Start()
     {
         // Set component references
-        mAnimationController = GetComponent<AnimationController>();
+        mAnimationController = mSpriteObject.GetComponent<AnimationController>();
 
         mStateManager = GetComponent<StateManagerPlayer>();
+
+        mPoolContainer = GetComponent<PoolContainer>();
 
         // gets reference to the opponent
         PlayerCombatController[] mPlayers = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
@@ -128,6 +140,7 @@ public class PlayerCombatController : MonoBehaviour
         {
             HealthBarController healthBar = mHealthBar.GetComponent<HealthBarController>();
             healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health")); // Set the health pool to be represented by the health bar
+            healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Gas")); // Set gas meter to represent the gas pool
             healthBar.SetPlayerNameText("Player " + (mPlayerIndex + 1)); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
 
 
@@ -179,6 +192,27 @@ public class PlayerCombatController : MonoBehaviour
 
             mLastDirectionalMoveInput = mMoveInput; // Saves as last nonzero move onput
         }
+
+
+
+        // Apply gas gain for if we've moving toward our opponent
+
+        Vector2 velocity = GetComponent<Rigidbody2D>().velocity;
+
+        if (velocity.magnitude != 0.0f) // Don't gain meter if velocity is 0, which would pass the angle threshold, but not have any forward movement
+        {
+            Vector2 vecToOpponent = mOpponentRef.transform.position - transform.position;
+
+            float movementAngle = Mathf.Abs(Vector2.Angle(velocity, vecToOpponent));
+
+            if (movementAngle <= GasMeterData.MovingForwardAngleForgiveness / 2.0f) // If moving forward within the angle of forgiveness
+            {
+                // Apply moving forward meter gain
+                GetComponent<PoolContainer>().GetPool("Gas").DecreasePool(-GasMeterData.GasPerSecondMovingForward * Time.deltaTime);
+            }
+
+        }
+
     }
 
     // Getters and setters
@@ -255,8 +289,16 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
+
+
         if (inputPhase == InputActionPhase.Started)
         {
+            // If any meter gain on use (regardless of if it hits), apply gas meter gain
+            if (DirectionalSlashAttackStats.mStats.GasGainOnUse > 0.0f)
+            {
+                mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
+            }
+
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
@@ -288,6 +330,12 @@ public class PlayerCombatController : MonoBehaviour
 
         if (inputPhase == InputActionPhase.Started)
         {
+            // If any meter gain on use (regardless of if it hits), apply gas meter gain
+            if (DirectionalSlashAttackStats.mStats.GasGainOnUse > 0.0f)
+            {
+                mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
+            }
+
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
@@ -321,6 +369,12 @@ public class PlayerCombatController : MonoBehaviour
 
         if (inputPhase == InputActionPhase.Started)
         {
+            // If any meter gain on use (regardless of if it hits), apply gas meter gain
+            if (DirectionalSlashAttackStats.mStats.GasGainOnUse > 0.0f)
+            {
+                mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
+            }
+
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
@@ -353,6 +407,12 @@ public class PlayerCombatController : MonoBehaviour
 
         if (inputPhase == InputActionPhase.Started)
         {
+            // If any meter gain on use (regardless of if it hits), apply gas meter gain
+            if (DirectionalSlashAttackStats.mStats.GasGainOnUse > 0.0f)
+            {
+                mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
+            }
+
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
@@ -380,6 +440,17 @@ public class PlayerCombatController : MonoBehaviour
 
         if (context.phase == InputActionPhase.Canceled)
         {
+            // Check gas cost
+            PoolContainer.Pool gasPool = GetComponent<PoolContainer>().GetPool("Gas");
+            if (gasPool.PoolValue < mPlayerBaseStats.mMovementStats.DashGasCost) // If not enough gas
+            {
+                return; // Can't do move, return
+            }
+            else
+            {
+                gasPool.DecreasePool(mPlayerBaseStats.mMovementStats.DashGasCost); // Pay gas cost
+            }
+
             mStateManager.EnterState(PlayerStates.Dash, mPlayerBaseStats.mMovementStats.DashDuration, PlayerStates.Ready);
         }
     }
@@ -400,6 +471,18 @@ public class PlayerCombatController : MonoBehaviour
                 return;
             }
 
+            // Check gas cost
+            PoolContainer.Pool gasPool = GetComponent<PoolContainer>().GetPool("Gas");
+            if (gasPool.PoolValue < mDashAttackStats.mStats.GasCost) // If not enough gas
+            {
+                return; // Can't do move, return
+            }
+            else
+            {
+                gasPool.DecreasePool(mDashAttackStats.mStats.GasCost); // Pay gas cost
+            }
+
+            // Start the move
             mStateManager.EnterState(PlayerStates.DashAttack);
         }
         else if (context.phase == InputActionPhase.Canceled)
@@ -418,11 +501,11 @@ public class PlayerCombatController : MonoBehaviour
     {
         if (newDirection == FacingDirection.Left)
         {
-            GetComponent<SpriteRenderer>().flipX = true;
+            mAnimationController.GetComponent<SpriteRenderer>().flipX = true;
         }
         else
         {
-            GetComponent<SpriteRenderer>().flipX = false;
+            mAnimationController.GetComponent<SpriteRenderer>().flipX = false;
         }
     }
 
@@ -451,6 +534,9 @@ public class PlayerCombatController : MonoBehaviour
         if (attackData.IsClashing)
         {
             currentDamage = 0.0f;
+
+            // Apply meter gain on clash
+            mPoolContainer.GetPool("Gas").DecreasePool(-GasMeterData.GasGainOnClash);
         }
 
         bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(currentDamage);
@@ -503,6 +589,10 @@ public class PlayerCombatController : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
     }
 
+    public void HitOpponentWithAttack(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
+    {
+        mPoolContainer.GetPool("Gas").DecreasePool(-baseAttackInfo.GasGainOnHit);
+    }
 
     public void SetCharacterVisuals(CharacterDataManager.Characters characterToBe)
     {
@@ -513,7 +603,7 @@ public class PlayerCombatController : MonoBehaviour
         }
 
         // Set color scheme material;
-        GetComponent<SpriteRenderer>().material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe).PlayerColorsMaterial;
+        mAnimationController.GetComponent<SpriteRenderer>().material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe).PlayerColorsMaterial;
     }
 }
 

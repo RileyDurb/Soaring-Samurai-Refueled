@@ -11,9 +11,10 @@ public class State_Ready : StateManagerPlayer.State
     PlayerCombatController mCombatControllerRef;
     public override void OnEnter()
     {
-        mParentObject.GetComponent<AnimationController>().SetAnimationState("Player_Idle");
 
         mCombatControllerRef = mParentObject.GetComponent<PlayerCombatController>();
+
+        mCombatControllerRef.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_Idle"); // Play idle animation
     }
 
     public override void OnUpdate(float dt)
@@ -35,5 +36,6 @@ public class State_Ready : StateManagerPlayer.State
         mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
 
     }
+
 
 }

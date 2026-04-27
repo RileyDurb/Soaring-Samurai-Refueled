@@ -88,4 +88,9 @@ public class DebugMenuFunctions : MonoBehaviour
     {
         mCurrentPlayerIndexToColorChange = (int)CharacterSelectTargetSliderRef.value;
     }
+
+    public void ToggleTimePaused()
+    {
+        LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().ToggleTimerPaused();
+    }
 }
