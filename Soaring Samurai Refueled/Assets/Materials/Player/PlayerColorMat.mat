@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Blue_PlayerColor
+  m_Name: PlayerColorMat
   m_Shader: {fileID: -6465566751694194690, guid: 652e939c8d8ddc04f97e2b7686918398, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -80,6 +80,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FireDarknessMultiplier: 3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -95,7 +96,8 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor: {r: 0, g: 0.23921569, b: 0.8980392, a: 0}
+    - _MainColor: {r: 0, g: 0.97121596, b: 1, a: 1}
     - _PantsColor: {r: 0.39215687, g: 0.44313726, b: 0.43921566, a: 1}
     - _ShoesColor: {r: 0.34509796, g: 0.19999996, b: 0.19607836, a: 1}
+    - _SkinColor: {r: 0.8352942, g: 0.7686275, b: 0.654902, a: 1}
   m_BuildTextureStacks: []

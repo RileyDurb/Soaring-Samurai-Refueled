@@ -12,6 +12,7 @@ public class CharacterVisuals : ScriptableObject
     {
         public CharacterDataManager.Characters Name = default;
         public Sprite HealthBarPortrait;
+        public Material PlayerColorsMaterial;
     }
 
 

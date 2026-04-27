@@ -7,7 +7,9 @@ public class CharacterDataManager : MonoBehaviour
     public enum Characters
     {
         BluePlayer,
-        RedPlayer
+        RedPlayer,
+        YellowPlayer,
+        GreenPlayer
     }
 
     [SerializeField] CharacterVisuals mCharacterVisualData;

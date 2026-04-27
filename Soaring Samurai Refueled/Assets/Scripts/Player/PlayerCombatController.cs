@@ -130,28 +130,28 @@ public class PlayerCombatController : MonoBehaviour
             healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health")); // Set the health pool to be represented by the health bar
             healthBar.SetPlayerNameText("Player " + (mPlayerIndex + 1)); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
 
-            switch (mPlayerIndex)
-            {
-                case 0:
-                    {
-                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.BluePlayer);
-                        break;
-                    }
-                case 1:
-                    {
-                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.RedPlayer);
-                        break;
-                    }
-                default:
-                    {
-                        healthBar.SetPlayerPortrait(CharacterDataManager.Characters.BluePlayer);
-                        break;
-                    }
-            }
-
 
         }
 
+
+        switch (mPlayerIndex)
+        {
+            case 0:
+                {
+                    SetCharacterVisuals(CharacterDataManager.Characters.BluePlayer);
+                    break;
+                }
+            case 1:
+                {
+                    SetCharacterVisuals(CharacterDataManager.Characters.RedPlayer);
+                    break;
+                }
+            default:
+                {
+                    SetCharacterVisuals(CharacterDataManager.Characters.BluePlayer);
+                    break;
+                }
+        }
 
     }
 
@@ -501,6 +501,19 @@ public class PlayerCombatController : MonoBehaviour
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo, PlayerIndex);
 
         Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
+    }
+
+
+    public void SetCharacterVisuals(CharacterDataManager.Characters characterToBe)
+    {
+        if (mHealthBar != null)
+        {
+            HealthBarController healthBar = mHealthBar.GetComponent<HealthBarController>();
+            healthBar.SetPlayerPortrait(characterToBe);
+        }
+
+        // Set color scheme material;
+        GetComponent<SpriteRenderer>().material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe).PlayerColorsMaterial;
     }
 }
 

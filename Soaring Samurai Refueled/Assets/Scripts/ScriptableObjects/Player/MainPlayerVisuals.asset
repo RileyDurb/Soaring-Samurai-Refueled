@@ -15,5 +15,13 @@ MonoBehaviour:
   mCharacterVisuals:
   - Name: 0
     HealthBarPortrait: {fileID: 21300000, guid: b428cef0a15132a46bf1adad0beea69e, type: 3}
+    PlayerColorsMaterial: {fileID: 2100000, guid: cf04b2d61d08c834c8b642a1a22ff4eb, type: 2}
   - Name: 1
     HealthBarPortrait: {fileID: 21300000, guid: 9af629632707284429b58e6dc6327db3, type: 3}
+    PlayerColorsMaterial: {fileID: 2100000, guid: b76ec6f617cbee345bbf0debb3eec266, type: 2}
+  - Name: 2
+    HealthBarPortrait: {fileID: 21300000, guid: 0d4715feb0bb04b48bcb0daa1133696e, type: 3}
+    PlayerColorsMaterial: {fileID: 2100000, guid: 503acf4707f3c4d49a1fce6a3f66a2ca, type: 2}
+  - Name: 3
+    HealthBarPortrait: {fileID: 21300000, guid: 57dd07297dd7bb44cbf71246224728fc, type: 3}
+    PlayerColorsMaterial: {fileID: 2100000, guid: f0106e9b77247e141b808ae13d971a7b, type: 2}
