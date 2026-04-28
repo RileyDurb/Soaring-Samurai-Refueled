@@ -5,8 +5,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class State_Ready : StateManagerPlayer.State
 {
-    float IdleMovementOffsetAmount = 0.1f;
-    float IdleMovementCycleTime = 5.0f;
+
     //Action_.EasingTypes IdleMovementOutEas
     public State_Ready() : base(PlayerStates.Ready) { }
 
@@ -20,10 +19,10 @@ public class State_Ready : StateManagerPlayer.State
 
         mCombatControllerRef.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_Idle"); // Play idle animation
 
-        StartIdleLoop();
-        mReadyActionList.AddActionCallback(() => { StartIdleLoop(); }, IdleMovementCycleTime, false, true);
-
-
+        // Slightly randomize loop time for this idle state
+        float idleMovementCycleTime = mCombatControllerRef.StateAesthetics.IdleStats.MovementCycleTime + MyRandom.RandomRange(-mCombatControllerRef.StateAesthetics.IdleStats.MaxTimeOffsetRandom, mCombatControllerRef.StateAesthetics.IdleStats.MaxTimeOffsetRandom);
+        StartIdleLoop(idleMovementCycleTime);
+        mReadyActionList.AddActionCallback(() => { StartIdleLoop(idleMovementCycleTime); }, idleMovementCycleTime, false, true);
     }
 
     public override void OnUpdate(float dt)
@@ -55,15 +54,29 @@ public class State_Ready : StateManagerPlayer.State
         mCombatControllerRef.SpriteObject.transform.localPosition = Vector2.zero; // Resets local position to 0
     }
 
-    void StartIdleLoop()
+    void StartIdleLoop(float cycleTime)
     {
         Vector2 currPos = Vector2.zero;
 
+        float movementCycleTime = cycleTime;
+        float movementOffset = mCombatControllerRef.StateAesthetics.IdleStats.MovementOffsetAmount + MyRandom.RandomRange(-mCombatControllerRef.StateAesthetics.IdleStats.MaxDistanceOffsetRandom, mCombatControllerRef.StateAesthetics.IdleStats.MaxDistanceOffsetRandom);
+
         float currDelay = 0.0f;
-        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.down * IdleMovementOffsetAmount, IdleMovementCycleTime / 4);
-        currDelay += IdleMovementCycleTime / 4;
-        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.up * IdleMovementOffsetAmount, IdleMovementCycleTime / 2, currDelay);
-        currDelay += IdleMovementCycleTime / 2;
-        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos, IdleMovementCycleTime / 4, currDelay);
+        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.down * movementOffset, movementCycleTime / 4, 0.0f, mCombatControllerRef.StateAesthetics.IdleStats.FirstOutMoveEasing);
+        currDelay += movementCycleTime / 4;
+        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos, movementCycleTime / 4, currDelay, mCombatControllerRef.StateAesthetics.IdleStats.FirstInMoveEasing);
+        currDelay += movementCycleTime / 4;
+        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.up * movementOffset, movementCycleTime / 4, currDelay, mCombatControllerRef.StateAesthetics.IdleStats.SecondOutMoveEasing);
+        currDelay += movementCycleTime / 4;
+        mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos, movementCycleTime / 4, currDelay, mCombatControllerRef.StateAesthetics.IdleStats.SecondInMoveEasing);
+
+        //// Old way of doimg it that had 3 actions
+        //float currDelay = 0.0f;
+        //mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.down * movementOffset, movementCycleTime / 4, 0.0f, mCombatControllerRef.StateAesthetics.IdleStats.FirstQuarterEasing);
+        //currDelay += movementCycleTime / 4;
+        //mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos + Vector2.up * movementOffset, movementCycleTime / 2, currDelay, mCombatControllerRef.StateAesthetics.IdleStats.MiddleHalfEasing);
+        //currDelay += movementCycleTime / 2;
+        //mReadyActionList.AddActionLocalMove(mCombatControllerRef.SpriteObject, currPos, movementCycleTime / 4, currDelay, mCombatControllerRef.StateAesthetics.IdleStats.LastQuarterEasing);
+
     }
 }

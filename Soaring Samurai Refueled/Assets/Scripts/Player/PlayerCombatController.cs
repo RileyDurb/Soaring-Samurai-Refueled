@@ -30,11 +30,14 @@ public class PlayerCombatController : MonoBehaviour
     // Editor Accessible variables  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public PlayerBaseDataObject mPlayerBaseStats;
     public DashAttackDataObject mDashAttackStats;
+    public PlayerStateAesthetics StateAesthetics;
+
 
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
     [SerializeField] GasMeterStats GasMeterData;
+
 
     [Header("Aesthetics")]
     public ActionAesthetics mActionAesthetics = new ActionAesthetics();

@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mPlayerBaseStats: {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
   mDashAttackStats: {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
+  StateAesthetics: {fileID: 11400000, guid: ef232ede7480e4645807102549c49b82, type: 2}
   DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   GasMeterData: {fileID: 11400000, guid: edc218f5bf9335c4a811a57e2c98c7fb, type: 2}
   mActionAesthetics:
