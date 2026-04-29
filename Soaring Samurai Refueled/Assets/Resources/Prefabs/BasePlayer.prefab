@@ -204,15 +204,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mStateInfoList:
   - mName: 0
-    mStatesCancellableInto: 00000000020000000100000003000000
+    mStatesCancellableInto: 0000000002000000010000000300000005000000
   - mName: 1
-    mStatesCancellableInto: 0000000002000000
+    mStatesCancellableInto: 000000000200000005000000
   - mName: 2
-    mStatesCancellableInto: 000000000100000003000000
+    mStatesCancellableInto: 00000000010000000300000005000000
   - mName: 3
     mStatesCancellableInto: 00000000
   - mName: 4
     mStatesCancellableInto: 
+  - mName: 5
+    mStatesCancellableInto: 0000000005000000
   mStartingState: 0
 --- !u!1 &3998123260480139891
 GameObject:

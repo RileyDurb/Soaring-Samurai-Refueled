@@ -533,6 +533,7 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
+        // Factor in clashing
         float currentDamage = baseAttackInfo.Damage;
         if (attackData.IsClashing)
         {
@@ -542,19 +543,23 @@ public class PlayerCombatController : MonoBehaviour
             mPoolContainer.GetPool("Gas").DecreasePool(-GasMeterData.GasGainOnClash);
         }
 
+        // Apply damage to health
         bool wasDefeated = GetComponent<PoolContainer>().GetPool("Health").DecreasePool(currentDamage);
 
 
         if (SimManager.Instance.DebugModeOn)
         {
+            // Debug draw knockback
             Debug.DrawRay(transform.position, attackData.Knockback, Color.yellow, .5f, false);
         }
 
+        // Apply knockback
         if (attackData.Knockback.magnitude > 0.0f)
         {
             mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
         }
 
+        // Apply hit squish
         if (baseAttackInfo.UseCustomHitSquishCurve)
         {
             mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f, 0.0f, Action_.EasingTypes.Custom, baseAttackInfo.SquishCurve);
@@ -572,6 +577,10 @@ public class PlayerCombatController : MonoBehaviour
             LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerDefeated.Invoke(mPlayerIndex);
 
             GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Defeated);
+        }
+        else if (mStateManager.CanEnterState(PlayerStates.Flinch)) // If can flinch
+        {
+            mStateManager.EnterState(PlayerStates.Flinch, baseAttackInfo.HitStunTime, PlayerStates.Ready); // Go into flinching
         }
 
         if (OnDamageTaken != null)

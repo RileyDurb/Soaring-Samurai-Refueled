@@ -24,6 +24,7 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mActiveTime = 1.0f;
         [SerializeField] float mAttackOffsetDistance = 1.0f;
         [SerializeField] Vector2 mHitboxScaleFromPlayer = new Vector2(1.0f, 1.0f);
+        [SerializeField] float mHitStunTime = 1.0f;
         [Header("Resources")]
         [SerializeField] float mGasCost = 0.0f;
         [SerializeField] float mGasGainOnUse = 0.0f;
@@ -40,6 +41,7 @@ public class Hitbox : MonoBehaviour
         public float Damage { get { return mDamage; } }
         public float KnockbackStrength { get { return mKnockbackStrength; } }
         public float ActiveTime { get { return mActiveTime; } }
+        public float HitStunTime { get { return mHitStunTime; } }
         public float GasCost {  get { return mGasCost; } }
         public float GasGainOnHit {  get { return mGasGainOnHit; } }
         public float GasGainOnUse {  get { return mGasGainOnUse; } }

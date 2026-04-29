@@ -11,7 +11,8 @@ public enum PlayerStates
     SlashAttack,
     Dash,
     DashAttack,
-    Defeated
+    Defeated,
+    Flinch
 }
 
 public class StateManagerPlayer : StateManagerEnum<PlayerStates>
@@ -23,6 +24,7 @@ public class StateManagerPlayer : StateManagerEnum<PlayerStates>
         mStateList.Add(new State_Defeated());
         mStateList.Add(new State_DashAttack());
         mStateList.Add(new State_Dash());
+        mStateList.Add(new State_Flinch());
 
         // Copies info for each state into the derived class
         foreach (PlayerStates currState in Enum.GetValues(typeof(PlayerStates)))
