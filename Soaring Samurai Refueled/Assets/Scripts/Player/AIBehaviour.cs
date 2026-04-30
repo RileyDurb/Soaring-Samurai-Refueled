@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MBT;
 
 public class AIBehaviour : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class AIBehaviour : MonoBehaviour
     {
         PlayerInput,
         MirrorOpponent,
-        AttackOnTimer
+        AttackOnTimer,
+        BehaviourTree
     }
 
     enum AttackDirection
@@ -40,7 +42,8 @@ public class AIBehaviour : MonoBehaviour
 
     PlayerCombatController mCombatControllerRef;
 
-
+    MonoBehaviourTree mBehaviourTreeRef = null;
+    [SerializeField] GameObject BehaviourTreePrefab;
 
     ActionList mAIActionList = new ActionList();
 
@@ -54,6 +57,17 @@ public class AIBehaviour : MonoBehaviour
     void Start()
     {
         mCombatControllerRef = GetComponent<PlayerCombatController>();
+
+        // Creates the set behaviour tree if any
+
+        if (BehaviourTreePrefab != null)
+        {
+            mBehaviourTreeRef = Instantiate(BehaviourTreePrefab, transform).GetComponent<MonoBehaviourTree>();
+        }
+        else
+        {
+            print("AIBehaviour:Start: No behaviour tree prefab set");
+        }
     }
 
     // Update is called once per frame
@@ -61,7 +75,7 @@ public class AIBehaviour : MonoBehaviour
     {
         switch (mCurrAIMode)
         {
-            case (AIMode.MirrorOpponent): // Case for just mirroring opponent's input
+            case AIMode.MirrorOpponent: // Case for just mirroring opponent's input
             {
                 if (mCombatControllerRef.OpponentRef == null)
                 {
@@ -72,7 +86,7 @@ public class AIBehaviour : MonoBehaviour
 
                 break;
             }
-            case (AIMode.AttackOnTimer):
+            case AIMode.AttackOnTimer:
             {
                 if (mAttackOnTimerActive == false)
                 {
@@ -89,6 +103,11 @@ public class AIBehaviour : MonoBehaviour
 
                     mAttackOnTimerActive = false; // Set to false so it resets on next loop
                 }
+                break;
+            }
+            case AIMode.BehaviourTree:
+            {
+                mBehaviourTreeRef.Tick();
                 break;
             }
 

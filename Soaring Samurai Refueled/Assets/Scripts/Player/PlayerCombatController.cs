@@ -232,7 +232,12 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Action functions
+  
     public void OnMove(InputAction.CallbackContext context)
+    {
+        OnMove(context.phase, context.ReadValue<Vector2>());
+    }
+    public void OnMove(InputActionPhase inputPhase, Vector2 inputValue)
     {
         // If combat actions are blocked, don't attack
         if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.MovementAction))
@@ -241,11 +246,11 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
-        switch (context.phase)
+        switch (inputPhase)
         {
             case InputActionPhase.Performed:
                 {
-                    mMoveInput = context.ReadValue<Vector2>();
+                    mMoveInput = inputValue;
                 }
                 break;
 

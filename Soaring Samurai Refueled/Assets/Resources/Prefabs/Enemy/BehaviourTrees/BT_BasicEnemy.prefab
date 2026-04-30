@@ -1,0 +1,230 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3723271666710103351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 166421335978172578}
+  - component: {fileID: 819176107858189168}
+  - component: {fileID: 5161406469011026009}
+  - component: {fileID: 8337776675897930559}
+  - component: {fileID: 3503688239673523745}
+  - component: {fileID: 2551272652439459061}
+  - component: {fileID: 7763014114658045548}
+  - component: {fileID: 6034339479485781190}
+  m_Layer: 0
+  m_Name: BT_BasicEnemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &166421335978172578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.07498441, y: 1.2144766, z: -11.246467}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &819176107858189168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedEditorNode: {fileID: 6034339479485781190}
+  repeatOnFinish: 1
+  maxExecutionsPerTick: 1000
+  parent: {fileID: 0}
+--- !u!114 &5161406469011026009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 538645f2f9090fd43bc6154b2e89e2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Root
+  rect:
+    serializedVersion: 2
+    x: 220
+    y: 200
+    width: 160
+    height: 45
+  parent: {fileID: 0}
+  children:
+  - {fileID: 2551272652439459061}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+--- !u!114 &8337776675897930559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2217e4d35c0c94ea02cf2166c17e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variables: []
+  masterBlackboard: {fileID: 0}
+--- !u!114 &3503688239673523745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58fe7bc6a9b18e148b82820c7c1c0a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Wait
+  rect:
+    serializedVersion: 2
+    x: 160
+    y: 480
+    width: 160
+    height: 45
+  parent: {fileID: 2551272652439459061}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  time:
+    useConstant: 1
+    mode: 0
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: 5
+  randomDeviation: 0
+  continueOnRestart: 0
+--- !u!114 &2551272652439459061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Sequence
+  rect:
+    serializedVersion: 2
+    x: 240
+    y: 380
+    width: 160
+    height: 45
+  parent: {fileID: 5161406469011026009}
+  children:
+  - {fileID: 3503688239673523745}
+  - {fileID: 7763014114658045548}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  random: 0
+--- !u!114 &7763014114658045548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7398d433fe3d0cc4fa2be27225631887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: MoveTo
+  rect:
+    serializedVersion: 2
+    x: 340
+    y: 480
+    width: 160
+    height: 45
+  parent: {fileID: 2551272652439459061}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  UseMaxMoveTime: 1
+  MaxMoveTime: 5
+  TargetClosnessThreshold: 2
+--- !u!114 &6034339479485781190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116da7b1dd539b042837b7acc2c9cfa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Set Object
+  rect:
+    serializedVersion: 2
+    x: 420
+    y: 240
+    width: 160
+    height: 45
+  parent: {fileID: 0}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  type: 1
+  sourceTransform:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: {fileID: 0}
+  sourceGameObject:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: {fileID: 0}
+  destinationTransform:
+    useConstant: 0
+    mode: 1
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: {fileID: 0}
+  destinationGameObject:
+    useConstant: 0
+    mode: 1
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: {fileID: 0}

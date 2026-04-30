@@ -190,6 +190,7 @@ MonoBehaviour:
   mCurrAIMode: 0
   mAttackOnTimerInterval: 5
   mAttackOnTimerAttackDirection: 1
+  BehaviourTreePrefab: {fileID: 3723271666710103351, guid: fb0736ffab6d69d4783b1f96674b3af3, type: 3}
 --- !u!114 &3464813975692426095
 MonoBehaviour:
   m_ObjectHideFlags: 0
