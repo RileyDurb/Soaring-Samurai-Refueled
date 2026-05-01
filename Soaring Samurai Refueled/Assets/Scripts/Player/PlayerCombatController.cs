@@ -11,6 +11,16 @@ public class PlayerCombatController : MonoBehaviour
         Right
     }
 
+    public enum PlayerMoves
+    {
+        URAttack,
+        DRAttack,
+        DLAttack,
+        ULAttack,
+        Dash,
+        DashAttack
+    }
+
 
 
     // TODO: make player use a scriptable object with base stats instead of the straight variables

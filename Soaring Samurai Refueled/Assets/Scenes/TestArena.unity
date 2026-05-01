@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1883828559541653457, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: mCurrAIMode
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 652935351384745842, guid: 8539cacc9a04c8e479d213b149228658, type: 3}
       propertyPath: m_Name

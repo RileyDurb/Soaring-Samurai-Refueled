@@ -18,7 +18,7 @@ public class Task_MoveTowardOpponent : Leaf
     {
         mCurrMoveTime = MaxMoveTime;
 
-        mCombatController = behaviourTree.transform.parent.GetComponent<PlayerCombatController>();
+        mCombatController = behaviourTree.GetComponentInParent<PlayerCombatController>();
     }
     public override NodeResult Execute()
     {

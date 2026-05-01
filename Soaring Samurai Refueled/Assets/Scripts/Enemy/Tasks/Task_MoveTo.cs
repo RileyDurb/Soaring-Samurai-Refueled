@@ -26,7 +26,7 @@ public class Task_MoveTo : Leaf
     {
         mCurrMoveTime = MaxMoveTime;
 
-        mCombatController = behaviourTree.transform.parent.GetComponent<PlayerCombatController>();
+        mCombatController = behaviourTree.GetComponentInParent<PlayerCombatController>();
     }
     public override NodeResult Execute()
     {
@@ -37,7 +37,7 @@ public class Task_MoveTo : Leaf
             // Move toward opponent
             Vector2 vecToTarget = TargetObjectKeyRef.Value.transform.position - mCombatController.transform.position;
 
-            if (TargetOffsetKeyRef == null) // If no offsewt key set
+            if (TargetOffsetKeyRef.key == "") // If no offsewt key set
             {
                 vecToTarget += ManualTargetOffset;
             }

@@ -32,7 +32,7 @@ public class Task_SetStrafeTarget : Leaf
 
     public override void OnEnter()
     {
-        mCombatController = transform.parent.GetComponent<PlayerCombatController>();
+        mCombatController = transform.GetComponentInParent<PlayerCombatController>();
         TargetObjectKeyRef.Value = mCombatController.OpponentRef.gameObject;
     }
     public override NodeResult Execute()
@@ -41,7 +41,7 @@ public class Task_SetStrafeTarget : Leaf
         {
             // Pick a starting point
 
-            Vector2 vecToTarget = TargetObjectKeyRef.Value.transform.position - transform.parent.position; // Get vector toward opponent
+            Vector2 vecToTarget = TargetObjectKeyRef.Value.transform.position - mCombatController.transform.position; // Get vector toward opponent
             if (SimManager.Instance.DebugModeOn)
             {
                 Debug.DrawRay(transform.parent.position, vecToTarget, Color.magenta, 5.0f);

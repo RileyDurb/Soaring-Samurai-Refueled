@@ -16,13 +16,21 @@ public class AIBehaviour : MonoBehaviour
         BehaviourTree
     }
 
-    enum AttackDirection
+    public enum AttackDirection
     { 
         UpRight,
         UpLeft,
         DownRight,
         DownLeft
     }
+
+    public static List<Vector2> AttackDirectionVectors = new List<Vector2>
+    {
+        Vector2.up + Vector2.right,
+        Vector2.up + Vector2.left,
+        Vector2.down + Vector2.right,
+        Vector2.down + Vector2.left
+    };
 
 
 
@@ -52,6 +60,8 @@ public class AIBehaviour : MonoBehaviour
     bool mAttackOnTimerActive = false;
 
     float mLastTimerInterval = 0.0f;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -132,7 +142,7 @@ public class AIBehaviour : MonoBehaviour
         mAIActionList.Update(Time.deltaTime);
     }
 
-    void TriggerNormalSlashAttack(AttackDirection directionToSlash)
+    public void TriggerNormalSlashAttack(AttackDirection directionToSlash)
     {
         switch (directionToSlash)
         {
