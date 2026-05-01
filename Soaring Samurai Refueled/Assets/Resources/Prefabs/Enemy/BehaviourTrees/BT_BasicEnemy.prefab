@@ -15,7 +15,17 @@ GameObject:
   - component: {fileID: 3503688239673523745}
   - component: {fileID: 2551272652439459061}
   - component: {fileID: 7763014114658045548}
-  - component: {fileID: 6034339479485781190}
+  - component: {fileID: 3437770279166195343}
+  - component: {fileID: -2393630831745021785}
+  - component: {fileID: 1069269990901503515}
+  - component: {fileID: 8564790825420106947}
+  - component: {fileID: -5310242871689988540}
+  - component: {fileID: 5330499851404202208}
+  - component: {fileID: -8650863565938330097}
+  - component: {fileID: -971492261933530248}
+  - component: {fileID: -2519617241621421113}
+  - component: {fileID: 25998929135873918}
+  - component: {fileID: -478223416730349971}
   m_Layer: 0
   m_Name: BT_BasicEnemy
   m_TagString: Untagged
@@ -50,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 6034339479485781190}
+  selectedEditorNode: {fileID: 0}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -91,7 +101,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2217e4d35c0c94ea02cf2166c17e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variables: []
+  variables:
+  - {fileID: 1069269990901503515}
+  - {fileID: 8564790825420106947}
+  - {fileID: 5330499851404202208}
+  - {fileID: 25998929135873918}
   masterBlackboard: {fileID: 0}
 --- !u!114 &3503688239673523745
 MonoBehaviour:
@@ -109,7 +123,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 160
-    y: 480
+    y: 500
     width: 160
     height: 45
   parent: {fileID: 2551272652439459061}
@@ -122,7 +136,7 @@ MonoBehaviour:
     mode: 0
     blackboard: {fileID: 0}
     key: 
-    constantValue: 5
+    constantValue: 0.2
   randomDeviation: 0
   continueOnRestart: 0
 --- !u!114 &2551272652439459061
@@ -147,7 +161,7 @@ MonoBehaviour:
   parent: {fileID: 5161406469011026009}
   children:
   - {fileID: 3503688239673523745}
-  - {fileID: 7763014114658045548}
+  - {fileID: -8650863565938330097}
   behaviourTree: {fileID: 0}
   runtimePriority: 0
   breakpoint: 0
@@ -167,11 +181,11 @@ MonoBehaviour:
   title: MoveTo
   rect:
     serializedVersion: 2
-    x: 340
-    y: 480
+    x: 640
+    y: 820
     width: 160
     height: 45
-  parent: {fileID: 2551272652439459061}
+  parent: {fileID: 3437770279166195343}
   children: []
   behaviourTree: {fileID: 0}
   runtimePriority: 0
@@ -179,7 +193,20 @@ MonoBehaviour:
   UseMaxMoveTime: 1
   MaxMoveTime: 5
   TargetClosnessThreshold: 2
---- !u!114 &6034339479485781190
+  ManualTargetOffset: {x: 0, y: -5}
+  TargetObjectKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
+  TargetOffsetKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeTargetOffset
+    constantValue: {x: 0, y: 0}
+--- !u!114 &3437770279166195343
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,43 +215,300 @@ MonoBehaviour:
   m_GameObject: {fileID: 3723271666710103351}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 116da7b1dd539b042837b7acc2c9cfa6, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Set Object
+  title: Strafe Sequence
   rect:
     serializedVersion: 2
-    x: 420
-    y: 240
+    x: 640
+    y: 700
     width: 160
     height: 45
-  parent: {fileID: 0}
+  parent: {fileID: -2519617241621421113}
+  children:
+  - {fileID: -5310242871689988540}
+  - {fileID: 7763014114658045548}
+  - {fileID: -2393630831745021785}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  random: 0
+--- !u!114 &-2393630831745021785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58fe7bc6a9b18e148b82820c7c1c0a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Wait
+  rect:
+    serializedVersion: 2
+    x: 820
+    y: 820
+    width: 160
+    height: 45
+  parent: {fileID: 3437770279166195343}
   children: []
   behaviourTree: {fileID: 0}
   runtimePriority: 0
   breakpoint: 0
-  type: 1
-  sourceTransform:
-    useConstant: 0
+  time:
+    useConstant: 1
     mode: 0
     blackboard: {fileID: 0}
     key: 
-    constantValue: {fileID: 0}
-  sourceGameObject:
+    constantValue: 1
+  randomDeviation: 0
+  continueOnRestart: 0
+--- !u!114 &1069269990901503515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb61a66fcb1c549a844f093811f6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: TargetOpponent
+  val: {fileID: 0}
+--- !u!114 &8564790825420106947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa62ce5e63cc9d45ae0efc52561ace7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: StrafeTargetOffset
+  val: {x: 0, y: 0}
+--- !u!114 &-5310242871689988540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b114a687b0a27246a019c2797b20629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: SetStrafeTarget
+  rect:
+    serializedVersion: 2
+    x: 420
+    y: 820
+    width: 160
+    height: 45
+  parent: {fileID: 3437770279166195343}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  TargetObjectKeyRef:
     useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
+  StrafeTargetOffsetKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeTargetOffset
+    constantValue: {x: 0, y: 0}
+  HasStrafeStarted:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeStarted
+    constantValue: 0
+  OffsetDistance: 5
+  AngleOfOptions: 90
+--- !u!114 &5330499851404202208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ae15c5e6bcb1714080f2e8296c3d17a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: StrafeStarted
+  val: 0
+--- !u!114 &-8650863565938330097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Strafe State
+  rect:
+    serializedVersion: 2
+    x: 480
+    y: 440
+    width: 160
+    height: 45
+  parent: {fileID: 2551272652439459061}
+  children:
+  - {fileID: -971492261933530248}
+  - {fileID: -478223416730349971}
+  - {fileID: -2519617241621421113}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  random: 0
+--- !u!114 &-971492261933530248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a491dc0bc41ade74e85756aea423797c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Reset Strafe Started
+  rect:
+    serializedVersion: 2
+    x: 280
+    y: 620
+    width: 160
+    height: 45
+  parent: {fileID: -8650863565938330097}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  source:
+    useConstant: 1
     mode: 0
     blackboard: {fileID: 0}
     key: 
-    constantValue: {fileID: 0}
-  destinationTransform:
+    constantValue: 0
+  destination:
     useConstant: 0
     mode: 1
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeStarted
+    constantValue: 0
+--- !u!114 &-2519617241621421113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8595d37ac5b0f340b7f64ca227f8860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Strafe Loop
+  rect:
+    serializedVersion: 2
+    x: 640
+    y: 620
+    width: 160
+    height: 45
+  parent: {fileID: -8650863565938330097}
+  children:
+  - {fileID: 3437770279166195343}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  loops:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: NumStrafeLoops
+    constantValue: 3
+  infinite:
+    useConstant: 1
+    mode: 0
     blackboard: {fileID: 0}
     key: 
-    constantValue: {fileID: 0}
-  destinationGameObject:
+    constantValue: 0
+  breakOnStatus: 2
+  resultOnFinish: 0
+  resultOnBreak: 1
+--- !u!114 &25998929135873918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be6860a83fe93e4bbd689336d96bdc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: NumStrafeLoops
+  val: 0
+--- !u!114 &-478223416730349971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1490dbef6b51161428fcea74c8dbf399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Randomize Number of Strafes
+  rect:
+    serializedVersion: 2
+    x: 460
+    y: 620
+    width: 160
+    height: 59
+  parent: {fileID: -8650863565938330097}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  min:
+    useConstant: 1
+    mode: 0
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: 3
+  max:
+    useConstant: 1
+    mode: 0
+    blackboard: {fileID: 0}
+    key: 
+    constantValue: 5
+  output:
     useConstant: 0
     mode: 1
-    blackboard: {fileID: 0}
-    key: 
-    constantValue: {fileID: 0}
+    blackboard: {fileID: 8337776675897930559}
+    key: NumStrafeLoops
+    constantValue: 0

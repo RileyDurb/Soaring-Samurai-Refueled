@@ -14,4 +14,18 @@ public static class MyRandom
         return Random.Range(min, max);
     }
 
+    public static bool RandomBool()
+    {
+        int randomBool = Random.Range(-1, 2);
+
+        if (randomBool == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 }
