@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestMenuFunctions : MonoBehaviour
 {
     [SerializeField] GameObject TestNextMenu;
-    public void CreateNextMenu()
+    public void CreateNextPauseMenu()
     {
         MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
 
@@ -14,13 +14,13 @@ public class TestMenuFunctions : MonoBehaviour
             print("TestMenuFunctions:CreateNextMenu: No menu prefab set, cannot create next menu. Try setting a prefab for the TestNextMenu variable");
             return;
         }
-        menuManager.PushMenu(TestNextMenu);
+        menuManager.PushPauseMenu(TestNextMenu);
     }
 
-    public void GoBackInMenu()
+    public void GoBackInPauseMenu()
     {
         MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
 
-        menuManager.PopMenu();
+        menuManager.PopPauseMenu();
     }
 }

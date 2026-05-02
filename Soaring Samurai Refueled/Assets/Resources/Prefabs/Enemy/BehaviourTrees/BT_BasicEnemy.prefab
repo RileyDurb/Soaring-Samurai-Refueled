@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: -8650863565938330097}
+  selectedEditorNode: {fileID: 7371633414262407249}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -1040,7 +1040,7 @@ PrefabInstance:
     - target: {fileID: 5466766633071047034, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: selectedEditorNode
       value: 
-      objectReference: {fileID: 186605125492758264}
+      objectReference: {fileID: 4156739261059088711}
     - target: {fileID: 6351699296125741047, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: rect.x
       value: 40
@@ -1117,17 +1117,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4156739261059088711}
   m_SourcePrefab: {fileID: 100100000, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
---- !u!114 &186605125492758264 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7386468187820312306, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-  m_PrefabInstance: {fileID: 7211659318855438346}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543528862314487228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538645f2f9090fd43bc6154b2e89e2d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1543528862314487228 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8178328718445563318, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
@@ -1148,7 +1137,7 @@ MonoBehaviour:
   title: SetTargetOpponent
   rect:
     serializedVersion: 2
-    x: -180
+    x: -179
     y: 720
     width: 160
     height: 45

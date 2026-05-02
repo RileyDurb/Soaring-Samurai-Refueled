@@ -80,6 +80,9 @@ public class PlayerCombatController : MonoBehaviour
 
     public GameObject SpriteObject {  get { return mSpriteObject; } }
 
+    public string PlayerName {  get { return mPlayerName; } }
+
+    public CharacterDataManager.Characters CharacterVisualsName {  get { return mCurrentCharacterVisuals; } }
 
     // Public variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Action<int, int> OnDamageTaken; // Event called when taking damage, 1st parameter is the player index who took the damage, 2nd paramater is who gave the damage
@@ -93,7 +96,11 @@ public class PlayerCombatController : MonoBehaviour
     [SerializeField]
     private int mPlayerIndex = -1; // Index of player, inits to less than 0 to represent no player assigned
 
+    string mPlayerName = "";
+
     private bool mNonPlayerControlled = false;
+
+    CharacterDataManager.Characters mCurrentCharacterVisuals;
 
     // Component references
     AnimationController mAnimationController;
@@ -148,16 +155,22 @@ public class PlayerCombatController : MonoBehaviour
 
         //mStateManager.AddOnEnter(PlayerStates.DashAttack, StartDashAttackCharge);
 
+        // Set player name
+        mPlayerName = "Player " + (mPlayerIndex + 1);
+        //gameObject.name = mPlayerName;
+
         // Set up health bar
         if (mHealthBar != null)
         {
             HealthBarController healthBar = mHealthBar.GetComponent<HealthBarController>();
             healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Health")); // Set the health pool to be represented by the health bar
             healthBar.SetPoolToRepresent(GetComponent<PoolContainer>().GetPool("Gas")); // Set gas meter to represent the gas pool
-            healthBar.SetPlayerNameText("Player " + (mPlayerIndex + 1)); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
+            healthBar.SetPlayerNameText(mPlayerName); // Set the player's name on the health bar (player name uses player index plus 1 to convert the 0 based index into a more expected 1 based player number)
 
 
         }
+
+
 
 
         switch (mPlayerIndex)
@@ -631,6 +644,8 @@ public class PlayerCombatController : MonoBehaviour
 
         // Set color scheme material;
         mAnimationController.GetComponent<SpriteRenderer>().material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe).PlayerColorsMaterial;
+
+        mCurrentCharacterVisuals = characterToBe;
     }
 }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PublicMenuFunctions", menuName = "Scripts/ScriptableObjects/UI/Menu/PublicMenuFunctions")]
 public class PublicMenuFunctions : ScriptableObject
 {
-    public void GoBackInMenu()
+    public void GoBackInPauseMenu()
     {
         MenuManager currentMenuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
 
@@ -16,7 +16,7 @@ public class PublicMenuFunctions : ScriptableObject
             return;
         }
 
-        currentMenuManager.PopMenu();
+        currentMenuManager.PopPauseMenu();
     }
 
     public void ExitGame()

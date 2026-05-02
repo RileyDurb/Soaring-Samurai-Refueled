@@ -10,9 +10,11 @@ public class DebugMenuFunctions : MonoBehaviour
 {
     [SerializeField] GameObject DebugMenuToggleRef;
     [SerializeField] TMP_Dropdown CharacterSelectDropdownRef;
-    [SerializeField] Slider CharacterSelectTargetSliderRef;
+    [SerializeField] Slider PlayerToChangeSlider;
+    [SerializeField] TextMeshProUGUI SelectedPlayerText;
+    [SerializeField] TMP_Dropdown CPUModeDropdown;
 
-    int mCurrentPlayerIndexToColorChange = 0;
+    int mSelectedPlayerIndex = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +36,22 @@ public class DebugMenuFunctions : MonoBehaviour
 
         CharacterSelectDropdownRef.AddOptions(characterSelectOptions);
 
-        // Set number of players for character select target slider
-        CharacterSelectTargetSliderRef.maxValue = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList.Count - 1;
+        // Initialize items for CPU Mode selector
+        CPUModeDropdown.ClearOptions();
+        List<TMP_Dropdown.OptionData> cpuModeSelectOptions = new List<TMP_Dropdown.OptionData>();
+        foreach (AIBehaviour.AIMode mode in Enum.GetValues(typeof(AIBehaviour.AIMode)))
+        {
+            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
+            option.text = mode.ToString();
+
+            cpuModeSelectOptions.Add(option);
+        }
+        CPUModeDropdown.AddOptions(cpuModeSelectOptions);
+
+        CPUModeDropdown.onValueChanged.AddListener(SelectCPUMode); // Add select event to occur when value is changed
+
+        // Set number of players for player edit target slider
+        PlayerToChangeSlider.maxValue = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList.Count - 1;
     }
 
     public void ToggleDebugMode()
@@ -62,10 +78,10 @@ public class DebugMenuFunctions : MonoBehaviour
 
     public void SelectCharacter(int optionIndex)
     {
-        int targetPlayerIndex = mCurrentPlayerIndexToColorChange;
+        int targetPlayerIndex = mSelectedPlayerIndex;
         List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
 
-        PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == mCurrentPlayerIndexToColorChange; });
+        PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == mSelectedPlayerIndex; });
 
         if (targetPlayer == null)
         {
@@ -84,9 +100,47 @@ public class DebugMenuFunctions : MonoBehaviour
         targetPlayer.SetCharacterVisuals(characterToBe);
     }
 
-    public void SetPlayerIndexToCharacterSelect()
+    public void SelectCPUMode(int optionIndex)
     {
-        mCurrentPlayerIndexToColorChange = (int)CharacterSelectTargetSliderRef.value;
+
+        // Get selected player
+        int targetPlayerIndex = mSelectedPlayerIndex;
+        List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
+        PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == mSelectedPlayerIndex; });
+        if (targetPlayer == null)
+        {
+            print("DebugMenuFunctions:SelectCPUMode: no player of index " + targetPlayerIndex.ToString() + " could be found.");
+            return;
+        }
+
+        // Get selectied option as an AI mode enum
+        AIBehaviour.AIMode modeToChangeTo = AIBehaviour.AIMode.PlayerInput;
+        bool modeWasValid = Enum.TryParse(CPUModeDropdown.options[optionIndex].text, out modeToChangeTo);
+
+        if (modeWasValid == false)
+        {
+            print("DebugModeFunctions:SelectCPUMode: no AI mode matched player option " + CPUModeDropdown.options[optionIndex].text);
+            return;
+        }
+
+        targetPlayer.GetComponent<AIBehaviour>().SetAIMode(modeToChangeTo);
+
+    }
+    
+    public void SetSelectedPlayer()
+    {
+        mSelectedPlayerIndex = (int)PlayerToChangeSlider.value; // Set the player to target for player specific menu items
+
+        // Find target player controller to get name
+        List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
+        PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == mSelectedPlayerIndex; });
+
+        SelectedPlayerText.text = "Selected Player: " + targetPlayer.PlayerName; // Set player name
+
+        // Update dropdowns to show current value
+        CharacterSelectDropdownRef.SetValueWithoutNotify((int)targetPlayer.CharacterVisualsName);
+        CPUModeDropdown.SetValueWithoutNotify((int)targetPlayer.GetComponent<AIBehaviour>().CurrAIMode);
+
     }
 
     public void ToggleTimePaused()

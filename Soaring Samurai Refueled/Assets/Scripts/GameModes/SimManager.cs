@@ -94,12 +94,12 @@ public class SimManager : MonoBehaviour
             MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
             if (mInPause == false)
             {
-                menuManager.PushMenu(mPrefabs["PauseMenu"]);
+                menuManager.PushPauseMenu(mPrefabs["PauseMenu"]);
                 IsPaused = true;
             }
             else
             {
-                menuManager.PopMenu();
+                menuManager.PopPauseMenu();
                 IsPaused = false;
             }
         }

@@ -28,6 +28,6 @@ public class MatchEndMenuFeatures : MonoBehaviour
     {
         LevelScopeManagers.Instance.GetComponent<MatchStateManager>().RestartMatch();
 
-        LevelScopeManagers.Instance.GetComponent<MenuManager>().PopMenu();
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PopGameplayMenu();
     }
 }

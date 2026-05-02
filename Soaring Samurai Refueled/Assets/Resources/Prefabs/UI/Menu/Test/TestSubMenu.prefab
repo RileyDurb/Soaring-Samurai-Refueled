@@ -575,7 +575,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4155654120667689064}
         m_TargetAssemblyTypeName: TestMenuFunctions, Assembly-CSharp
-        m_MethodName: GoBackInMenu
+        m_MethodName: GoBackInPauseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

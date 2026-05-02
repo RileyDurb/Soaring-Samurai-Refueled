@@ -8,7 +8,7 @@ using MBT;
 public class AIBehaviour : MonoBehaviour
 {
     // Enum and struct definitions //////////////////////////////////////////////////////
-    enum AIMode
+    public enum AIMode
     {
         PlayerInput,
         MirrorOpponent,
@@ -38,6 +38,8 @@ public class AIBehaviour : MonoBehaviour
 
     [SerializeField]
     private AIMode mCurrAIMode = AIMode.PlayerInput;
+    [SerializeField]
+    private AIMode mNextAIMode = AIMode.PlayerInput;
 
     [SerializeField]
     private float mAttackOnTimerInterval = 5.0f;
@@ -61,7 +63,8 @@ public class AIBehaviour : MonoBehaviour
 
     float mLastTimerInterval = 0.0f;
 
-
+    // Getters and setters //////////////////////////////////////////////////////////////////////
+    public AIMode CurrAIMode { get { return mCurrAIMode; } }
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +86,29 @@ public class AIBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If we have a new AI mode to switch to, do any cleanup for last mode, then switch to the new mode
+        if (mNextAIMode != mCurrAIMode)
+        {
+            switch (mCurrAIMode)
+            {
+                // Call any on exit functionality that each mode may need
+                case AIMode.AttackOnTimer:
+                    {
+                        mAIActionList.Clear(); // Clears action list so we dom't continue auto attacking
+                        mAttackOnTimerActive = false;
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+
+            // Set new mode as the current one
+            mCurrAIMode = mNextAIMode;
+        }
+
+
         switch (mCurrAIMode)
         {
             case AIMode.MirrorOpponent: // Case for just mirroring opponent's input
@@ -127,21 +153,11 @@ public class AIBehaviour : MonoBehaviour
 
         }
 
-        // Handle turning off attack on timer mode
-        if (mCurrAIMode != AIMode.AttackOnTimer)
-        {
-            if (mAttackOnTimerActive == true)
-            {
-                mCombatControllerRef.mActionList.Clear(); // Clear action list to stop attack timer
-
-                mAttackOnTimerActive = false; // mark as turned off, so we don't clear again
-            }
-        }
-
         // Update action list
         mAIActionList.Update(Time.deltaTime);
     }
 
+    // Public interface
     public void TriggerNormalSlashAttack(AttackDirection directionToSlash)
     {
         switch (directionToSlash)
@@ -172,7 +188,14 @@ public class AIBehaviour : MonoBehaviour
         }
     }
 
-
+    public void SetAIMode(AIMode newMode)
+    {
+        if (newMode != mCurrAIMode)
+        {
+            mNextAIMode = newMode;
+        }
+    }
+    // Private helper functions
     void TriggerUpRightAttack()
     {
         mCombatControllerRef.UpRightAttackInput(InputActionPhase.Started);   

@@ -10,7 +10,8 @@ public class MenuManager : MonoBehaviour
     // Public class definitions
     public enum MenuLayers
     {
-        Menu,
+        GameplayMenu,
+        PauseMenu,
         Popups
     }
 
@@ -209,15 +210,29 @@ public class MenuManager : MonoBehaviour
 
 
     // Creates an UI object from the given prefab. By default, puts it in the front of the menu layer
-    public GameObject PushMenu(GameObject uiPrefabToUse, bool addToCurrentLayerLevel = false)
+    public GameObject PushGameplayMenu(GameObject uiPrefabToUse, bool addToCurrentLayerLevel = false)
     {
-        return PushItem(MenuLayers.Menu, uiPrefabToUse);
+        return PushItem(MenuLayers.GameplayMenu, uiPrefabToUse);
     }
 
-    // Removes and destroys top item on the menu layer
-    public void PopMenu()
+    // Creates an UI object from the given prefab. By default, puts it in the front of the menu layer
+    public GameObject PushPauseMenu(GameObject uiPrefabToUse, bool addToCurrentLayerLevel = false)
     {
-        PopItem(MenuLayers.Menu);
+        return PushItem(MenuLayers.PauseMenu, uiPrefabToUse);
+    }
+
+
+
+
+    // Removes and destroys top item on the menu layer
+    public void PopGameplayMenu()
+    {
+        PopItem(MenuLayers.GameplayMenu);
+    }
+    // Removes and destroys top item on the menu layer
+    public void PopPauseMenu()
+    {
+        PopItem(MenuLayers.PauseMenu);
     }
 
     // Creates an UI object from the given prefab. By default, puts it above the current top layer and hides the previous top
@@ -232,9 +247,9 @@ public class MenuManager : MonoBehaviour
     }
 
     // Returns number of items in the menu layer
-    public int NumItemsInMenu()
+    public int NumItemsInPauseMenu()
     {
-        return NumItemsInLayer(MenuLayers.Menu);
+        return NumItemsInLayer(MenuLayers.PauseMenu);
     }
 
 

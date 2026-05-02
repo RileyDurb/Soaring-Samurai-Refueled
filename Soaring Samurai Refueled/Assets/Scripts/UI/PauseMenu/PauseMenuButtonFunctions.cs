@@ -12,14 +12,14 @@ public class PauseMenuButtonFunctions : MonoBehaviour
 
     public void OpenDebugMenu()
     {
-        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushMenu(DebugMenuPrefab);
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(DebugMenuPrefab);
     }
 
     public void GoBackFromPauseMenu()
     {
         MenuManager menuMan = LevelScopeManagers.Instance.GetComponent<MenuManager>();
 
-        menuMan.PopMenu();
+        menuMan.PopPauseMenu();
 
         SimManager.Instance.SetPaused(false);
     }

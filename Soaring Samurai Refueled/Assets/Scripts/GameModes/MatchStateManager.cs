@@ -257,7 +257,7 @@ public class MatchStateManager : MonoBehaviour
     {
         print("Match be won");
 
-        mMatchWinMenuObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushMenu(mMatchWinMenuPrefab);
+        mMatchWinMenuObject = LevelScopeManagers.Instance.GetComponent<MenuManager>().PushGameplayMenu(mMatchWinMenuPrefab);
         mMatchWinMenuObject.GetComponent<MatchEndMenuFeatures>().SetWinnerNameMessage("Player " + (winningPlayerID + 1).ToString() + " Has Won This Fight");
     }
 
