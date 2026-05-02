@@ -30,6 +30,16 @@ public class PlayerInputHandler : MonoBehaviour
                 playerController = controller; // Saves player object for controlling
                 controller.SetPlayerIndex(input.playerIndex, true); // Gives the player this input handler's index, and marks the player as now being player controlled
 
+                // Update character visual based elements of the mobile controller for this character, if any
+                MobileInputManager mobileControlsMan = LevelScopeManagers.Instance.GetComponent<MobileInputManager>();
+                if (mobileControlsMan.mSpawnedControlsPerPlayer.ContainsKey(controller.PlayerIndex))
+                {
+                    MobileControlsTheme mobileControlsVisuals = mobileControlsMan.mSpawnedControlsPerPlayer[controller.PlayerIndex].GetComponent<MobileControlsTheme>();
+                    controller.OnCharacterChanged += mobileControlsVisuals.UpdateCharacterBasedVisuals;
+
+                    mobileControlsVisuals.UpdateCharacterBasedVisuals(controller.CharacterVisualsName);
+                }
+
                 break;
             }
         }

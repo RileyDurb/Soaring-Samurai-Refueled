@@ -19,4 +19,9 @@ public class CharacterDataManager : MonoBehaviour
     {
         return mCharacterVisualData;
     }
+
+    public CharacterVisuals.CharacterVisualData GetCharactersData(Characters character)
+    {
+        return mCharacterVisualData.GetCharacterVisuals(character);
+    }
 }

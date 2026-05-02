@@ -87,6 +87,8 @@ public class PlayerCombatController : MonoBehaviour
     // Public variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Action<int, int> OnDamageTaken; // Event called when taking damage, 1st parameter is the player index who took the damage, 2nd paramater is who gave the damage
 
+    public Action<CharacterDataManager.Characters> OnCharacterChanged;
+
     // Private variables //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 mMoveInput;
     Vector2 mLastDirectionalMoveInput;
@@ -169,8 +171,6 @@ public class PlayerCombatController : MonoBehaviour
 
 
         }
-
-
 
 
         switch (mPlayerIndex)
@@ -646,6 +646,11 @@ public class PlayerCombatController : MonoBehaviour
         mAnimationController.GetComponent<SpriteRenderer>().material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharacterVisualData().GetCharacterVisuals(characterToBe).PlayerColorsMaterial;
 
         mCurrentCharacterVisuals = characterToBe;
+
+        if (OnCharacterChanged != null)
+        {
+            OnCharacterChanged.Invoke(mCurrentCharacterVisuals);
+        }
     }
 }
 

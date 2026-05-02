@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.OnScreen;
@@ -9,6 +10,8 @@ public class MobileInputManager : MonoBehaviour
     [SerializeField] GameObject MobileControllerPrefab;
 
     List<GameObject> mSpawnedControlsObjects = new List<GameObject>();
+
+    public Dictionary<int, GameObject> mSpawnedControlsPerPlayer = new Dictionary<int, GameObject>();
 
     int mNumMobileControllersSpawned = 0;
     // Start is called before the first frame update
@@ -31,6 +34,9 @@ public class MobileInputManager : MonoBehaviour
         {
             GameObject newMobileControls = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddControlsItem(MobileControllerPrefab);
             mSpawnedControlsObjects.Add(newMobileControls);
+            int playerIndex = inputManager.playerCount;
+            mSpawnedControlsPerPlayer.Add(playerIndex, newMobileControls);
+
 
             GameObject joystick = newMobileControls.transform.Find("MobileJoystick").gameObject;
             OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
@@ -38,7 +44,7 @@ public class MobileInputManager : MonoBehaviour
             //GameObject northButton = GameObject.Find("UpRightAttackButton");
             //OnScreenButton buttonCom = northButton.GetComponent<OnScreenButton>();
 
-            inputManager.JoinPlayer(inputManager.playerCount, -1, "GamePad", joystickComp.control.device);
+            inputManager.JoinPlayer(playerIndex, -1, "GamePad", joystickComp.control.device);
 
             mNumMobileControllersSpawned++;
         }
