@@ -5,10 +5,15 @@ using UnityEngine.UI;
 
 public class MobileControlsTheme : MonoBehaviour
 {
-    [SerializeField] Image MoveJoystickImage;
+    [SerializeField] List<Image> CharacterColorDependentImages = new List<Image>();
 
     public void UpdateCharacterBasedVisuals(CharacterDataManager.Characters characterToBe)
     {
-        MoveJoystickImage.material = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharactersData(characterToBe).PlayerColorsMaterial;
+        CharacterVisuals.CharacterVisualData characterData = PersistentScopeManagers.Instance.GetComponent<CharacterDataManager>().GetCharactersData(characterToBe);
+        foreach (Image imageToRecolor in CharacterColorDependentImages)
+        {
+            imageToRecolor.material = characterData.PlayerColorsMaterial;
+
+        }
     }
 }

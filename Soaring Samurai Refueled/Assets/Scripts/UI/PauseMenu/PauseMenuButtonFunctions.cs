@@ -5,6 +5,7 @@ using UnityEngine;
 public class PauseMenuButtonFunctions : MonoBehaviour
 {
     [SerializeField] GameObject DebugMenuPrefab;
+    [SerializeField] GameObject MovesListMenuPrefab;
     public void ExitGame()
     {
         SimManager.Instance.Exit();
@@ -13,6 +14,11 @@ public class PauseMenuButtonFunctions : MonoBehaviour
     public void OpenDebugMenu()
     {
         LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(DebugMenuPrefab);
+    }
+
+    public void OpenMovesListMenu()
+    {
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(MovesListMenuPrefab);
     }
 
     public void GoBackFromPauseMenu()
