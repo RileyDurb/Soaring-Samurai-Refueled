@@ -45,7 +45,7 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         // TODO: add a case for no player with a matching index existing, and if that's the case, spawn a new player (need to make player spawning, and make that spawn UI elements for the new player)
-        
+
 
         //GameObject joystick = GameObject.Find("TestMobileJoystick");
         //OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
@@ -134,5 +134,10 @@ public class PlayerInputHandler : MonoBehaviour
             return;
         }
         playerController.OnDashAttack(context);
+    }
+
+    public void OnPauseTriggered(InputAction.CallbackContext context)
+    {
+        playerController.OnPauseTriggered(context);
     }
 }

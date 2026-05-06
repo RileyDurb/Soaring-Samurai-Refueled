@@ -73,6 +73,7 @@ MonoBehaviour:
     AnchorMax: {x: 0.5, y: 0.5}
     Pivot: {x: 0.5, y: 0.5}
   mUseDebugNames: 0
+  mLayersToNotWarnForiInteractableComponent: 
 --- !u!114 &2524533964964330955
 MonoBehaviour:
   m_ObjectHideFlags: 0

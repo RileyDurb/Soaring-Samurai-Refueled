@@ -153,6 +153,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""d82c4d39-0162-412f-a80c-50e8e757ca3b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -397,6 +406,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""DashAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f302a743-e7cf-401c-a7e7-d5fb0ca64e2e"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3decb9d-28ee-41af-8775-28941e52a426"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -412,6 +443,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Combat_UpRightSlash = m_Combat.FindAction("UpRightSlash", throwIfNotFound: true);
         m_Combat_Dash = m_Combat.FindAction("Dash", throwIfNotFound: true);
         m_Combat_DashAttack = m_Combat.FindAction("DashAttack", throwIfNotFound: true);
+        m_Combat_Pause = m_Combat.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -499,6 +531,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_UpRightSlash;
     private readonly InputAction m_Combat_Dash;
     private readonly InputAction m_Combat_DashAttack;
+    private readonly InputAction m_Combat_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Combat".
     /// </summary>
@@ -538,6 +571,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Combat/DashAttack".
         /// </summary>
         public InputAction @DashAttack => m_Wrapper.m_Combat_DashAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Combat_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -585,6 +622,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @DashAttack.started += instance.OnDashAttack;
             @DashAttack.performed += instance.OnDashAttack;
             @DashAttack.canceled += instance.OnDashAttack;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -617,6 +657,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @DashAttack.started -= instance.OnDashAttack;
             @DashAttack.performed -= instance.OnDashAttack;
             @DashAttack.canceled -= instance.OnDashAttack;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -706,5 +749,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDashAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }

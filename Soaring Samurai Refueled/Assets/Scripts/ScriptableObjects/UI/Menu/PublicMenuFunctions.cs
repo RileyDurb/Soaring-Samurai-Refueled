@@ -16,7 +16,14 @@ public class PublicMenuFunctions : ScriptableObject
             return;
         }
 
-        currentMenuManager.PopPauseMenu();
+        if (currentMenuManager.NumItemsInLayer(MenuManager.MenuLayers.PauseMenu) > 1)
+        {
+            currentMenuManager.PopPauseMenu();
+        }
+        else
+        {
+            SimManager.Instance.QueuePauseMenuChange();
+        }
     }
 
     public void ExitGame()

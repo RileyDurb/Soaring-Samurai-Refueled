@@ -23,10 +23,6 @@ public class PauseMenuButtonFunctions : MonoBehaviour
 
     public void GoBackFromPauseMenu()
     {
-        MenuManager menuMan = LevelScopeManagers.Instance.GetComponent<MenuManager>();
-
-        menuMan.PopPauseMenu();
-
-        SimManager.Instance.SetPaused(false);
+        SimManager.Instance.QueuePauseMenuChange();
     }
 }

@@ -526,6 +526,16 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
+    public void OnPauseTriggered(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Canceled)
+        {
+            SimManager.Instance.QueuePauseMenuChange();
+        }
+    }
+
+
+
 
     // Public interface /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void SetFacingDirection(FacingDirection newDirection)
@@ -652,5 +662,6 @@ public class PlayerCombatController : MonoBehaviour
             OnCharacterChanged.Invoke(mCurrentCharacterVisuals);
         }
     }
+
 }
 

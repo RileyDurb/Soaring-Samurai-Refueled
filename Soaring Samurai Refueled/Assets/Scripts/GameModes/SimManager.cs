@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
@@ -29,6 +30,7 @@ public class SimManager : MonoBehaviour
     GameObject mTempPauseMenuSpawnedPrefab;
 
     bool mInPause = false;
+    bool mPauseChangeQueued = false;
     private bool IsPaused { 
         get { return mInPause; } 
         set { mInPause = value; if (OnPausedChange != null) { OnPausedChange(mInPause); } }
@@ -89,7 +91,9 @@ public class SimManager : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu))
+
+        // Toggle pause menu on, or go back in pause menu, unpausing when we've closed the last pause menu item
+        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu) || mPauseChangeQueued)
         {
             MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
             if (mInPause == false)
@@ -100,8 +104,13 @@ public class SimManager : MonoBehaviour
             else
             {
                 menuManager.PopPauseMenu();
-                IsPaused = false;
+                if (menuManager.NumItemsInLayer(MenuManager.MenuLayers.PauseMenu) <= 0)
+                {
+                    IsPaused = false;
+                }
             }
+
+            mPauseChangeQueued = false;
         }
     }
 
@@ -166,10 +175,11 @@ public class SimManager : MonoBehaviour
 
     }
 
-    // Public getter for changing what happens when wantimg to set paused publicly, vs within the sim manager
-    public void SetPaused(bool newPaused)
+
+    // Set pause to toggle on if off, or go back in the pause menu if on
+    public void QueuePauseMenuChange()
     {
-        IsPaused = newPaused;
+        mPauseChangeQueued = true;
     }
 
 }

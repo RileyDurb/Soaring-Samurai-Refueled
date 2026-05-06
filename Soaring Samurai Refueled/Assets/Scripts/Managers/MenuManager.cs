@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class MenuManager : MonoBehaviour
 {
@@ -41,9 +43,9 @@ public class MenuManager : MonoBehaviour
     int mNumUIItems = 0;
     [SerializeField] bool mUseDebugNames = false;
 
-
     // References
     GameObject mCanvasRef;
+    EventSystem mCurrEventSystem;
 
 
     // Start is called before the first frame update
@@ -97,7 +99,7 @@ public class MenuManager : MonoBehaviour
         }
 
 
-
+        mCurrEventSystem = EventSystem.current;
 
     }
 
@@ -147,6 +149,17 @@ public class MenuManager : MonoBehaviour
         // Adds new UI item to the layer
         mMenuLayers[(int)layer].mLayerItems.Push(newUIObject);
 
+        InteractableMenuPage interactionInfo = newUIObject.GetComponent<InteractableMenuPage>();
+        if (interactionInfo == null)
+        {
+            //print("MenuManager:Push Item: Newly pushed object " + newUIObject.name + " does not have an interactableMenuPage component, cannot focus on a particular element for controller navigation. Reccomend adding one unless there are no interactable elements on the page");
+        }
+        else
+        {
+            mCurrEventSystem.SetSelectedGameObject(interactionInfo.FirstItemToFocus);
+        }
+
+
         return newUIObject;
     }
 
@@ -193,8 +206,23 @@ public class MenuManager : MonoBehaviour
 
             for (int i = additiveCounts[additiveCounts.Count - 1]; i > 0; i--) // For however many items were in the previous level
             {
-                GameObject currItemToHide = mMenuLayers[(int)layer].mLayerItems.ElementAt(i - 1);
-                currItemToHide.SetActive(true);
+                GameObject currItemToShow = mMenuLayers[(int)layer].mLayerItems.ElementAt(i - 1);
+                currItemToShow.SetActive(true);
+
+                if (i == additiveCounts[additiveCounts.Count - 1])
+                {
+
+                    InteractableMenuPage interactionInfo = currItemToShow.GetComponent<InteractableMenuPage>();
+                    if (interactionInfo == null)
+                    {
+                        //print("MenuManager:Pop Item: Newly visible object " + currItemToShow.name + " does not have an interactableMenuPage component, cannot focus on a particular element for controller navigation. Reccomend adding one unless there are no interactable elements on the page");
+                    }
+                    else
+                    {
+                        mCurrEventSystem.SetSelectedGameObject(interactionInfo.FirstItemToFocus);
+                    }
+
+                }
             }
         }
     }
