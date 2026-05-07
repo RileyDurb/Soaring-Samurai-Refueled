@@ -78,6 +78,11 @@ public class PlayerCombatController : MonoBehaviour
         mNonPlayerControlled = true;
     }
 
+    public bool GetIsNonPlayerControlled()
+    {
+        return mNonPlayerControlled;
+    }
+
     public GameObject SpriteObject {  get { return mSpriteObject; } }
 
     public string PlayerName {  get { return mPlayerName; } }

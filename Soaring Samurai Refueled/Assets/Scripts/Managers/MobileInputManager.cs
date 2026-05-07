@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.OnScreen;
 
 public class MobileInputManager : MonoBehaviour
@@ -17,7 +19,7 @@ public class MobileInputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerInputManager.instance.playerJoinedEvent.AddListener(RejectExtraMobileControllers);
     }
 
     // Update is called once per frame
@@ -41,13 +43,40 @@ public class MobileInputManager : MonoBehaviour
             GameObject joystick = newMobileControls.transform.Find("MobileJoystick").gameObject;
             OnScreenStick joystickComp = joystick.GetComponent<OnScreenStick>();
 
+            //InputDeviceDescription newMobileDeviceDescription = new InputDeviceDescription();
+            //joystickComp.control.device.displayName = "Test";
+            //newMobileDeviceDescription.version = "Virtual";
+            //newMobileDeviceDescription.deviceClass = "Gamepad";
+
             //GameObject northButton = GameObject.Find("UpRightAttackButton");
             //OnScreenButton buttonCom = northButton.GetComponent<OnScreenButton>();
 
-            inputManager.JoinPlayer(playerIndex, -1, "GamePad", joystickComp.control.device);
+            inputManager.JoinPlayer(playerIndex, -1, "MobileVirtualGamePad", joystickComp.control.device);
 
             mNumMobileControllersSpawned++;
+
         }
 
     }
+
+    void RejectExtraMobileControllers(PlayerInput newPlayer)
+    {
+        if (newPlayer.devices[0].description.product == "Virtual")
+        {
+            Destroy(newPlayer);
+        }
+    }
+
+    //void CheckForNewPlayerAdd(System.IObservable<InputControl> addNewPlayer)
+    //{
+    //    PlayerInputManager inputMan = PlayerInputManager.instance;
+    //    if (PlayerInputManager.instance.playerCount >= PlayerInputManager.instance.maxPlayerCount)
+    //    {
+    //        return;
+    //    }
+
+    //    if (addNewPlayer.device)
+
+    //        inputMan.JoinPlayer(inputMan.playerCount, -1, "", addNewPlayer.device);
+    //}
 }

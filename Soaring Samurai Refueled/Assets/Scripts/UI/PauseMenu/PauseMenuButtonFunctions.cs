@@ -6,6 +6,7 @@ public class PauseMenuButtonFunctions : MonoBehaviour
 {
     [SerializeField] GameObject DebugMenuPrefab;
     [SerializeField] GameObject MovesListMenuPrefab;
+    [SerializeField] GameObject PlayerControllersMenuPrefab;
     public void ExitGame()
     {
         SimManager.Instance.Exit();
@@ -19,6 +20,11 @@ public class PauseMenuButtonFunctions : MonoBehaviour
     public void OpenMovesListMenu()
     {
         LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(MovesListMenuPrefab);
+    }
+
+    public void OpenCheckPlayersMenu()
+    {
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(PlayerControllersMenuPrefab);
     }
 
     public void GoBackFromPauseMenu()

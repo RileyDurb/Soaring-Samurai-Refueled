@@ -237,6 +237,7 @@ public class TelemetryTracker : MonoBehaviour
         // Make a telemetry directory if it doesn't already exist
         if (Directory.Exists("Telemetry") == false)
         {
+            // TODO: Find a writable filesystem for mobile, since on mobile, the directory this gets is read only and causes an error
             Directory.CreateDirectory("Telemetry");
         }
 

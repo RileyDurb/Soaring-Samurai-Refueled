@@ -138,6 +138,10 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnPauseTriggered(InputAction.CallbackContext context)
     {
+        if (playerController == null)
+        {
+            return;
+        }
         playerController.OnPauseTriggered(context);
     }
 }

@@ -73,7 +73,6 @@ MonoBehaviour:
     AnchorMax: {x: 0.5, y: 0.5}
     Pivot: {x: 0.5, y: 0.5}
   mUseDebugNames: 0
-  mLayersToNotWarnForiInteractableComponent: 
 --- !u!114 &2524533964964330955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,13 +129,21 @@ MonoBehaviour:
   m_JoinAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Join
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: dfd7c093-bcd8-43e7-aaa0-0bff1f947ddf
       m_Processors: 
       m_Interactions: 
-      m_SingletonActionBindings: []
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: fc320cb3-6f16-47a7-bdb2-556e5a41ac3b
+        m_Path: 
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
   m_PlayerPrefab: {fileID: 2898222890073545663, guid: b7b7d59a79c8c354bb1d4a8985049777, type: 3}
