@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8002417812860321925}
   - component: {fileID: 1381884081140895769}
   - component: {fileID: 8135590943195541946}
+  - component: {fileID: 2392753584855636452}
   m_Layer: 0
   m_Name: BT_BasicEnemy
   m_TagString: Untagged
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 8002417812860321925}
+  selectedEditorNode: {fileID: -478223416730349971}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -129,6 +130,7 @@ MonoBehaviour:
   - {fileID: 8585268507868269434}
   - {fileID: -8256966938063052304}
   - {fileID: 1381884081140895769}
+  - {fileID: 2392753584855636452}
   masterBlackboard: {fileID: 0}
 --- !u!114 &3503688239673523745
 MonoBehaviour:
@@ -466,8 +468,8 @@ MonoBehaviour:
   title: Randomize Number of Strafes
   rect:
     serializedVersion: 2
-    x: 720
-    y: 640
+    x: 704
+    y: 643
     width: 160
     height: 59
   parent: {fileID: -8650863565938330097}
@@ -942,7 +944,12 @@ MonoBehaviour:
     blackboard: {fileID: 8337776675897930559}
     key: StrafeStarted
     constantValue: 0
-  mBotStats: {fileID: 11400000, guid: fbb98f59c6951a0439b044c5da2404e5, type: 2}
+  BotStatsKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: MainBotStats
+    constantValue: {fileID: 0}
 --- !u!114 &8002417812860321925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,7 +978,6 @@ MonoBehaviour:
   interval: 1
   randomDeviation: 0
   callOnEnter: 0
-  BotStatsObject: {fileID: 11400000, guid: fbb98f59c6951a0439b044c5da2404e5, type: 2}
   TargetOffsetVectorKeyRef:
     useConstant: 0
     mode: 0
@@ -989,6 +995,12 @@ MonoBehaviour:
     mode: 0
     blackboard: {fileID: 8337776675897930559}
     key: TargetOpponent
+    constantValue: {fileID: 0}
+  BotStats:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: MainBotStats
     constantValue: {fileID: 0}
 --- !u!114 &1381884081140895769
 MonoBehaviour:
@@ -1034,6 +1046,20 @@ MonoBehaviour:
     blackboard: {fileID: 8337776675897930559}
     key: TargetOpponent
     constantValue: {fileID: 0}
+--- !u!114 &2392753584855636452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d4a22462604bb94893c25d590cb8716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: MainBotStats
+  val: {fileID: 11400000, guid: fbb98f59c6951a0439b044c5da2404e5, type: 2}
 --- !u!1001 &7211659318855438346
 PrefabInstance:
   m_ObjectHideFlags: 0

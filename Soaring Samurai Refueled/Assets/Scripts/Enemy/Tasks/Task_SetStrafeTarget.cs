@@ -16,7 +16,7 @@ public class Task_SetStrafeTarget : Leaf
 
     [SerializeField] BoolReference HasStrafeStarted;
 
-    [SerializeField] BotBehaviourStats mBotStats;
+    [SerializeField] BotBehaviourStatsReference BotStatsKeyRef;
     // Private variables
     // Private references
 
@@ -45,11 +45,11 @@ public class Task_SetStrafeTarget : Leaf
 
             // Find all points around opponent that aren't behind it
             List<int> mValidOptions = new List<int>();
-            for (int i = 0; i < mBotStats.mStrafeStats.OffsetDirectionOptions.Count; i++)
+            for (int i = 0; i < BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions.Count; i++)
             {
-                Vector2 direction = mBotStats.mStrafeStats.OffsetDirectionOptions[i];
+                Vector2 direction = BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions[i];
                 float wideAngleDeg = 180.0f -  Vector2.Angle(direction, vecToTarget);
-                if (wideAngleDeg <= mBotStats.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
+                if (wideAngleDeg <= BotStatsKeyRef.Value.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
                 {
                     mValidOptions.Add(i);
                 }
@@ -63,7 +63,7 @@ public class Task_SetStrafeTarget : Leaf
 
             // Pick a random offset to use
             StrafeOffsetDirectionIntKeyRef.Value = mValidOptions[MyRandom.RandomRange(0, mValidOptions.Count - 1)];
-            StrafeTargetOffsetKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance;
+            StrafeTargetOffsetKeyRef.Value = BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * BotStatsKeyRef.Value.mStrafeStats.OffsetDistance;
 
 
             // Set that strafing has been started
@@ -80,27 +80,28 @@ public class Task_SetStrafeTarget : Leaf
                 StrafeOffsetDirectionIntKeyRef.Value--;
                 if (StrafeOffsetDirectionIntKeyRef.Value < 0)
                 {
-                    StrafeOffsetDirectionIntKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions.Count - 1;
+                    StrafeOffsetDirectionIntKeyRef.Value = BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions.Count - 1;
                 }
             }
             else
             {
                 StrafeOffsetDirectionIntKeyRef.Value++;
 
-                if (StrafeOffsetDirectionIntKeyRef.Value >= mBotStats.mStrafeStats.OffsetDirectionOptions.Count)
+                if (StrafeOffsetDirectionIntKeyRef.Value >= BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions.Count)
                 {
                     StrafeOffsetDirectionIntKeyRef.Value = 0;
                 }
             }
 
-            StrafeTargetOffsetKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance;
+            StrafeTargetOffsetKeyRef.Value = BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * BotStatsKeyRef.Value.mStrafeStats.OffsetDistance;
         }
 
         if (SimManager.Instance.DebugModeOn)
         {
             //Vector2 offsetPoint = new Vector2(TargetObjectKeyRef.Value.transform.position.x, TargetObjectKeyRef.Value.transform.position.y) + mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance;
             //Debug.DrawLine(transform.position, offsetPoint, Color.yellow, 5.0f);
-            Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance, Color.yellow, 5.0f);
+            Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, BotStatsKeyRef.Value.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * 
+                BotStatsKeyRef.Value.mStrafeStats.OffsetDistance, Color.yellow, 5.0f);
         }
 
         return NodeResult.success;

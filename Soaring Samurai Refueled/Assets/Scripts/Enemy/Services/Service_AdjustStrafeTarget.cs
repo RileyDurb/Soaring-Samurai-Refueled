@@ -7,10 +7,11 @@ using UnityEngine;
 [MBTNode("Services/AdjustStrafeTarget")]
 public class Service_AdjustStrafeTarget : Service
 {
-    [SerializeField] BotBehaviourStats BotStatsObject;
     [SerializeField] Vector2Reference TargetOffsetVectorKeyRef;
     [SerializeField] IntReference TargetOffsetIntKeyRef;
     [SerializeField] GameObjectReference TargetObjectKeyRef;
+    [SerializeField] BotBehaviourStatsReference BotStats;
+
 
 
     // Non editor set references
@@ -26,7 +27,7 @@ public class Service_AdjustStrafeTarget : Service
         Vector2 vecToTarget = TargetObjectKeyRef.Value.transform.position - mParentController.transform.position;
         print("Here in adjustment");
         float wideAngleDeg = 180.0f - Vector2.Angle(TargetOffsetVectorKeyRef.Value, vecToTarget);
-        if (wideAngleDeg <= BotStatsObject.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
+        if (wideAngleDeg <= BotStats.Value.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
         {
             return; // Point is good, keep it and return
         }
@@ -39,44 +40,46 @@ public class Service_AdjustStrafeTarget : Service
             
             // Try one offset point clockwise of the current one
             int newDirectionToTry = currOffset + 1;
-            if (newDirectionToTry >= BotStatsObject.mStrafeStats.OffsetDirectionOptions.Count)
+            if (newDirectionToTry >= BotStats.Value.mStrafeStats.OffsetDirectionOptions.Count)
             {
                 newDirectionToTry = 0;
             }
 
             int currFinalDirection = newDirectionToTry;
-            float minWideAngleBetweenOffset = 180.0f - Vector2.Angle(BotStatsObject.mStrafeStats.OffsetDirectionOptions[newDirectionToTry], vecToTarget);
+            float minWideAngleBetweenOffset = 180.0f - Vector2.Angle(BotStats.Value.mStrafeStats.OffsetDirectionOptions[newDirectionToTry], vecToTarget);
 
             // Try one offset point countercolockwise of the current one, and use as final if it's closer to our player (angle is amaller
 
             newDirectionToTry = currOffset - 1;
             if (newDirectionToTry < 0)
             {
-                newDirectionToTry = BotStatsObject.mStrafeStats.OffsetDirectionOptions.Count - 1;
+                newDirectionToTry = BotStats.Value.mStrafeStats.OffsetDirectionOptions.Count - 1;
             }
 
-            float currWideAngleBetweenOffset = 180.0f - Vector2.Angle(BotStatsObject.mStrafeStats.OffsetDirectionOptions[newDirectionToTry], vecToTarget);
+            float currWideAngleBetweenOffset = 180.0f - Vector2.Angle(BotStats.Value.mStrafeStats.OffsetDirectionOptions[newDirectionToTry], vecToTarget);
             if (currWideAngleBetweenOffset < minWideAngleBetweenOffset)
             {
                 minWideAngleBetweenOffset = currWideAngleBetweenOffset;
                 currFinalDirection = newDirectionToTry;
             }
 
-            if (minWideAngleBetweenOffset > 90.0f)
+            // ensure new direction is within angle of options
+            if (minWideAngleBetweenOffset > BotStats.Value.mStrafeStats.AngleOfOptions) // if not within angle
             {
-                print("Service_AdjustStrafeTarget:Task: both adjacent offsets were above a 90 degree angle with player. That shouldn't be possible with 4 directions, investigate");
+                print("Service_AdjustStrafeTarget:Task: both adjacent offsets were above the " + BotStats.Value.mStrafeStats.AngleOfOptions + " degree angle of options. Investigate or change this to allow trying more directions");
                 return;
             }
             else // Set new strafe target
             {
-                TargetOffsetVectorKeyRef.Value = BotStatsObject.mStrafeStats.OffsetDirectionOptions[newDirectionToTry];
+                TargetOffsetVectorKeyRef.Value = BotStats.Value.mStrafeStats.OffsetDirectionOptions[newDirectionToTry];
                 TargetOffsetIntKeyRef.Value = newDirectionToTry;
 
                 if (SimManager.Instance.DebugModeOn)
                 {
                     //Vector2 offsetPoint = new Vector2(TargetObjectKeyRef.Value.transform.position.x, TargetObjectKeyRef.Value.transform.position.y) + mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance;
                     //Debug.DrawLine(transform.position, offsetPoint, Color.yellow, 5.0f);
-                    Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, BotStatsObject.mStrafeStats.OffsetDirectionOptions[TargetOffsetIntKeyRef.Value] * BotStatsObject.mStrafeStats.OffsetDistance, Color.yellow, 5.0f);
+                    Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, BotStats.Value.mStrafeStats.OffsetDirectionOptions[TargetOffsetIntKeyRef.Value] *
+                        BotStats.Value.mStrafeStats.OffsetDistance, Color.yellow, 5.0f);
                 }
             }
         }
