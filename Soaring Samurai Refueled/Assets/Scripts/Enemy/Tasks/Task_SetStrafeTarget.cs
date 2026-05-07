@@ -12,21 +12,14 @@ public class Task_SetStrafeTarget : Leaf
     // Blackboard key references
     [SerializeField] GameObjectReference TargetObjectKeyRef;
     [SerializeField] Vector2Reference StrafeTargetOffsetKeyRef;
+    [SerializeField] IntReference StrafeOffsetDirectionIntKeyRef;
 
     [SerializeField] BoolReference HasStrafeStarted;
 
-    [SerializeField] float OffsetDistance = 5.0f;
-    [SerializeField] float AngleOfOptions = 90.0f;
+    [SerializeField] BotBehaviourStats mBotStats;
     // Private variables
-    int mCurrentOffsetIndex = 0;
-    List<Vector2> mOffsetDirectionOptions = new List<Vector2>{
-        Vector2.up,
-        Vector2.right,
-        Vector2.down,
-        Vector2.left
-        };
-
     // Private references
+
     PlayerCombatController mCombatController;
 
 
@@ -52,11 +45,11 @@ public class Task_SetStrafeTarget : Leaf
 
             // Find all points around opponent that aren't behind it
             List<int> mValidOptions = new List<int>();
-            for (int i = 0; i < mOffsetDirectionOptions.Count; i++)
+            for (int i = 0; i < mBotStats.mStrafeStats.OffsetDirectionOptions.Count; i++)
             {
-                Vector2 direction = mOffsetDirectionOptions[i];
+                Vector2 direction = mBotStats.mStrafeStats.OffsetDirectionOptions[i];
                 float wideAngleDeg = 180.0f -  Vector2.Angle(direction, vecToTarget);
-                if (wideAngleDeg <= AngleOfOptions) // If the point is not behind the opponent, in reference to our player
+                if (wideAngleDeg <= mBotStats.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
                 {
                     mValidOptions.Add(i);
                 }
@@ -69,8 +62,8 @@ public class Task_SetStrafeTarget : Leaf
             }
 
             // Pick a random offset to use
-            mCurrentOffsetIndex = mValidOptions[MyRandom.RandomRange(0, mValidOptions.Count - 1)];
-            StrafeTargetOffsetKeyRef.Value = mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance;
+            StrafeOffsetDirectionIntKeyRef.Value = mValidOptions[MyRandom.RandomRange(0, mValidOptions.Count - 1)];
+            StrafeTargetOffsetKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance;
 
 
             // Set that strafing has been started
@@ -84,30 +77,30 @@ public class Task_SetStrafeTarget : Leaf
 
             if (moveClockwise)
             {
-                mCurrentOffsetIndex--;
-                if (mCurrentOffsetIndex < 0)
+                StrafeOffsetDirectionIntKeyRef.Value--;
+                if (StrafeOffsetDirectionIntKeyRef.Value < 0)
                 {
-                    mCurrentOffsetIndex = mOffsetDirectionOptions.Count - 1;
+                    StrafeOffsetDirectionIntKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions.Count - 1;
                 }
             }
             else
             {
-                mCurrentOffsetIndex++;
+                StrafeOffsetDirectionIntKeyRef.Value++;
 
-                if (mCurrentOffsetIndex >= mOffsetDirectionOptions.Count)
+                if (StrafeOffsetDirectionIntKeyRef.Value >= mBotStats.mStrafeStats.OffsetDirectionOptions.Count)
                 {
-                    mCurrentOffsetIndex = 0;
+                    StrafeOffsetDirectionIntKeyRef.Value = 0;
                 }
             }
 
-            StrafeTargetOffsetKeyRef.Value = mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance;
+            StrafeTargetOffsetKeyRef.Value = mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance;
         }
 
         if (SimManager.Instance.DebugModeOn)
         {
             //Vector2 offsetPoint = new Vector2(TargetObjectKeyRef.Value.transform.position.x, TargetObjectKeyRef.Value.transform.position.y) + mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance;
             //Debug.DrawLine(transform.position, offsetPoint, Color.yellow, 5.0f);
-            Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, mOffsetDirectionOptions[mCurrentOffsetIndex] * OffsetDistance, Color.yellow, 5.0f);
+            Debug.DrawRay(TargetObjectKeyRef.Value.transform.position, mBotStats.mStrafeStats.OffsetDirectionOptions[StrafeOffsetDirectionIntKeyRef.Value] * mBotStats.mStrafeStats.OffsetDistance, Color.yellow, 5.0f);
         }
 
         return NodeResult.success;
