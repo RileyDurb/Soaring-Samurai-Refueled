@@ -8,6 +8,8 @@ public class PlayerMovementStats
 {
     public float MoveJerk = 18000.0f;
     public float DashingJerk = 18000.0f;
+    public bool UseMaxJerkCurve = false;
+    public AnimationCurve InputValueToMaxJerkCurve;
     public float DashDuration = 0.3f;
     public float DashGasCost = 25.0f;
 }

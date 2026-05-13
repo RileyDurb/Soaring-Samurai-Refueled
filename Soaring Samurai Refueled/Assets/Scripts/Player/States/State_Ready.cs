@@ -39,8 +39,19 @@ public class State_Ready : StateManagerPlayer.State
             mCombatControllerRef.SetFacingDirection(PlayerCombatController.FacingDirection.Right);
         }
 
+        PlayerMovementStats currMovementStats = mCombatControllerRef.mPlayerBaseStats.mMovementStats;
+
         // Apply movement
+
+        // Find current movement input, starting with base jert to apply
         float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
+        
+        // If using a curve to apply different jerk at different amounts of the input diretion
+        if (currMovementStats.UseMaxJerkCurve)
+        {
+            float inputScalar = currMovementStats.InputValueToMaxJerkCurve.Evaluate(mCombatControllerRef.CurrMoveInput.magnitude);
+            currSpeed *= inputScalar;// Scale speed based on how much of the max input we're giving
+        }
 
         Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
 
