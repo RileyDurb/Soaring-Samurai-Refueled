@@ -343,7 +343,14 @@ public class PhysicsApplier : MonoBehaviour
             //}
             //else // Won't flip directions
             //{
-                mAcceleration += dragVec; // Apply drag normally
+            if (Stats.ApplyDragAsAcceleration) // If we want to experimentally apply drag as acceleration, for more floaty movement
+            {
+                mAcceleration += dragVec;
+            }
+            else
+            {
+                SetVelocity(Add(GetVelocity(), dragVec)); // Apply drag normally
+            }
             //}
 
             //if (Abs(mAcceleration) <= dragZeroThreshold)
@@ -447,7 +454,15 @@ public class PhysicsApplier : MonoBehaviour
             float angularDrag = Mathf.Sign(Velocity) * -1 * angularDragMag;
 
             float ogSign = Mathf.Sign(mAcceleration);
-            mAcceleration += angularDrag;
+
+            if (Stats.ApplyDragAsAcceleration) // If wanting to experimentally apply drag to acceleration instead
+            {
+                mAcceleration += angularDrag;
+            }
+            else // Apply drag to velocity as normal
+            {
+                SetVelocity(Add(GetVelocity(), angularDrag));
+            }
 
             if (Mathf.Sign(mAcceleration) != ogSign && Abs(mAcceleration) <= dragZeroThreshold)
             {
@@ -586,7 +601,7 @@ public class PhysicsApplier : MonoBehaviour
                 Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Acceleration.x, mDirectionalForces.Acceleration.y, 0), Color.red, 0, false);
                 Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.Jerk.x, mDirectionalForces.Jerk.y, 0), Color.blue, 0, false);
 
-                Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.GetVelocity().x, mUncappedDirectionalForces.GetVelocity().y, 0), Color.black, 0, false);
+                //Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.GetVelocity().x, mUncappedDirectionalForces.GetVelocity().y, 0), Color.black, 0, false);
                 Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Acceleration.x, mUncappedDirectionalForces.Acceleration.y, 0), Color.grey, 0, false);
                 Debug.DrawRay(transform.position, new Vector3(mUncappedDirectionalForces.Jerk.x, mUncappedDirectionalForces.Jerk.y, 0), Color.magenta, 0, false);
 

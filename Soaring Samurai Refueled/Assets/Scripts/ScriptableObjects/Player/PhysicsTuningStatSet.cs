@@ -20,4 +20,7 @@ public class PhysicsTuningStatSet : ScriptableObject
     public DampeningType mDampeningType = DampeningType.Percentage;
     public float mMaxDampeningTime = 1.0f; // Only for interpolation dampening. The time it takes to dampen when at max velocity. Lower velocities will take less time
 
+    [Header("Switches")]
+    public bool ApplyDragAsAcceleration = false;
+
 }
