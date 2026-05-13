@@ -40,6 +40,10 @@ GameObject:
   - component: {fileID: 6745280054288282283}
   - component: {fileID: 4909258728199042500}
   - component: {fileID: -490254134927774445}
+  - component: {fileID: 8002417812860321925}
+  - component: {fileID: 1381884081140895769}
+  - component: {fileID: 8135590943195541946}
+  - component: {fileID: 2392753584855636452}
   m_Layer: 0
   m_Name: BT_BasicEnemy
   m_TagString: Untagged
@@ -75,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 7371633414262407249}
+  selectedEditorNode: {fileID: -478223416730349971}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -125,6 +129,8 @@ MonoBehaviour:
   - {fileID: 2544070030172627373}
   - {fileID: 8585268507868269434}
   - {fileID: -8256966938063052304}
+  - {fileID: 1381884081140895769}
+  - {fileID: 2392753584855636452}
   masterBlackboard: {fileID: 0}
 --- !u!114 &3503688239673523745
 MonoBehaviour:
@@ -201,11 +207,11 @@ MonoBehaviour:
   title: MoveToStrafeTarget
   rect:
     serializedVersion: 2
-    x: 640
-    y: 820
+    x: 880
+    y: 940
     width: 160
     height: 45
-  parent: {fileID: 3437770279166195343}
+  parent: {fileID: 8002417812860321925}
   children: []
   behaviourTree: {fileID: 0}
   runtimePriority: 0
@@ -241,14 +247,14 @@ MonoBehaviour:
   title: Strafe Sequence
   rect:
     serializedVersion: 2
-    x: 640
-    y: 700
+    x: 880
+    y: 740
     width: 160
     height: 45
   parent: {fileID: -2519617241621421113}
   children:
   - {fileID: -490254134927774445}
-  - {fileID: 7763014114658045548}
+  - {fileID: 8002417812860321925}
   - {fileID: -2393630831745021785}
   behaviourTree: {fileID: 0}
   runtimePriority: 0
@@ -269,8 +275,8 @@ MonoBehaviour:
   title: Wait
   rect:
     serializedVersion: 2
-    x: 820
-    y: 820
+    x: 1040
+    y: 900
     width: 160
     height: 45
   parent: {fileID: 3437770279166195343}
@@ -343,13 +349,14 @@ MonoBehaviour:
   title: Strafe State
   rect:
     serializedVersion: 2
-    x: 642
-    y: 544
+    x: 880
+    y: 540
     width: 160
     height: 45
   parent: {fileID: 2551272652439459061}
   children:
   - {fileID: -971492261933530248}
+  - {fileID: 8135590943195541946}
   - {fileID: -478223416730349971}
   - {fileID: -2519617241621421113}
   behaviourTree: {fileID: 0}
@@ -371,8 +378,8 @@ MonoBehaviour:
   title: Reset Strafe Started
   rect:
     serializedVersion: 2
-    x: 280
-    y: 620
+    x: 340
+    y: 640
     width: 160
     height: 45
   parent: {fileID: -8650863565938330097}
@@ -407,8 +414,8 @@ MonoBehaviour:
   title: Strafe Loop
   rect:
     serializedVersion: 2
-    x: 640
-    y: 620
+    x: 880
+    y: 640
     width: 160
     height: 45
   parent: {fileID: -8650863565938330097}
@@ -461,8 +468,8 @@ MonoBehaviour:
   title: Randomize Number of Strafes
   rect:
     serializedVersion: 2
-    x: 460
-    y: 620
+    x: 704
+    y: 643
     width: 160
     height: 59
   parent: {fileID: -8650863565938330097}
@@ -531,7 +538,7 @@ MonoBehaviour:
   title: Attack Sequence
   rect:
     serializedVersion: 2
-    x: 1160
+    x: 1360
     y: 720
     width: 160
     height: 45
@@ -556,7 +563,7 @@ MonoBehaviour:
   title: Loop
   rect:
     serializedVersion: 2
-    x: 1160
+    x: 1360
     y: 560
     width: 160
     height: 45
@@ -610,7 +617,7 @@ MonoBehaviour:
   title: Attack Loop Sequence
   rect:
     serializedVersion: 2
-    x: 940
+    x: 1140
     y: 480
     width: 160
     height: 45
@@ -637,7 +644,7 @@ MonoBehaviour:
   title: Random Integer
   rect:
     serializedVersion: 2
-    x: 940
+    x: 1140
     y: 560
     width: 160
     height: 45
@@ -793,7 +800,7 @@ MonoBehaviour:
   title: Wait For Attack Cooldown If Doing Multiple Attacks
   rect:
     serializedVersion: 2
-    x: 1360
+    x: 1560
     y: 720
     width: 160
     height: 59
@@ -845,7 +852,7 @@ MonoBehaviour:
   title: Sequence
   rect:
     serializedVersion: 2
-    x: 1240
+    x: 1440
     y: 640
     width: 160
     height: 45
@@ -872,7 +879,7 @@ MonoBehaviour:
   title: Wait
   rect:
     serializedVersion: 2
-    x: 1360
+    x: 1560
     y: 840
     width: 160
     height: 45
@@ -904,8 +911,8 @@ MonoBehaviour:
   title: SetStrafeTarget
   rect:
     serializedVersion: 2
-    x: 400
-    y: 800
+    x: 660
+    y: 920
     width: 160
     height: 45
   parent: {fileID: 3437770279166195343}
@@ -925,14 +932,134 @@ MonoBehaviour:
     blackboard: {fileID: 8337776675897930559}
     key: StrafeTargetOffset
     constantValue: {x: 0, y: 0}
+  StrafeOffsetDirectionIntKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeTargetOffsetInt
+    constantValue: 0
   HasStrafeStarted:
     useConstant: 0
     mode: 0
     blackboard: {fileID: 8337776675897930559}
     key: StrafeStarted
     constantValue: 0
-  OffsetDistance: 5
-  AngleOfOptions: 90
+  BotStatsKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: MainBotStats
+    constantValue: {fileID: 0}
+--- !u!114 &8002417812860321925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc28aee2d612a6c4db5fcffc43e029ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Service AdjustStrafeTarget
+  rect:
+    serializedVersion: 2
+    x: 880
+    y: 840
+    width: 160
+    height: 45
+  parent: {fileID: 3437770279166195343}
+  children:
+  - {fileID: 7763014114658045548}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  interval: 1
+  randomDeviation: 0
+  callOnEnter: 0
+  TargetOffsetVectorKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeTargetOffset
+    constantValue: {x: 0, y: 0}
+  TargetOffsetIntKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: StrafeTargetOffsetInt
+    constantValue: 0
+  TargetObjectKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
+  BotStats:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: MainBotStats
+    constantValue: {fileID: 0}
+--- !u!114 &1381884081140895769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be6860a83fe93e4bbd689336d96bdc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: StrafeTargetOffsetInt
+  val: 0
+--- !u!114 &8135590943195541946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b114a687b0a27246a019c2797b20629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: SetTargetOpponent
+  rect:
+    serializedVersion: 2
+    x: 520
+    y: 640
+    width: 160
+    height: 45
+  parent: {fileID: -8650863565938330097}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  TargetObjectKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
+--- !u!114 &2392753584855636452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d4a22462604bb94893c25d590cb8716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: MainBotStats
+  val: {fileID: 11400000, guid: fbb98f59c6951a0439b044c5da2404e5, type: 2}
 --- !u!1001 &7211659318855438346
 PrefabInstance:
   m_ObjectHideFlags: 0

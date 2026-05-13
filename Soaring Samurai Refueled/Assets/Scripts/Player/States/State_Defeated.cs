@@ -8,7 +8,10 @@ public class State_Defeated : StateManagerPlayer.State
 
     public override void OnEnter()
     {
-        mParentObject.GetComponent<PlayerCombatController>().SpriteObject.GetComponent<SpriteRenderer>().enabled = false;
+        PlayerCombatController combatController = mParentObject.GetComponent<PlayerCombatController>();
+        combatController.SpriteObject.GetComponent<SpriteRenderer>().enabled = false;
+
+        combatController.CurrMoveInput = Vector2.zero; // Cancel out move input
     }
 
 
