@@ -107,9 +107,10 @@ public class PhysicsApplier : MonoBehaviour
 
             // Dampening for acceleration
             int cancelVelocity = 0;
-            if (InputBeingApplied == false) // Only apply if not input was made this frame
+            if (InputBeingApplied == false) // Only apply if not input was made this frame, and only on non max force overriding
             {
                 cancelVelocity = ApplyDampening(dt);
+
             }
             else
             {
@@ -130,6 +131,12 @@ public class PhysicsApplier : MonoBehaviour
             {
                 // Apply dampening to acceleration
                 mAcceleration = Add(mAcceleration, Scale(Scale(Subtract(default, mAcceleration), Stats.DampeningMultiplier), dt));
+
+                if (mActiveMaxForceUnlocks.Count <= 0) // Only apply velocity dampening once, on the non uncapped forces, since multiple physics groups with the same type can share the same velocity
+                {
+                    // Apply damping to velocity
+                    SetVelocity(Add(GetVelocity(), Scale(Scale(Subtract(default, GetVelocity()), Stats.DampeningMultiplier), dt)));
+                }
 
                 // Cut off acceleration at a predefined threshold
                 // Do this to prevent infinite drifting, and potential oscillations in the direction of acceleration, which drag can cause at small values
