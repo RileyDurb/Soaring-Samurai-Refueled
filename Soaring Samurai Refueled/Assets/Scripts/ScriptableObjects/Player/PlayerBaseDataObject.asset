@@ -15,48 +15,15 @@ MonoBehaviour:
   mMovementStats:
     MoveJerk: 400000
     DashingJerk: 400000
-    mUseMaxJerkCurve: 1
-    mInputValueToMaxJerkCurve:
+    UseMaxJerkCurve: 0
+    InputValueToMaxJerkCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.5
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.5007851
-        value: 0.5026636
-        inSlope: 0.01806504
-        outSlope: 0.01806504
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.5897827
-        value: 0.99292374
-        inSlope: 0.07522053
-        outSlope: 0.07522053
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.0024937
-        value: 1.0023584
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    PartialInputMovementStatsThreshold: 0
+    PartialInputMovementStats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
+    FullInputMovementStats: {fileID: 11400000, guid: 53b449dc2a012174ca0be156fd8da34b, type: 2}
     DashDuration: 0.3
     DashGasCost: 25

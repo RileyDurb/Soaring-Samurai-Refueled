@@ -41,6 +41,18 @@ public class State_Ready : StateManagerPlayer.State
 
         PlayerMovementStats currMovementStats = mCombatControllerRef.mPlayerBaseStats.mMovementStats;
 
+        // Set current max speed
+
+        PhysicsApplier physics = mCombatControllerRef.GetComponent<PhysicsApplier>();
+        if (mCombatControllerRef.CurrMoveInput.magnitude >= mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStatsThreshold) // If at the threshold for full movement input
+        {
+            physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.FullInputMovementStats; // Use full max speed
+        }
+        else
+        {
+            physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStats; // Use full max speed
+        }
+
         // Apply movement
 
         // Find current movement input, starting with base jert to apply
@@ -56,7 +68,8 @@ public class State_Ready : StateManagerPlayer.State
         Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
 
         mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
-
+        
+        
     }
 
     public override void OnExit()

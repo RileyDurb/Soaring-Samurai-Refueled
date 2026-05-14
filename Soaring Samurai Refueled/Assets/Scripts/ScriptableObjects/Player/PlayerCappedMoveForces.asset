@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd17cb25da9f7741a98f97544570f47, type: 3}
   m_Name: PlayerCappedMoveForces
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsApplier/PhysicsTuningStatSet
-  mMaxVelocity: 12
-  mMaxAcceleration: 80
+  mMaxVelocity: 11
+  mMaxAcceleration: 75
   mMaxJerk: 10000
   DampeningMultiplier: 3
-  DragCoeff: 3
+  DragCoeff: 1.2
   mDampeningZeroThreshold: 0.1
   mDampeningType: 0
   mMaxDampeningTime: 1
+  ApplyDragAsAcceleration: 0

@@ -43,7 +43,6 @@ public class PlayerCombatController : MonoBehaviour
     public PlayerStateAesthetics StateAesthetics;
 
 
-
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
     [SerializeField] GasMeterStats GasMeterData;

@@ -46,7 +46,7 @@ public class PhysicsApplier : MonoBehaviour
         }
 
 
-        [SerializeField] protected PhysicsTuningStatSet Stats;
+        public PhysicsTuningStatSet Stats;
 
         // Tracked variables
         public bool InputBeingApplied = true;

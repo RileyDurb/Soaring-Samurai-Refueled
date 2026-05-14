@@ -78,4 +78,4 @@ MonoBehaviour:
       m_RotationOrder: 4
   ChargeTime: 1
   RecoveryTime: 0.5
-  DashingJerk: 2000000
+  DashingJerk: 1800000

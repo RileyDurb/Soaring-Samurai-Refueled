@@ -10,6 +10,9 @@ public class PlayerMovementStats
     public float DashingJerk = 18000.0f;
     public bool UseMaxJerkCurve = false;
     public AnimationCurve InputValueToMaxJerkCurve;
+    public float PartialInputMovementStatsThreshold; // Percentage of max movement input value before full movement stats are applied
+    public PhysicsTuningStatSet PartialInputMovementStats;
+    public PhysicsTuningStatSet FullInputMovementStats;
     public float DashDuration = 0.3f;
     public float DashGasCost = 25.0f;
 }
