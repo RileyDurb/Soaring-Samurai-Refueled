@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -12,10 +13,13 @@ public class State_Ready : StateManagerPlayer.State
     ActionList mReadyActionList = new ActionList();
 
     PlayerCombatController mCombatControllerRef;
+    InputBuffer mInputBuffer;
     public override void OnEnter()
     {
 
         mCombatControllerRef = mParentObject.GetComponent<PlayerCombatController>();
+
+        mInputBuffer = mParentObject.GetComponent<InputBuffer>();
 
         mCombatControllerRef.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_Idle"); // Play idle animation
 
@@ -43,20 +47,33 @@ public class State_Ready : StateManagerPlayer.State
 
         // Set current max speed
 
+        // If all previous move inputs were closer together than a certain threshold, allow dashing
+        bool alwaysSprint = mInputBuffer.IsFlickingStick(InputBuffer.BufferTrackedInputs.Move, mCombatControllerRef.CurrMoveInput);
+
+        Debug.Log(mParentObject.name + "Is flicking? " + alwaysSprint.ToString());
         PhysicsApplier physics = mCombatControllerRef.GetComponent<PhysicsApplier>();
-        if (mCombatControllerRef.CurrMoveInput.magnitude >= mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStatsThreshold) // If at the threshold for full movement input
+
+        if (alwaysSprint)
         {
             physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.FullInputMovementStats; // Use full max speed
         }
-        else
+        else // Decide if we're sprinting or not
         {
-            physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStats; // Use full max speed
+            if (mCombatControllerRef.CurrMoveInput.magnitude >= mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStatsThreshold && mCombatControllerRef.IsSprintOn) // If at the threshold for full movement input
+            {
+                physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.FullInputMovementStats; // Use full max speed
+            }
+            else
+            {
+                physics.mDirectionalForces.Stats = mCombatControllerRef.mPlayerBaseStats.mMovementStats.PartialInputMovementStats; // Use full max speed
+            }
         }
 
-        // Apply movement
 
-        // Find current movement input, starting with base jert to apply
-        float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
+            // Apply movement
+
+            // Find current movement input, starting with base jert to apply
+            float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
         
         // If using a curve to apply different jerk at different amounts of the input diretion
         if (currMovementStats.UseMaxJerkCurve)

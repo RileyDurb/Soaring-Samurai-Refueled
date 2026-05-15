@@ -144,4 +144,13 @@ public class PlayerInputHandler : MonoBehaviour
         }
         playerController.OnPauseTriggered(context);
     }
+
+    public void Sprint(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.SprintInputGiven(context);
+    }
 }

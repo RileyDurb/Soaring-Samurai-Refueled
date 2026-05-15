@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -72,6 +73,10 @@ public class PlayerCombatController : MonoBehaviour
         get { return mOGScale; }
     }
 
+    public bool IsSprintOn
+    {
+        get { return mCurrSprintOn; }
+    }
     public void SetIsNonPlayerControlled()
     {
         mNonPlayerControlled = true;
@@ -97,6 +102,10 @@ public class PlayerCombatController : MonoBehaviour
     Vector2 mMoveInput;
     Vector2 mLastDirectionalMoveInput;
     Vector2 mOGScale; // Original scale, for using to base squash and stretch off of, so we don't loose it with overlapping actions and become bigger
+
+    bool mCurrSprintOn = false;
+    bool mSprintTurnsOnWithInput = false;
+    bool mSprintInToggleMode = true; // If toggle, each press & release only changes the state once, else the button press only changes sprint state until it's released
 
 
     [SerializeField]
@@ -196,6 +205,7 @@ public class PlayerCombatController : MonoBehaviour
                 }
         }
 
+        mCurrSprintOn = !mSprintTurnsOnWithInput;
     }
 
     // Update is called once per frame
@@ -538,6 +548,33 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
+    public void SprintInputGiven(InputAction.CallbackContext context)
+    {
+        SprintInputGiven(context.phase);
+    }
+
+    public void SprintInputGiven(InputActionPhase inputPhase)
+    {
+        if (mSprintInToggleMode)
+        {
+            if (inputPhase == InputActionPhase.Started)
+            {
+                mCurrSprintOn = !mCurrSprintOn; // Toggle sprint state
+            }
+        }
+        else // In hold mode
+        {
+            if (inputPhase == InputActionPhase.Started) // Change on input started
+            {
+                mCurrSprintOn = mSprintTurnsOnWithInput;
+            }
+            else if (inputPhase == InputActionPhase.Canceled) // Change back on input ended
+            {
+                mCurrSprintOn = !mSprintTurnsOnWithInput;
+            }
+        }
+
+    }
 
 
 
@@ -640,7 +677,10 @@ public class PlayerCombatController : MonoBehaviour
         newHitbox.transform.localPosition += new Vector3(offsetFromPlayer.x, offsetFromPlayer.y); // Adds the given offset
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo, PlayerIndex);
 
-        Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
+        if (SimManager.Instance.DebugModeOn)
+        {
+            Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
+        }
     }
 
     public void HitOpponentWithAttack(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)

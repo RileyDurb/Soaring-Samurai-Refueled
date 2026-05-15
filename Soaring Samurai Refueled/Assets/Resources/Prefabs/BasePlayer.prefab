@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -4621455244979845033}
   - component: {fileID: -1883828559541653457}
   - component: {fileID: 3464813975692426095}
+  - component: {fileID: 5742729484602185888}
   m_Layer: 7
   m_Name: BasePlayer
   m_TagString: Player
@@ -147,8 +148,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.61, y: 1.1}
+  m_Offset: {x: 0, y: -0.05}
+  m_Size: {x: 0.57, y: 1}
   m_Direction: 0
 --- !u!114 &-4621455244979845033
 MonoBehaviour:
@@ -188,6 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mCurrAIMode: 0
+  mNextAIMode: 0
   mAttackOnTimerInterval: 5
   mAttackOnTimerAttackDirection: 1
   BehaviourTreePrefab: {fileID: 3723271666710103351, guid: fb0736ffab6d69d4783b1f96674b3af3, type: 3}
@@ -217,6 +219,19 @@ MonoBehaviour:
   - mName: 5
     mStatesCancellableInto: 0000000005000000
   mStartingState: 0
+--- !u!114 &5742729484602185888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652935351384745842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3d8d3101ab40044809f40d3f95f05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mStats: {fileID: 11400000, guid: f9b4dd42e933d6248bfa0134654e7643, type: 2}
 --- !u!1 &3998123260480139891
 GameObject:
   m_ObjectHideFlags: 0

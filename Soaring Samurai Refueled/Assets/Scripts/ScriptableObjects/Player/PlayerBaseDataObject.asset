@@ -22,8 +22,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    PartialInputMovementStatsThreshold: 0
-    PartialInputMovementStats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
-    FullInputMovementStats: {fileID: 11400000, guid: 53b449dc2a012174ca0be156fd8da34b, type: 2}
+    PartialInputMovementStatsThreshold: 0.7
+    PartialInputMovementStats: {fileID: 11400000, guid: 53b449dc2a012174ca0be156fd8da34b, type: 2}
+    FullInputMovementStats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
     DashDuration: 0.3
     DashGasCost: 25
