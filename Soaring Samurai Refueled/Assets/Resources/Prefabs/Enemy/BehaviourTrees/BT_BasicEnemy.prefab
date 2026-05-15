@@ -1213,7 +1213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1361235298070627379, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: TargetClosnessThreshold
-      value: 1.2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1361235298070627379, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: TargetObjectKeyRef.blackboard
@@ -1274,7 +1274,7 @@ PrefabInstance:
     - target: {fileID: 5466766633071047034, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: selectedEditorNode
       value: 
-      objectReference: {fileID: 4721752533650390794}
+      objectReference: {fileID: 0}
     - target: {fileID: 6351699296125741047, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: rect.x
       value: 60
