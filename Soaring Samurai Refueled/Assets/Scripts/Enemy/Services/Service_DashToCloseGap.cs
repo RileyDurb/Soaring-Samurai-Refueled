@@ -70,7 +70,6 @@ public class Service_DashToCloseGap : Service
                 if (shouldDash)
                 {
                     mCombatController.DashInput(UnityEngine.InputSystem.InputActionPhase.Canceled); // Trigger dash
-                    print(name + "Dashed");
                 }
 
                 // Add time to check for dashing again, this time with optionally different values for how long we wait
