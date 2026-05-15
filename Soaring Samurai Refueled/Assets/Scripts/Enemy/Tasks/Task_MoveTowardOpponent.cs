@@ -28,6 +28,8 @@ public class Task_MoveTowardOpponent : Leaf
 
             // Move toward opponent
             Vector2 vecToOpponent = mCombatController.OpponentRef.transform.position - mCombatController.transform.position;
+            vecToOpponent = Vector2.ClampMagnitude(vecToOpponent, 1.0f); // Allow less then full input, but not more than 1, as that's the max movement value of input
+
             mCombatController.OnMove(UnityEngine.InputSystem.InputActionPhase.Performed, vecToOpponent);
 
             return NodeResult.running;

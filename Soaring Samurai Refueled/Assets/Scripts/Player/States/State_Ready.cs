@@ -50,7 +50,6 @@ public class State_Ready : StateManagerPlayer.State
         // If all previous move inputs were closer together than a certain threshold, allow dashing
         bool alwaysSprint = mInputBuffer.IsFlickingStick(InputBuffer.BufferTrackedInputs.Move, mCombatControllerRef.CurrMoveInput);
 
-        Debug.Log(mParentObject.name + "Is flicking? " + alwaysSprint.ToString());
         PhysicsApplier physics = mCombatControllerRef.GetComponent<PhysicsApplier>();
 
         if (alwaysSprint)

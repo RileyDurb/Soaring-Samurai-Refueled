@@ -472,6 +472,11 @@ public class PlayerCombatController : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        DashInput(context.phase);
+    }
+
+    public void DashInput(InputActionPhase inputPhase)
+    {
         if (mStateManager.CanEnterState(PlayerStates.Dash) == false)
         {
             return;
@@ -483,7 +488,7 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
-        if (context.phase == InputActionPhase.Canceled)
+        if (inputPhase == InputActionPhase.Canceled)
         {
             // Check gas cost
             PoolContainer.Pool gasPool = GetComponent<PoolContainer>().GetPool("Gas");
@@ -500,8 +505,12 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
-
     public void OnDashAttack(InputAction.CallbackContext context)
+    {
+        DashAttackInput(context.phase);
+    }
+
+    public void DashAttackInput(InputActionPhase inputPhase)
     {
         // If combat actions are blocked, don't attack
         if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.CombatAction))
@@ -509,7 +518,7 @@ public class PlayerCombatController : MonoBehaviour
             return;
         }
 
-        if (context.phase == InputActionPhase.Performed)
+        if (inputPhase == InputActionPhase.Performed)
         {
             if (mStateManager.CanEnterState(PlayerStates.DashAttack) == false || mStateManager.CurrStateName == PlayerStates.DashAttack)
             {
@@ -530,7 +539,7 @@ public class PlayerCombatController : MonoBehaviour
             // Start the move
             mStateManager.EnterState(PlayerStates.DashAttack);
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (inputPhase == InputActionPhase.Canceled)
         {
             if (mStateManager.CurrStateName == PlayerStates.DashAttack)
             {
@@ -539,6 +548,7 @@ public class PlayerCombatController : MonoBehaviour
             }
         }
     }
+
 
     public void OnPauseTriggered(InputAction.CallbackContext context)
     {

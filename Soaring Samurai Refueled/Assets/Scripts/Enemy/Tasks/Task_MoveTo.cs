@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MBT;
+using Unity.VisualScripting;
 
 // Empty Menu attribute prevents Node to show up in "Add Component" menu.
 [AddComponentMenu("")]
@@ -51,6 +52,8 @@ public class Task_MoveTo : Leaf
             {
                 return NodeResult.success;
             }
+
+            vecToTarget = Vector2.ClampMagnitude(vecToTarget, 1.0f); // Allow less then full input, but not more than 1, as that's the max movement value of input
 
             // Not there yet, apply mvement toward target
             mCombatController.OnMove(UnityEngine.InputSystem.InputActionPhase.Performed, vecToTarget);

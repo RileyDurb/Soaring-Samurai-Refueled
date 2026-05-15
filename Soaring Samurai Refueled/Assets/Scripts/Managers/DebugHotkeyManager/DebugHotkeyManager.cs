@@ -38,6 +38,47 @@ public class DebugHotkeyManager : MonoBehaviour
             {
                 SetTimerPaued(!LevelScopeManagers.Instance.GetComponent<MatchStateManager>().TimerPaused);
             }
+
+            if (Input.GetKey(KeyCode.O))
+            {
+                List<int> playersToCPUToggle = new List<int>();
+                if (Input.GetKeyUp(KeyCode.Alpha1))
+                {
+                    playersToCPUToggle.Add(0);
+                }
+                else if (Input.GetKeyUp(KeyCode.Alpha2))
+                {
+                    playersToCPUToggle.Add(1);
+                }
+
+                // Toggle AI modes between player Input and CPU controller if they are in either mode currently
+                foreach (int playerIndex in playersToCPUToggle)
+                {
+                    List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
+                    PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == playerIndex; });
+                    if (targetPlayer == null)
+                    {
+                        print("DebugHotkeyManager:Update(ToggleCPUHotkey): no player of index " + playerIndex.ToString() + " could be found.");
+                        continue;
+                    }
+
+                    // Based on current mode, may toggle to another mode, and prints if it does
+                    AIBehaviour aiComp = targetPlayer.GetComponent<AIBehaviour>();
+                    AIBehaviour.AIMode newAIMode = aiComp.CurrAIMode;
+                    if (aiComp.CurrAIMode == AIBehaviour.AIMode.PlayerInput)
+                    {
+                        newAIMode = AIBehaviour.AIMode.BehaviourTree;
+                        aiComp.SetAIMode(newAIMode);
+                        print(targetPlayer.name + " was changed to AI Mode: " + newAIMode.ToString());
+                    }
+                    else if (aiComp.CurrAIMode == AIBehaviour.AIMode.BehaviourTree)
+                    {
+                        newAIMode = AIBehaviour.AIMode.PlayerInput;
+                        aiComp.SetAIMode(newAIMode);
+                        print(targetPlayer.name + " was changed to AI Mode: " + newAIMode.ToString());
+                    }
+                }
+            }
         }
 
     }
