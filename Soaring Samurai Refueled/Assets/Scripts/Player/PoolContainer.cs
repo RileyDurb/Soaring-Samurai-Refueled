@@ -113,10 +113,10 @@ public class PoolContainer : MonoBehaviour
         // Decreases pool by given amount, and returns whether the pool became empty by that decrease
         public virtual bool DecreasePool(float amount)
         {
-            if (PoolCurr <= 0)
-            {
-                return false;
-            }
+            //if (PoolCurr <= 0)
+            //{
+            //    return false;
+            //}
 
             bool justEmptied = false;
             float valueBeforeModify = PoolCurr;
@@ -133,7 +133,7 @@ public class PoolContainer : MonoBehaviour
             }
 
             
-            if (PoolCurr <= 0.0f)
+            if (PoolCurr <= 0.0f && valueBeforeModify > 0.0f)
             {
                 justEmptied = true;
             }
