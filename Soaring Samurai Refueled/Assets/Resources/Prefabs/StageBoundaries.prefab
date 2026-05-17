@@ -140,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6487043653448507333}
   - component: {fileID: 5303685344161159027}
+  - component: {fileID: 5632946412675819688}
   m_Layer: 8
   m_Name: StageBoundaries
   m_TagString: Untagged
@@ -179,6 +180,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowInGame: 0
+--- !u!114 &5632946412675819688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3774508109739440221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b69071fb474a8de44afcaa8344b5033e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mBoundsSides:
+  - {fileID: 3477910381930395618}
+  - {fileID: 6679042769991765994}
+  - {fileID: 6737080161039650884}
+  - {fileID: 7708970111450686446}
 --- !u!1 &6679042769991765994
 GameObject:
   m_ObjectHideFlags: 0

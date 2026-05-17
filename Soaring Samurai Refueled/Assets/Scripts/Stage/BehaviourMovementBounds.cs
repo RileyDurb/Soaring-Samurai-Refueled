@@ -66,12 +66,17 @@ public class BehaviourMovementBounds : MonoBehaviour
 
         currBoundsHalfLength += new Vector2(mNonMaxDistanceBoundsMargin, mNonMaxDistanceBoundsMargin) / 2.0f;
 
+        // Find desired width of the boundaries, which is just outside the current camera
+        float cameraOrthoSize = Camera.main.orthographicSize;
+        Vector2 targetDimensions = new Vector2(cameraOrthoSize / 2 * Screen.width / Screen.height, cameraOrthoSize / 2);
+        //Vector2 boundsSideWidth = mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundsWidth();
+        //targetDimensions.Set(targetDimensions.x + boundsSideWidth.x / 2, targetDimensions.y + boundsSideWidth.y / 2);
+
         // Clamp to max bounds
-        currBoundsHalfLength.Set(Mathf.Clamp(currBoundsHalfLength.x, 0.0f, mMaxMoveBounds.x), Mathf.Clamp(currBoundsHalfLength.y, 0.0f, mMaxMoveBounds.y));
+        currBoundsHalfLength.Set(Mathf.Clamp(currBoundsHalfLength.x, targetDimensions.x, mMaxMoveBounds.x), Mathf.Clamp(currBoundsHalfLength.y, targetDimensions.y, mMaxMoveBounds.y));
 
         // Set the scale
-        //mMovementBoundsObject.transform.lossyScale.Set(currBoundsHalfLength.x, currBoundsHalfLength.y, mMovementBoundsObject.transform.lossyScale.z);
-        mMovementBoundsObject.transform.localScale.Set(1, 1, mMovementBoundsObject.transform.lossyScale.z);
+        mMovementBoundsObject.transform.localScale = new Vector3(currBoundsHalfLength.x, mMovementBoundsObject.transform.lossyScale.z, currBoundsHalfLength.y);
 
         // Update Position
         UpdateMaxCenterDistance();
@@ -80,13 +85,6 @@ public class BehaviourMovementBounds : MonoBehaviour
                               , Mathf.Clamp(mCurrPlayersCenter.y, -Mathf.Abs(mMaxDistFromCenter.y), Mathf.Abs(mMaxDistFromCenter.y))
                               , mCurrPlayersCenter.z);
         mMovementBoundsObject.transform.position = mCurrPos;
-
-        //Transform[] childTransforms = mMovementBoundsObject.transform.GetComponentsInChildren<Transform>();
-
-        //foreach (Transform childTransform in childTransforms)
-        //{
-        //    childTransform.lossyScale.Set(currBoundsHalfLength.x, currBoundsHalfLength.y, childTransform.transform.lossyScale.z);
-        //}
 
     }
     

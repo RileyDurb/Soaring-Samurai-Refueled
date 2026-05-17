@@ -726,7 +726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5303685344161159027, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: ShowInGame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_LocalScale.x
@@ -783,6 +783,10 @@ PrefabInstance:
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6503067614806947238, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1549,11 +1553,11 @@ PrefabInstance:
       objectReference: {fileID: 958854998}
     - target: {fileID: 1922338874349361592, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
       propertyPath: mMaxMoveBounds.x
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1922338874349361592, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
       propertyPath: mMaxMoveBounds.y
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1922338874349361592, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
       propertyPath: mMovementBoundsObject

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -38,6 +39,10 @@ public class CameraFollow : MonoBehaviour
     float mBaseOrthographicSize = 0.0f;
     float mMinOrthographicSize = 0.0f; // Calculated min camera zoom based on distance between players
     float mMaxOrthographicSize = float.MaxValue; // Calculated max camera zoom based on distance between players
+
+    bool mUseMarginTrimmingAtMaxDistance = false;
+    float mMarginTrimmingStartDistance = 3.0f;
+    float mMarginTrimmingEndDistance = 5.0f;
 
     // Getters and setters
 
@@ -144,6 +149,11 @@ public class CameraFollow : MonoBehaviour
                     float cameraZoomToFitPlayersX2 = Mathf.Lerp(horizontalFittingZoom, verticalFittingZoom, closenessToBeingVertical);
 
                     // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
+                    //float currMinMargin = MinZoomMarginSpace;
+                    //if (mUseMarginTrimmingAtMaxDistance && cameraZoomToFitPlayersX2 > )
+                    //{
+                    //    currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, )
+                    //}
                     mMinOrthographicSize = (cameraZoomToFitPlayersX2 + MinZoomMarginSpace) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
                     mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin
                     break;
