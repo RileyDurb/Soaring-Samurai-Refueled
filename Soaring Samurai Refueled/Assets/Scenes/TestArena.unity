@@ -730,15 +730,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_LocalScale.x
-      value: 49.1
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_LocalScale.y
-      value: 45.97703
+      value: 18.727917
       objectReference: {fileID: 0}
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_LocalScale.z
-      value: 23.812887
+      value: 9.699751
       objectReference: {fileID: 0}
     - target: {fileID: 6487043653448507333, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1211,6 +1211,8 @@ MonoBehaviour:
   mCurrFollowMode: 0
   CurrFollowTarget: {x: 0, y: 0, z: 0}
   CurrTargetVelocityMag: 0
+  mUseMarginTrimmingAtMaxDistance: 0
+  mMarginTrimmingWindowBeforeMaxDistance: 0.2
 --- !u!1001 &2105967121
 PrefabInstance:
   m_ObjectHideFlags: 0

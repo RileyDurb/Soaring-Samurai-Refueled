@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -40,9 +41,9 @@ public class CameraFollow : MonoBehaviour
     float mMinOrthographicSize = 0.0f; // Calculated min camera zoom based on distance between players
     float mMaxOrthographicSize = float.MaxValue; // Calculated max camera zoom based on distance between players
 
-    bool mUseMarginTrimmingAtMaxDistance = false;
-    float mMarginTrimmingStartDistance = 3.0f;
-    float mMarginTrimmingEndDistance = 5.0f;
+    [SerializeField] bool mUseMarginTrimmingAtMaxDistance = false;
+    [SerializeField] float mMarginTrimmingWindowBeforeMaxDistance = 3.0f;
+    BehaviourMovementBounds mBoundsManager = null;
 
     // Getters and setters
 
@@ -51,6 +52,9 @@ public class CameraFollow : MonoBehaviour
     {
         mDebugFirstPlayer = GameObject.Find("Player1");
         mBaseOrthographicSize = GetComponent<Camera>().orthographicSize;
+
+        // Save stage manager
+        mBoundsManager = GameObject.Find("StageManager").GetComponent<BehaviourMovementBounds>();
 
         // Add each player as a follow object
         List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
@@ -149,12 +153,18 @@ public class CameraFollow : MonoBehaviour
                     float cameraZoomToFitPlayersX2 = Mathf.Lerp(horizontalFittingZoom, verticalFittingZoom, closenessToBeingVertical);
 
                     // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
-                    //float currMinMargin = MinZoomMarginSpace;
-                    //if (mUseMarginTrimmingAtMaxDistance && cameraZoomToFitPlayersX2 > )
-                    //{
-                    //    currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, )
-                    //}
-                    mMinOrthographicSize = (cameraZoomToFitPlayersX2 + MinZoomMarginSpace) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
+                    float currMinMargin = MinZoomMarginSpace;
+                    float maxXDistance = mBoundsManager.MaxMoveBounds.x * 2;
+
+                    float totalMarginTrimZoneSize = maxXDistance - mMarginTrimmingWindowBeforeMaxDistance;
+
+                    if (mUseMarginTrimmingAtMaxDistance && cameraZoomToFitPlayersX2 > totalMarginTrimZoneSize)
+                    {
+                        float currAmountOfMarginTrimZone = maxXDistance - cameraZoomToFitPlayersX2;
+
+                        currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, currAmountOfMarginTrimZone / totalMarginTrimZoneSize);
+                    }
+                    mMinOrthographicSize = (cameraZoomToFitPlayersX2 + currMinMargin) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
                     mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin
                     break;
                 }

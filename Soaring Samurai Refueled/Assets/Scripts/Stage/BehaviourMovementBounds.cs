@@ -14,7 +14,8 @@ public class BehaviourMovementBounds : MonoBehaviour
     [SerializeField] private GameObject mBackgroundImage = null; // Either remove this ref, or change to background container class ref when that system is created. For now it's just an image
     private GameObject mCamRef = null; // Camera to use for positiining
     [SerializeField] float mNonMaxDistanceBoundsMargin = 0.0f; // When bounds are not at max, the margin it gives on each side
-   [SerializeField] Vector2 mMaxMoveBounds = new Vector2(50, 50); // Max xy bounds the move bounds will stretch to
+    [SerializeField] Vector2 mMaxMoveBounds = new Vector2(50, 50); // Max xy bounds the move bounds will stretch to
+
 
 
     // Tracked target values
@@ -22,6 +23,8 @@ public class BehaviourMovementBounds : MonoBehaviour
     Vector2 mMaxDistFromCenter = new Vector2();
     Vector3 mCurrPos = new Vector3();
 
+    // Getters and setters
+    public Vector2 MaxMoveBounds {  get { return mMaxMoveBounds; } }
 
     // Start is called before the first frame update
     void Start()
@@ -62,21 +65,22 @@ public class BehaviourMovementBounds : MonoBehaviour
         }
 
         // Add margins
-        Vector2 currBoundsHalfLength = maxPlayerCenterDistances;
+        //Vector2 currBoundsHalfLength = maxPlayerCenterDistances;
 
-        currBoundsHalfLength += new Vector2(mNonMaxDistanceBoundsMargin, mNonMaxDistanceBoundsMargin) / 2.0f;
+        //currBoundsHalfLength += new Vector2(mNonMaxDistanceBoundsMargin, mNonMaxDistanceBoundsMargin) / 2.0f;
 
-        // Find desired width of the boundaries, which is just outside the current camera
-        float cameraOrthoSize = Camera.main.orthographicSize;
-        Vector2 targetDimensions = new Vector2(cameraOrthoSize / 2 * Screen.width / Screen.height, cameraOrthoSize / 2);
-        //Vector2 boundsSideWidth = mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundsWidth();
-        //targetDimensions.Set(targetDimensions.x + boundsSideWidth.x / 2, targetDimensions.y + boundsSideWidth.y / 2);
+        //// Find desired width of the boundaries, which is just outside the current camera
+        //float cameraOrthoSize = Camera.main.orthographicSize;
+        //float minMarginSpace = Camera.main.GetComponent<CameraFollow>().MinZoomMarginSpace;
+        //Vector2 targetDimensions = new Vector2((cameraOrthoSize / 2 * Screen.width / Screen.height) + (minMarginSpace / 2), cameraOrthoSize / 2 + (minMarginSpace / 2));
+        ////Vector2 boundsSideWidth = mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundsWidth();
+        ////targetDimensions.Set(targetDimensions.x + boundsSideWidth.x / 2, targetDimensions.y + boundsSideWidth.y / 2);
 
-        // Clamp to max bounds
-        currBoundsHalfLength.Set(Mathf.Clamp(currBoundsHalfLength.x, targetDimensions.x, mMaxMoveBounds.x), Mathf.Clamp(currBoundsHalfLength.y, targetDimensions.y, mMaxMoveBounds.y));
+        //// Clamp to max bounds
+        //currBoundsHalfLength.Set(Mathf.Clamp(currBoundsHalfLength.x, targetDimensions.x, mMaxMoveBounds.x), Mathf.Clamp(currBoundsHalfLength.y, targetDimensions.y, mMaxMoveBounds.y));
 
-        // Set the scale
-        mMovementBoundsObject.transform.localScale = new Vector3(currBoundsHalfLength.x, mMovementBoundsObject.transform.lossyScale.z, currBoundsHalfLength.y);
+        //// Set the scale
+        //mMovementBoundsObject.transform.localScale = new Vector3(currBoundsHalfLength.x, mMovementBoundsObject.transform.lossyScale.z, currBoundsHalfLength.y);
 
         // Update Position
         UpdateMaxCenterDistance();
