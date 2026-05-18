@@ -154,15 +154,15 @@ public class CameraFollow : MonoBehaviour
 
                     // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
                     float currMinMargin = MinZoomMarginSpace;
-                    float maxXDistance = mBoundsManager.MaxMoveBounds.x * 2;
+                    float maxDistance = Mathf.Lerp(mBoundsManager.MovementBoundsObjectScale.x, mBoundsManager.MovementBoundsObjectScale.y, closenessToBeingVertical);
 
-                    float totalMarginTrimZoneSize = maxXDistance - mMarginTrimmingWindowBeforeMaxDistance;
+                    float marginTrimZoneStart = (maxDistance - mMarginTrimmingWindowBeforeMaxDistance);
 
-                    if (mUseMarginTrimmingAtMaxDistance && cameraZoomToFitPlayersX2 > totalMarginTrimZoneSize)
+                    if (mUseMarginTrimmingAtMaxDistance && maxDistanceVec.magnitude > marginTrimZoneStart)
                     {
-                        float currAmountOfMarginTrimZone = maxXDistance - cameraZoomToFitPlayersX2;
+                        float currAmountOfMarginTrimZone = maxDistance - maxDistanceVec.magnitude;
 
-                        currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, currAmountOfMarginTrimZone / totalMarginTrimZoneSize);
+                        currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, (mMarginTrimmingWindowBeforeMaxDistance - currAmountOfMarginTrimZone) / mMarginTrimmingWindowBeforeMaxDistance);
                     }
                     mMinOrthographicSize = (cameraZoomToFitPlayersX2 + currMinMargin) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
                     mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin

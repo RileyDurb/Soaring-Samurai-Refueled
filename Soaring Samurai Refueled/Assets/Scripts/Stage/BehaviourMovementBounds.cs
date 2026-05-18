@@ -25,6 +25,7 @@ public class BehaviourMovementBounds : MonoBehaviour
 
     // Getters and setters
     public Vector2 MaxMoveBounds {  get { return mMaxMoveBounds; } }
+    public Vector2 MovementBoundsObjectScale { get { return mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundDimensions(); } }
 
     // Start is called before the first frame update
     void Start()

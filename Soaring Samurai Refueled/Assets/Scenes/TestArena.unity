@@ -1211,8 +1211,8 @@ MonoBehaviour:
   mCurrFollowMode: 0
   CurrFollowTarget: {x: 0, y: 0, z: 0}
   CurrTargetVelocityMag: 0
-  mUseMarginTrimmingAtMaxDistance: 0
-  mMarginTrimmingWindowBeforeMaxDistance: 0.2
+  mUseMarginTrimmingAtMaxDistance: 1
+  mMarginTrimmingWindowBeforeMaxDistance: 10
 --- !u!1001 &2105967121
 PrefabInstance:
   m_ObjectHideFlags: 0

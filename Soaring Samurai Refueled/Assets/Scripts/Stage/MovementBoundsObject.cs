@@ -49,7 +49,13 @@ public class MovementBoundsObject : MonoBehaviour
 
     public Vector2 GetBoundsWidth()
     {
-        return new Vector2(mBoundsSides[(int)BoundDirections.Left].GetComponent<SpriteRenderer>().bounds.size.x / 2, mBoundsSides[(int)BoundDirections.Right].GetComponent<SpriteRenderer>().bounds.size.y / 2);
+        return new Vector2(mBoundsSides[(int)BoundDirections.Left].GetComponent<SpriteRenderer>().bounds.size.x, mBoundsSides[(int)BoundDirections.Up].GetComponent<SpriteRenderer>().bounds.size.y);
     }
 
+    public Vector2 GetBoundDimensions()
+    {
+        Vector2 boundsWidth = GetBoundsWidth();
+        return new Vector2((mBoundsSides[(int)BoundDirections.Right].transform.position - mBoundsSides[(int)BoundDirections.Left].transform.position).magnitude - boundsWidth.x
+            , (mBoundsSides[(int)BoundDirections.Up].transform.position - mBoundsSides[(int)BoundDirections.Down].transform.position).magnitude);
+    }
 }
