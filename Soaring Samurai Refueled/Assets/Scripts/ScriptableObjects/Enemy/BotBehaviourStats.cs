@@ -1,3 +1,4 @@
+using MBT;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,16 @@ public class BotBehaviourStats : ScriptableObject
         public float OffsetDistance = 5.0f;
         public float AngleOfOptions = 90.0f;
     }
-
+    
 
     public StrafeBehaviourStats mStrafeStats = new StrafeBehaviourStats();
+
+    [Header("Attack Stats")]
+    public RandomBin AttackOptionsRandomBin = new RandomBin();
+
+
+    public void InitializeVariablesOntoBehaviourTree(MonoBehaviourTree playerBotTree, Blackboard blackboard)
+    {
+        blackboard.GetVariable<RandomBinVariable>("AttackOptionsRandomBin").Value = AttackOptionsRandomBin;
+    }
 }

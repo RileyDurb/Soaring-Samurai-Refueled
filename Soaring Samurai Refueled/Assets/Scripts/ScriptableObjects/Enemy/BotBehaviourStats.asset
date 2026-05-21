@@ -18,3 +18,13 @@ MonoBehaviour:
     - {x: 1, y: 0}
     - {x: 0, y: -1}
     - {x: -1, y: 0}
+    OffsetDistance: 5
+    AngleOfOptions: 90
+  AttackOptionsRandomBin:
+    mItems:
+    - Name: Dash Attack
+      Weight: 20
+    - Name: Slow Pursuit Attack
+      Weight: 50
+    - Name: Combo Attack
+      Weight: 10

@@ -9,24 +9,28 @@ using UnityEngine;
 [MBTNode(name = "RandomBinSelector", order = 100)]
 public class RandomBinSelector : Composite
 {
-    [SerializeField] RandomBin RandomBinOfOptions;
+    [SerializeField] RandomBinVariableReference RandomBinKeyRef;
 
     int mCurrPathIndex = 0;
 
     Dictionary<int, Node> mOriginalPositions = new Dictionary<int, Node>();
 
+    bool mDefaultsInitialized = false;
+
     public override void OnAllowInterrupt()
     {
         // Saves what posiion each child was originally at, so we can keep selecting new orders (which requires changing the actual child array) while not loosing which child is at which index)
-        if (mOriginalPositions.Count <= 0)
+        if (mDefaultsInitialized == false)
         {
             for (int i = 0; i < children.Count; i++)
             {
                 mOriginalPositions.Add(i, children[i]);
             }
+
+            mDefaultsInitialized = true;
         }
 
-        mCurrPathIndex = RandomBinOfOptions.PullItemIndex(); // Pulls which branch to update from the random bin
+        mCurrPathIndex = RandomBinKeyRef.Value.PullItemIndex(); // Pulls which branch to update from the random bin
 
         print("RandomBinSelector:OnEnter: Selected branch " + mCurrPathIndex.ToString());
 

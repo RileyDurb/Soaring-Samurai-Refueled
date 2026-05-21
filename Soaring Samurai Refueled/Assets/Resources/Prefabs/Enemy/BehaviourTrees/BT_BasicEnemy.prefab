@@ -51,6 +51,14 @@ GameObject:
   - component: {fileID: 3079625259333770904}
   - component: {fileID: 6675727396816860547}
   - component: {fileID: 3247519503796901226}
+  - component: {fileID: 2176543843186576728}
+  - component: {fileID: 2780522658280085655}
+  - component: {fileID: 8818792797803259887}
+  - component: {fileID: 1983559125739861588}
+  - component: {fileID: 489700997697552181}
+  - component: {fileID: 518112194628645778}
+  - component: {fileID: 4663432757455894551}
+  - component: {fileID: 6521585250675054645}
   m_Layer: 0
   m_Name: BT_BasicEnemy
   m_TagString: Untagged
@@ -87,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 3247519503796901226}
+  selectedEditorNode: {fileID: 1983559125739861588}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -107,12 +115,12 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 220
-    y: 200
+    y: 100
     width: 160
     height: 45
   parent: {fileID: 0}
   children:
-  - {fileID: 2551272652439459061}
+  - {fileID: 518112194628645778}
   behaviourTree: {fileID: 0}
   runtimePriority: 0
   breakpoint: 0
@@ -140,6 +148,7 @@ MonoBehaviour:
   - {fileID: 1381884081140895769}
   - {fileID: 2392753584855636452}
   - {fileID: 4896966750343028585}
+  - {fileID: 489700997697552181}
   masterBlackboard: {fileID: 0}
 --- !u!114 &3503688239673523745
 MonoBehaviour:
@@ -156,8 +165,8 @@ MonoBehaviour:
   title: Wait
   rect:
     serializedVersion: 2
-    x: 37
-    y: 726
+    x: 40
+    y: 760
     width: 160
     height: 45
   parent: {fileID: -4917903527875671316}
@@ -188,11 +197,11 @@ MonoBehaviour:
   title: Sequence
   rect:
     serializedVersion: 2
-    x: 240
-    y: 380
+    x: 220
+    y: 400
     width: 160
     height: 45
-  parent: {fileID: 5161406469011026009}
+  parent: {fileID: 1983559125739861588}
   children:
   - {fileID: 3247519503796901226}
   - {fileID: -8650863565938330097}
@@ -217,7 +226,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 1020
+    y: 1060
     width: 160
     height: 45
   parent: {fileID: 2626795167488137538}
@@ -257,7 +266,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 740
+    y: 780
     width: 160
     height: 45
   parent: {fileID: -2519617241621421113}
@@ -284,8 +293,8 @@ MonoBehaviour:
   title: Wait
   rect:
     serializedVersion: 2
-    x: 1049
-    y: 903
+    x: 1040
+    y: 940
     width: 160
     height: 45
   parent: {fileID: 3437770279166195343}
@@ -359,7 +368,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 540
+    y: 580
     width: 160
     height: 45
   parent: {fileID: 2551272652439459061}
@@ -388,7 +397,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 340
-    y: 640
+    y: 680
     width: 160
     height: 45
   parent: {fileID: -8650863565938330097}
@@ -424,7 +433,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 640
+    y: 680
     width: 160
     height: 45
   parent: {fileID: -8650863565938330097}
@@ -477,8 +486,8 @@ MonoBehaviour:
   title: Randomize Number of Strafes
   rect:
     serializedVersion: 2
-    x: 704
-    y: 643
+    x: 700
+    y: 680
     width: 160
     height: 59
   parent: {fileID: -8650863565938330097}
@@ -547,8 +556,8 @@ MonoBehaviour:
   title: Attack Sequence
   rect:
     serializedVersion: 2
-    x: 1500
-    y: 980
+    x: 1820
+    y: 880
     width: 160
     height: 45
   parent: {fileID: 6745280054288282283}
@@ -572,11 +581,11 @@ MonoBehaviour:
   title: Loop
   rect:
     serializedVersion: 2
-    x: 1600
-    y: 780
+    x: 1920
+    y: 680
     width: 160
     height: 45
-  parent: {fileID: 0}
+  parent: {fileID: 3904444274939619010}
   children:
   - {fileID: 6745280054288282283}
   behaviourTree: {fileID: 0}
@@ -627,7 +636,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 1420
-    y: 420
+    y: 460
     width: 160
     height: 45
   parent: {fileID: 2551272652439459061}
@@ -654,7 +663,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 1420
-    y: 540
+    y: 580
     width: 160
     height: 45
   parent: {fileID: 1183958386016253489}
@@ -695,8 +704,8 @@ MonoBehaviour:
   title: Random Chance To Wait
   rect:
     serializedVersion: 2
-    x: -63
-    y: 566
+    x: -60
+    y: 600
     width: 160
     height: 45
   parent: {fileID: 3247519503796901226}
@@ -740,8 +749,8 @@ MonoBehaviour:
   title: Randomize Wait Time
   rect:
     serializedVersion: 2
-    x: -183
-    y: 726
+    x: -180
+    y: 760
     width: 160
     height: 45
   parent: {fileID: -4917903527875671316}
@@ -782,8 +791,8 @@ MonoBehaviour:
   title: Random Wait Length Sequence
   rect:
     serializedVersion: 2
-    x: -63
-    y: 626
+    x: -60
+    y: 660
     width: 160
     height: 59
   parent: {fileID: 9105174727044084480}
@@ -809,8 +818,8 @@ MonoBehaviour:
   title: Wait For Attack Cooldown If Doing Multiple Attacks
   rect:
     serializedVersion: 2
-    x: 1700
-    y: 980
+    x: 2020
+    y: 880
     width: 160
     height: 59
   parent: {fileID: 6745280054288282283}
@@ -861,8 +870,8 @@ MonoBehaviour:
   title: Sequence
   rect:
     serializedVersion: 2
-    x: 1600
-    y: 900
+    x: 1920
+    y: 800
     width: 160
     height: 45
   parent: {fileID: 7457807998418779025}
@@ -888,8 +897,8 @@ MonoBehaviour:
   title: Wait
   rect:
     serializedVersion: 2
-    x: 1700
-    y: 1100
+    x: 2020
+    y: 1000
     width: 160
     height: 45
   parent: {fileID: -5354827662432201384}
@@ -921,7 +930,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 660
-    y: 920
+    y: 960
     width: 160
     height: 45
   parent: {fileID: 3437770279166195343}
@@ -975,7 +984,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 840
+    y: 880
     width: 160
     height: 45
   parent: {fileID: 3437770279166195343}
@@ -1041,7 +1050,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 520
-    y: 640
+    y: 680
     width: 160
     height: 45
   parent: {fileID: -8650863565938330097}
@@ -1085,7 +1094,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 880
-    y: 940
+    y: 980
     width: 160
     height: 45
   parent: {fileID: 8002417812860321925}
@@ -1119,8 +1128,8 @@ MonoBehaviour:
   title: Combo Attack
   rect:
     serializedVersion: 2
-    x: 1960
-    y: 620
+    x: 2120
+    y: 680
     width: 160
     height: 45
   parent: {fileID: 3904444274939619010}
@@ -1145,23 +1154,25 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 1760
-    y: 500
+    y: 540
     width: 160
     height: 45
   parent: {fileID: 1183958386016253489}
   children:
-  - {fileID: 3079625259333770904}
+  - {fileID: 2780522658280085655}
+  - {fileID: 7457807998418779025}
   - {fileID: 3369414187433325143}
   behaviourTree: {fileID: 0}
   runtimePriority: 0
   breakpoint: 0
   random: 0
-  RandomBinOfOptions:
-    mItems:
-    - Name: AttackSlower
-      Weight: 20
-    - Name: AttackFaster
-      Weight: 50
+  RandomBinKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: AttackOptionsRandomBin
+    constantValue:
+      mItems: []
 --- !u!114 &4896966750343028585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1192,11 +1203,11 @@ MonoBehaviour:
   title: TriggerDashAttack
   rect:
     serializedVersion: 2
-    x: 1620
-    y: 580
+    x: 1560
+    y: 700
     width: 160
     height: 45
-  parent: {fileID: 3904444274939619010}
+  parent: {fileID: 2780522658280085655}
   children: []
   behaviourTree: {fileID: 0}
   runtimePriority: 0
@@ -1216,8 +1227,8 @@ MonoBehaviour:
   title: MoveTowardOpponent
   rect:
     serializedVersion: 2
-    x: 1800
-    y: 780
+    x: 1600
+    y: 860
     width: 160
     height: 45
   parent: {fileID: 0}
@@ -1241,8 +1252,8 @@ MonoBehaviour:
   title: Succeeder
   rect:
     serializedVersion: 2
-    x: -66
-    y: 475
+    x: -60
+    y: 520
     width: 160
     height: 45
   parent: {fileID: 2551272652439459061}
@@ -1251,6 +1262,248 @@ MonoBehaviour:
   behaviourTree: {fileID: 0}
   runtimePriority: 0
   breakpoint: 0
+--- !u!114 &2176543843186576728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2712069abf7ced4e810e7d2cab096cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: MoveTowardOpponent
+  rect:
+    serializedVersion: 2
+    x: 1720
+    y: 700
+    width: 160
+    height: 45
+  parent: {fileID: 2780522658280085655}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  MaxMoveTime: 0.3
+--- !u!114 &2780522658280085655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Dash Attack Sequence
+  rect:
+    serializedVersion: 2
+    x: 1640
+    y: 600
+    width: 160
+    height: 45
+  parent: {fileID: 3904444274939619010}
+  children:
+  - {fileID: 8818792797803259887}
+  - {fileID: 3079625259333770904}
+  - {fileID: 2176543843186576728}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  random: 0
+--- !u!114 &8818792797803259887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d7fffd42dc11f40ad55061b4470420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Reset Dash Attack Chance
+  rect:
+    serializedVersion: 2
+    x: 1360
+    y: 700
+    width: 160
+    height: 45
+  parent: {fileID: 2780522658280085655}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  RandomBinKey:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: AttackOptionsRandomBin
+    constantValue:
+      mItems: []
+  ItemNameToSet: Dash Attack
+  MinValueToAdd: 10
+  MaxValueToAdd: 10
+  SetInsteadOfAdd: 1
+--- !u!114 &1983559125739861588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 009a5cfb55fbc014e9cc2ebf5ffabf7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Update Dash Attack Chance
+  rect:
+    serializedVersion: 2
+    x: 220
+    y: 320
+    width: 160
+    height: 59
+  parent: {fileID: 518112194628645778}
+  children:
+  - {fileID: 2551272652439459061}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  interval: 0.5
+  randomDeviation: 0
+  callOnEnter: 1
+  BinToUpdateKey:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: AttackOptionsRandomBin
+    constantValue:
+      mItems: []
+  FromTargetKey:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: SelfRef
+    constantValue: {fileID: 0}
+  ToTargetKey:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
+  ItemToUpdateName: Dash Attack
+  DistanceThresholdToAddToBin: 10
+  AddIfPastThreshold: 1
+  ValueToAddRange: {x: 1, y: 5}
+  SetInsteadOfAdd: 0
+--- !u!114 &489700997697552181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb61a66fcb1c549a844f093811f6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: SelfRef
+  val: {fileID: 0}
+--- !u!114 &518112194628645778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Sequence
+  rect:
+    serializedVersion: 2
+    x: 220
+    y: 160
+    width: 160
+    height: 45
+  parent: {fileID: 5161406469011026009}
+  children:
+  - {fileID: 4663432757455894551}
+  - {fileID: 6521585250675054645}
+  - {fileID: 1983559125739861588}
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  random: 0
+--- !u!114 &4663432757455894551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f9c00849adfec047b2301341210759d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: SetSelfReference
+  rect:
+    serializedVersion: 2
+    x: -220
+    y: 260
+    width: 160
+    height: 45
+  parent: {fileID: 518112194628645778}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  SelfReferenceKey:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: SelfRef
+    constantValue: {fileID: 0}
+--- !u!114 &6521585250675054645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723271666710103351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b114a687b0a27246a019c2797b20629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: SetTargetOpponent
+  rect:
+    serializedVersion: 2
+    x: -20
+    y: 260
+    width: 160
+    height: 45
+  parent: {fileID: 518112194628645778}
+  children: []
+  behaviourTree: {fileID: 0}
+  runtimePriority: 0
+  breakpoint: 0
+  TargetObjectKeyRef:
+    useConstant: 0
+    mode: 0
+    blackboard: {fileID: 8337776675897930559}
+    key: TargetOpponent
+    constantValue: {fileID: 0}
 --- !u!1001 &1950967930169050012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1297,7 +1550,7 @@ PrefabInstance:
       objectReference: {fileID: 7674196410812031569}
     - target: {fileID: 1361235298070627379, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: rect.x
-      value: 280
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1361235298070627379, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: rect.y
@@ -1354,11 +1607,11 @@ PrefabInstance:
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: children.Array.data[1]
       value: 
-      objectReference: {fileID: 4843337886370341995}
+      objectReference: {fileID: 718094018111522735}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: children.Array.data[2]
       value: 
-      objectReference: {fileID: 718094018111522735}
+      objectReference: {fileID: 4843337886370341995}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: children.Array.data[3]
       value: 
@@ -1374,10 +1627,14 @@ PrefabInstance:
     - target: {fileID: 5466766633071047034, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: selectedEditorNode
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4843337886370341995}
     - target: {fileID: 6351699296125741047, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: rect.x
-      value: 60
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 6351699296125741047, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
+      propertyPath: rect.y
+      value: 720
       objectReference: {fileID: 0}
     - target: {fileID: 6351699296125741047, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
       propertyPath: AttackDirectionKeyRef.key

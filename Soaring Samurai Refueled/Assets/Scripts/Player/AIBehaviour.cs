@@ -76,6 +76,8 @@ public class AIBehaviour : MonoBehaviour
         if (BehaviourTreePrefab != null)
         {
             mBehaviourTreeRef = Instantiate(BehaviourTreePrefab, transform).GetComponent<MonoBehaviourTree>();
+            BotBehaviourStatsVariable mainBotStats = mBehaviourTreeRef.GetComponent<Blackboard>().GetVariable<BotBehaviourStatsVariable>("MainBotStats");
+            mainBotStats.Value.InitializeVariablesOntoBehaviourTree(mBehaviourTreeRef, mBehaviourTreeRef.GetComponent<Blackboard>());
         }
         else
         {

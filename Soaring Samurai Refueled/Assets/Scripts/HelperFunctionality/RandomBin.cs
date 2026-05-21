@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 // Class for getting a weighted random selection from a list of values. Each has their own weight for how likely they are compared to the others
 [System.Serializable]
 public class RandomBin
 {
     [System.Serializable]
-    class RandomBinItem
+    public class RandomBinItem
     {
         public RandomBinItem(string name, int weight)
         {
@@ -31,7 +32,45 @@ public class RandomBin
         }
         else
         {
-            mItems.Add(new RandomBinItem(itemName, amountToAdd));
+            Debug.Log("RandomBin:AddToItem: item of name \"" + itemName + "\" does not exist");
+            return;
+        }
+
+        if (item.Weight < 0)
+        {
+            item.Weight = 0;
+        }
+    }
+
+    public virtual void AddItem(string itemName, int amountToAdd)
+    {
+        RandomBinItem newItem = new RandomBinItem(itemName, amountToAdd);
+
+        if (newItem.Weight < 0)
+        {
+            newItem.Weight = 0;
+        }
+
+        mItems.Add(newItem);
+    }
+
+    public virtual void SetItem(string itemName, int newWeight)
+    {
+        RandomBinItem item = mItems.Find((RandomBinItem otherItem) => { return otherItem.Name == itemName; });
+
+        if (item != null)
+        {
+            item.Weight = newWeight;
+        }
+        else
+        {
+            Debug.Log("RandomBin:SetItem: item of name \"" + itemName + "\" does not exist");
+            return;
+        }
+
+        if (item.Weight < 0)
+        {
+            item.Weight = 0;
         }
     }
 
