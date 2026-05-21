@@ -36,6 +36,8 @@ public class Hitbox : MonoBehaviour
         [Header("VFX")]
         [SerializeField] bool mUseCustomCurveHitSquish = false;
         [SerializeField] AnimationCurve mSquishCurve;
+        [SerializeField] GameObject mHitParticlesPrefab = null;
+        [SerializeField] bool mHitParticlesFollowTarget = false;
 
         // Getters
         public float Damage { get { return mDamage; } }
@@ -51,25 +53,30 @@ public class Hitbox : MonoBehaviour
         public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
         public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
         public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
+        public GameObject HitParticlesPrefab { get { return mHitParticlesPrefab; } }
+        public bool HitParticlesFollowTarget { get { return mHitParticlesFollowTarget; } }
     }
 
     [System.Serializable]
     public class AttackCurrentData
     {
-        public AttackCurrentData(Vector2 knockbackVec, int attackingPlayerSourceID, bool isClashing = false) 
+        public AttackCurrentData(Vector2 knockbackVec, int attackingPlayerSourceID, bool isClashing = false, Vector2 attackOffset = default) 
         {
             mKnockbackVec = knockbackVec;
             mAttackingPlayerID = attackingPlayerSourceID;
             mIsClashing = isClashing;
+            mAttackOffset = attackOffset;
         }
 
         Vector2 mKnockbackVec = Vector2.zero;
         int mAttackingPlayerID = -1;
         bool mIsClashing = false;
+        Vector2 mAttackOffset = Vector2.zero;
         // Getters
         public Vector2 Knockback { get { return mKnockbackVec; } }
         public int AttackingSourcePlayerID {  get { return mAttackingPlayerID; } }
         public bool IsClashing { get { return mIsClashing; } }
+        public Vector2 AttackOffset { get { return mAttackOffset; } }
     }
 
     // Editor accessible variables
@@ -132,7 +139,7 @@ public class Hitbox : MonoBehaviour
 
             // Sends attack
             // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
-            AttackCurrentData currAttackData = new AttackCurrentData(knockbackVec, mOwningPlayerID);
+            AttackCurrentData currAttackData = new AttackCurrentData(knockbackVec, mOwningPlayerID, false, transform.localPosition);
             collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(currAttackData, mAttackInfo);
 
             // Marks hitbox as already hit, so it doesn't trigger again
@@ -175,7 +182,7 @@ public class Hitbox : MonoBehaviour
 
                 // Sends attack
                 // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
-                collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID, true), mAttackInfo);
+                collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID, true, transform.localPosition), mAttackInfo);
 
                 // Marks hitbox as already hit, so it doesn't trigger again
                 mAlreadyHit = true;

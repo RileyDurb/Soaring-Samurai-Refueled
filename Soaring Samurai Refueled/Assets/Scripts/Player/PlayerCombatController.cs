@@ -46,6 +46,10 @@ public class PlayerCombatController : MonoBehaviour
     public GameObject mTempClashParticlesPrefab;
     GameObject mTempClashParticlesObjectRef;
 
+    public GameObject mTempHitParticlesPrefab;
+    GameObject mTempHitParticlesObjectRef;
+
+
 
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
@@ -664,8 +668,11 @@ public class PlayerCombatController : MonoBehaviour
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), .1f, .1f);
 
         // Spawn hit particles
+        // TODO: Spawn normal hit particles (TODO: Change both these systems to come from the attack definition
         if (attackData.IsClashing)
         {
+            // Spawn clash particles
+
             Vector2 knockbackVecNormalized = attackData.Knockback.normalized;
             Quaternion systemRotation = Quaternion.FromToRotation(Vector3.up, new Vector3(knockbackVecNormalized.x, knockbackVecNormalized.y, 0));
             mTempClashParticlesObjectRef = Instantiate(mTempClashParticlesPrefab, transform.position, systemRotation);
@@ -676,7 +683,57 @@ public class PlayerCombatController : MonoBehaviour
                 Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + particleSystemDirectionVec * 10.0f, Color.blue, 10.0f);
             }
         }
+        else if (baseAttackInfo.HitParticlesPrefab != null) // Normal hit
+        {
+            // Spawn hit particles
 
+            // Find out which direction to flip the effect
+            Quaternion hitParticleRotation = Quaternion.identity;
+            float flipX = 0;
+            float flipY = 0;
+
+            if (attackData.AttackOffset.magnitude > 0) // If a directional attack, rotate the particle based on the direction of the attack
+            {
+                float attackDotProductFromUp = Vector2.Dot(Vector2.up, attackData.AttackOffset);
+
+                if (attackDotProductFromUp >= 0) // If upper right or left
+                {
+                    if (attackData.AttackOffset.x < 0) // If negative, it's an up left attack
+                    {
+                        // Don't flip, particle is made for up right
+                    }
+                    else // Upper left
+                    {
+                        flipX = 1;
+                    }
+                }
+                else // Lower right or left
+                {
+                    if (attackData.AttackOffset.x < 0) // If negative, it's a down left attack
+                    {
+                        flipY = 1;
+                    }
+                    else // Lower right attack
+                    {
+                        flipX = 1;
+                        flipY = 1;
+                    }
+                }
+            }
+
+            if (baseAttackInfo.HitParticlesFollowTarget)
+            {
+                mTempHitParticlesObjectRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform); // Spawn particles as a child of the hit player
+            }
+            else 
+            {
+                mTempHitParticlesObjectRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform.position, Quaternion.identity); // Just spawn particles at the position of the hit player
+            }
+            mTempHitParticlesObjectRef.GetComponent<ParticleSystemRenderer>().flip = new Vector3(flipX, flipY, 0);
+
+        }
+
+        
 
         // Notify match of the player being defeated
         if (wasDefeated)
