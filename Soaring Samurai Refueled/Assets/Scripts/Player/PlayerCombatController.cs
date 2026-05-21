@@ -43,6 +43,10 @@ public class PlayerCombatController : MonoBehaviour
     public DashAttackDataObject mDashAttackStats;
     public PlayerStateAesthetics StateAesthetics;
 
+    public GameObject mTempClashParticlesPrefab;
+    GameObject mTempClashParticlesObjectRef;
+
+
 
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
@@ -658,6 +662,20 @@ public class PlayerCombatController : MonoBehaviour
             mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y * 1.2f), .1f); // Don't ease, just scale linearly
         }
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), .1f, .1f);
+
+        // Spawn hit particles
+        if (attackData.IsClashing)
+        {
+            Vector2 knockbackVecNormalized = attackData.Knockback.normalized;
+            Quaternion systemRotation = Quaternion.FromToRotation(Vector3.up, new Vector3(knockbackVecNormalized.x, knockbackVecNormalized.y, 0));
+            mTempClashParticlesObjectRef = Instantiate(mTempClashParticlesPrefab, transform.position, systemRotation);
+
+            if (SimManager.Instance.DebugModeOn)
+            {
+                Vector3 particleSystemDirectionVec = systemRotation * Vector3.up;
+                Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + particleSystemDirectionVec * 10.0f, Color.blue, 10.0f);
+            }
+        }
 
 
         // Notify match of the player being defeated
