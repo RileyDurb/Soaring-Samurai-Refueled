@@ -33,6 +33,7 @@ public class State_DashAttack : StateManagerPlayer.State
     [SerializeField] DashAttackDataObject mDashAttackStats;
     PlayerCombatController mCombatController;
 
+    LayerMask mOriginalCollisionExcludeLayers;
 
 
 
@@ -49,6 +50,11 @@ public class State_DashAttack : StateManagerPlayer.State
         // Start charging animation
         mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackCharge");
         mDashAttackActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
+        
+        // Set to exclude layers we've defined
+        Rigidbody2D physics = mCombatController.GetComponent<Rigidbody2D>();
+        mOriginalCollisionExcludeLayers = physics.excludeLayers;
+        physics.excludeLayers = mDashAttackStats.ExcludeLayersForPlayerCollision.value;
     }
 
     // Update is called once per frame
@@ -145,6 +151,10 @@ public class State_DashAttack : StateManagerPlayer.State
         {
             mDashAttackActionList.Clear(); // Clears action list, cause we're cancelling early, so we want to clear anything that's qeued to happen
         }
+
+        // Set to exclude layers back to original
+        Rigidbody2D physics = mCombatController.GetComponent<Rigidbody2D>();
+        physics.excludeLayers = mOriginalCollisionExcludeLayers.value;
     }
 
     void StartDashAttackRecovery()

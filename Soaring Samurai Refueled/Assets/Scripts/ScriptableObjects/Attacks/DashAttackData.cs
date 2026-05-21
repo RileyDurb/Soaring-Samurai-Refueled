@@ -12,4 +12,6 @@ public class DashAttackDataObject : AttackDataObject
     public float RecoveryTime = 0.5f;
     public float DashingJerk = 1200.0f;
 
+    public LayerMask ExcludeLayersForPlayerCollision;
+
 }

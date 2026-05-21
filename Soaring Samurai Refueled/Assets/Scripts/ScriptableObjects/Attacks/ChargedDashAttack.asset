@@ -76,8 +76,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    mHitParticlesPrefab: {fileID: 9200201252025249482, guid: b171ba2a2fe3643489d9485897d164a6, type: 3}
-    mHitParticlesFollowTarget: 0
+    mHitParticlesPrefab: {fileID: 5548152038656650806, guid: 7984bf321db724b47a1e780ef93afcfb, type: 3}
+    mHitParticlesFollowTarget: 1
   ChargeTime: 1
   RecoveryTime: 0.5
   DashingJerk: 1800000
+  ExcludeLayersForPlayerCollision:
+    serializedVersion: 2
+    m_Bits: 128

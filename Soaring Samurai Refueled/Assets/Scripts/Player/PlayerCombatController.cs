@@ -791,6 +791,5 @@ public class PlayerCombatController : MonoBehaviour
             OnCharacterChanged.Invoke(mCurrentCharacterVisuals);
         }
     }
-
 }
 

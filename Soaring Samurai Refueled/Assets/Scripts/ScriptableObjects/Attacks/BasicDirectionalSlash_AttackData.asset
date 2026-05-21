@@ -76,3 +76,5 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    mHitParticlesPrefab: {fileID: 9200201252025249482, guid: b171ba2a2fe3643489d9485897d164a6, type: 3}
+    mHitParticlesFollowTarget: 0

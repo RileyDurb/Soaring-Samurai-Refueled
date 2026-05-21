@@ -25,7 +25,6 @@ public class Service_AdjustStrafeTarget : Service
     public override void Task()
     {
         Vector2 vecToTarget = TargetObjectKeyRef.Value.transform.position - mParentController.transform.position;
-        print("Here in adjustment");
         float wideAngleDeg = 180.0f - Vector2.Angle(TargetOffsetVectorKeyRef.Value, vecToTarget);
         if (wideAngleDeg <= BotStats.Value.mStrafeStats.AngleOfOptions) // If the point is not behind the opponent, in reference to our player
         {
