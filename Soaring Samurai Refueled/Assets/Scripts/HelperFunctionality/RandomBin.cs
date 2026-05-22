@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 // Class for getting a weighted random selection from a list of values. Each has their own weight for how likely they are compared to the others
 [System.Serializable]
