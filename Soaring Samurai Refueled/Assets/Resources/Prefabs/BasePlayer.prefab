@@ -56,7 +56,7 @@ MonoBehaviour:
   mDashAttackStats: {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
   StateAesthetics: {fileID: 11400000, guid: ef232ede7480e4645807102549c49b82, type: 2}
   mTempClashParticlesPrefab: {fileID: 2984393216414542340, guid: 7d435aa19428f0d4ca0651e98ce649fa, type: 3}
-  mTempHitParticlesPrefab: {fileID: 9200201252025249482, guid: b171ba2a2fe3643489d9485897d164a6, type: 3}
+  mTempSharedClashParticlesPrefab: {fileID: 9200201252025249482, guid: f8254fd35d0cbe942a6207544129ebe0, type: 3}
   DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   GasMeterData: {fileID: 11400000, guid: edc218f5bf9335c4a811a57e2c98c7fb, type: 2}
   mActionAesthetics:

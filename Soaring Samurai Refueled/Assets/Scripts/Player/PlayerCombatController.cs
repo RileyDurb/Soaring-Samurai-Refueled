@@ -46,8 +46,6 @@ public class PlayerCombatController : MonoBehaviour
     public GameObject mTempClashParticlesPrefab;
     GameObject mTempClashParticlesObjectRef;
 
-    public GameObject mTempHitParticlesPrefab;
-    GameObject mTempHitParticlesObjectRef;
 
 
 
@@ -682,6 +680,9 @@ public class PlayerCombatController : MonoBehaviour
                 Vector3 particleSystemDirectionVec = systemRotation * Vector3.up;
                 Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + particleSystemDirectionVec * 10.0f, Color.blue, 10.0f);
             }
+
+            // Add queued clash, so only one VFX gets spawned for both clashes
+            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().mHitsThisFrame.Add(new Tuple<int, Hitbox.AttackCurrentData>(PlayerIndex, attackData));
         }
         else if (baseAttackInfo.HitParticlesPrefab != null) // Normal hit
         {
@@ -721,15 +722,16 @@ public class PlayerCombatController : MonoBehaviour
                 }
             }
 
+            GameObject newHitParticlesRef = null;
             if (baseAttackInfo.HitParticlesFollowTarget)
             {
-                mTempHitParticlesObjectRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform); // Spawn particles as a child of the hit player
+                newHitParticlesRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform); // Spawn particles as a child of the hit player
             }
             else 
             {
-                mTempHitParticlesObjectRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform.position, Quaternion.identity); // Just spawn particles at the position of the hit player
+                newHitParticlesRef = Instantiate(baseAttackInfo.HitParticlesPrefab, transform.position, Quaternion.identity); // Just spawn particles at the position of the hit player
             }
-            mTempHitParticlesObjectRef.GetComponent<ParticleSystemRenderer>().flip = new Vector3(flipX, flipY, 0);
+            newHitParticlesRef.GetComponent<ParticleSystemRenderer>().flip = new Vector3(flipX, flipY, 0);
 
         }
 

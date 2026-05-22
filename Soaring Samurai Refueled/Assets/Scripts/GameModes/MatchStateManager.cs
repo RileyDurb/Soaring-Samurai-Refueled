@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -51,7 +52,8 @@ public class MatchStateManager : MonoBehaviour
     [SerializeField] GameObject mRoundTieMessagePrefab;
     GameObject mRoundTieMessageObject;
 
-
+    public GameObject mTempSharedClashParticlesPrefab;
+    GameObject mTempSharedClashParticlesObjectRef;
 
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
@@ -62,6 +64,8 @@ public class MatchStateManager : MonoBehaviour
     int mCurrRoundNumber = 0;
 
     bool mTimerPaused = false;
+
+    public List<Tuple<int, Hitbox.AttackCurrentData>> mHitsThisFrame = new List<Tuple<int, Hitbox.AttackCurrentData>>();
 
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
@@ -118,6 +122,38 @@ public class MatchStateManager : MonoBehaviour
             {
                 // Handle timeout win
                 HandleTimerUp();   
+            }
+
+            if (mHitsThisFrame.Count > 0)
+            {
+                for (int i = mHitsThisFrame.Count - 1; i >= 0; i--)
+                {
+                    if (mHitsThisFrame[i].Item2.IsClashing && mTempSharedClashParticlesPrefab != null)
+                    {
+                        // If the found attack is the other clashing attack, where it's attacking source is the player that clashed with the attack we're checking,
+                        Tuple<int, Hitbox.AttackCurrentData> otherClashingAttack = mHitsThisFrame.Find((Tuple<int, Hitbox.AttackCurrentData> otherAttack) => { return otherAttack.Item2.AttackingSourcePlayerID == mHitsThisFrame[i].Item1; });
+
+                        if (otherClashingAttack != null)
+                        {
+                            PlayerCombatController clashingPlayer1 = GetPlayerByIndex(mHitsThisFrame[i].Item1);
+        
+                            // Spawn mutual clash background shockwave in between the two players
+                            mTempSharedClashParticlesObjectRef = Instantiate(mTempSharedClashParticlesPrefab, clashingPlayer1.transform.position + (clashingPlayer1.OpponentRef.transform.position - clashingPlayer1.transform.position) * .5f, Quaternion.identity);
+
+                            // Remove both clashing hits, now that they've been handlex
+                            mHitsThisFrame.RemoveAt(i);
+                            mHitsThisFrame.Remove(otherClashingAttack);
+
+                            i--; // Decrement i because we removed 2 objects
+
+
+                        }
+
+                    }
+                }
+
+                // After all potential clashes have been handled, clear list of hits
+                mHitsThisFrame.Clear();
             }
         }
     }
@@ -484,4 +520,9 @@ public class MatchStateManager : MonoBehaviour
         RestartRound();
     }
 
+    public PlayerCombatController GetPlayerByIndex(int playerIndex)
+    {
+        PlayerCombatController targetPlayer = mPlayers.Find((PlayerCombatController player) => { return player.PlayerIndex == playerIndex; });
+        return targetPlayer;
+    }
 }
