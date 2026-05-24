@@ -33,10 +33,11 @@ public class Task_FindEnemyFacingDirection : Leaf
         Vector2 attackDirectionVec = Vector2.up + Vector2.right;
 
         float vecToOpponentUpAngle = Vector2.SignedAngle(vecTowardOpponent, Vector2.up);
+        Debug.Log("SignedAngle: " + vecToOpponentUpAngle.ToString());
 
-        if (vecToOpponentUpAngle > 90.0f) // if dot product is negative, lower left or right quadrant
+        if (vecTowardOpponent.y > 0) // if y value is positive, upper right left or right quadrant  (or exactly straight on, which we'll decide to count as the upper quadrant)
         {
-            if (vecToOpponentUpAngle >= 0.0f)
+            if (vecTowardOpponent.x >= 0)
             {
                 attackDirectionEnum = AIBehaviour.AttackDirection.UpRight;
             }
@@ -46,9 +47,9 @@ public class Task_FindEnemyFacingDirection : Leaf
 
             }
         }
-        else // if angle is less than or equal to 90 degrees, upper left or right quadrant (exactly 90 can be either, so we'll decide to do the upper quadrant)
+        else // if y direction to opponent is positive, upper left or right quadrant
         {
-            if (vecToOpponentUpAngle >= 0.0f)
+            if (vecTowardOpponent.x >= 0.0f)
             {
                 attackDirectionEnum = AIBehaviour.AttackDirection.DownRight;
             }
