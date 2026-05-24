@@ -35,6 +35,8 @@ public class State_DashAttack : StateManagerPlayer.State
 
     LayerMask mOriginalCollisionExcludeLayers;
 
+    bool mCancelledThisState = false;
+
 
 
     // Start is called before the first frame update
@@ -55,6 +57,8 @@ public class State_DashAttack : StateManagerPlayer.State
         Rigidbody2D physics = mCombatController.GetComponent<Rigidbody2D>();
         mOriginalCollisionExcludeLayers = physics.excludeLayers;
         physics.excludeLayers = mDashAttackStats.ExcludeLayersForPlayerCollision.value;
+
+        mCancelledThisState = false;
     }
 
     // Update is called once per frame
@@ -163,7 +167,7 @@ public class State_DashAttack : StateManagerPlayer.State
 
         mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackRecoverySheathed");
 
-        mDashAttackActionList.AddActionCallback(() => EndDashAttackRecovery(), mDashAttackStats.RecoveryTime);
+        mDashAttackActionList.AddActionCallback(() => { EndDashAttackRecovery(); }, mDashAttackStats.RecoveryTime);
     }
 
     void EndDashAttackRecovery()
@@ -173,5 +177,8 @@ public class State_DashAttack : StateManagerPlayer.State
         {
             stateManager.EnterState(PlayerStates.Ready);
         }
+
+        mCancelledThisState = true;
+
     }
 }

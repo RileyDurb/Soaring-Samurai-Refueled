@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMovementStats:
     MoveJerk: 400000
-    DashingJerk: 400000
+    DashingJerk: 500000
     UseMaxJerkCurve: 0
     InputValueToMaxJerkCurve:
       serializedVersion: 2
@@ -25,5 +25,5 @@ MonoBehaviour:
     PartialInputMovementStatsThreshold: 0.7
     PartialInputMovementStats: {fileID: 11400000, guid: 53b449dc2a012174ca0be156fd8da34b, type: 2}
     FullInputMovementStats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
-    DashDuration: 0.3
+    DashDuration: 0.4
     DashGasCost: 25

@@ -20,3 +20,4 @@ MonoBehaviour:
   mDampeningZeroThreshold: 0.1
   mDampeningType: 0
   mMaxDampeningTime: 1.03
+  ApplyDragAsAcceleration: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MBT;
 using Unity.VisualScripting;
+using Unity.Collections;
 
 // Empty Menu attribute prevents Node to show up in "Add Component" menu.
 [AddComponentMenu("")]
@@ -13,7 +14,7 @@ public class Task_MoveTo : Leaf
 
     [SerializeField] bool UseMaxMoveTime = false;
     [SerializeField] float MaxMoveTime = 5.0f;
-    [SerializeField] float TargetClosnessThreshold = 2.0f; // How close the player needs to be to the target to be considered there, and for this task to count as succeded
+    [SerializeField] Vector2 TargetClosnessThresholdXY = new Vector2(2.0f, 2.0f); // How close the player needs to be to the target to be considered there, and for this task to count as succeded. If giving different values for x and y, lerps between them based on the directon the moving object is incoming to the target
     [SerializeField] Vector2 ManualTargetOffset = new Vector2(0, -5.0f);
 
 
@@ -47,8 +48,9 @@ public class Task_MoveTo : Leaf
                 vecToTarget += TargetOffsetKeyRef.Value;
             }
 
-
-            if (vecToTarget.magnitude <= TargetClosnessThreshold)
+            float closenessToBeingVertical = Mathf.Abs(Vector2.Dot(Vector2.up, vecToTarget.normalized));
+            float targetClosenessMagnitide = Mathf.Lerp(TargetClosnessThresholdXY.x, TargetClosnessThresholdXY.y, closenessToBeingVertical);
+            if (vecToTarget.magnitude <= targetClosenessMagnitide)
             {
                 return NodeResult.success;
             }
