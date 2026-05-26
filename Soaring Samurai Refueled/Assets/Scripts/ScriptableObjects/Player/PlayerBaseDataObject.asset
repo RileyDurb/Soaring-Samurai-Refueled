@@ -27,3 +27,4 @@ MonoBehaviour:
     FullInputMovementStats: {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
     DashDuration: 0.4
     DashGasCost: 25
+    DashOldInputRecencyLimit: 0.5
