@@ -15,6 +15,7 @@ public class PlayerMovementStats
     public PhysicsTuningStatSet FullInputMovementStats;
     public float DashDuration = 0.3f;
     public float DashGasCost = 25.0f;
+    public float DashOldInputRecencyLimit = 0.5f;
 }
 
 

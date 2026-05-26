@@ -73,7 +73,7 @@ public class PlayerCombatController : MonoBehaviour
     {
         get { return mLastDirectionalMoveInput; }
     }
-    
+
     public Vector2 OGScale
     {
         get { return mOGScale; }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class InputBuffer : MonoBehaviour
 {
@@ -64,7 +65,7 @@ public class InputBuffer : MonoBehaviour
     void RecordMoveInput()
     {
         InputState input = new InputState(mCombatController.CurrMoveInput);
-        input.mInputActiveValue = mCombatController.CurrMoveInput == Vector2.zero ? true : false;
+        input.mInputActiveValue = mCombatController.CurrMoveInput == Vector2.zero ? false : true;
 
         InputBufferSnapshot currSnapshot = new InputBufferSnapshot();
         currSnapshot.mCurrInputs.Add(BufferTrackedInputs.Move, input);
@@ -150,5 +151,33 @@ public class InputBuffer : MonoBehaviour
         }
 
         return conditionSuccess;
+    }
+
+    // Gets the last input vector within the recency ime frame limit.
+    public Vector2 GetLastInputVector(BufferTrackedInputs inputType, float recencyLimit)
+    {
+        float currBackwardTime = 0.0f;
+
+        for (int i = mMainInputBuffer.Count - 1; i > 0; i--)
+        {
+            currBackwardTime += Time.timeSinceLevelLoad - mMainInputBuffer[i].mTimestamp;
+
+            // if we're past the target time period
+            if (currBackwardTime > recencyLimit)
+            {
+                return Vector2.zero;
+            }
+
+            InputBufferSnapshot currInputFrame = mMainInputBuffer[i];
+            // If input was given, and is within the recency limit
+            if (currInputFrame.mCurrInputs.ContainsKey(inputType) && currInputFrame.mCurrInputs[inputType].mInputActiveValue && Time.timeSinceLevelLoad - currInputFrame.mTimestamp < recencyLimit)
+            {
+                return currInputFrame.mCurrInputs[inputType].mInputVectorValue;
+            }
+
+        }
+
+        // If reaching here, likely no inputs in buffer
+        return Vector2.zero; // Return no input
     }
 }

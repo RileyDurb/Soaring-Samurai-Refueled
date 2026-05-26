@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,19 @@ public class State_Dash : StateManagerPlayer.State
     // Private variables
     ActionList mDashActionList = new ActionList();
 
+
     // References
     PlayerCombatController mCombatController;
+    InputBuffer mInputBuffer;
+
+    bool mMoveInputGiven = false;
+    Vector2 mOldMovementDirectionToUse;
+
     public override void OnEnter()
     {
         // Intialize variables
         mCombatController = mParentObject.GetComponent<PlayerCombatController>();
+        mInputBuffer = mParentObject.GetComponent<InputBuffer>();
 
         // Do squash and stretch
         float timeElapsed = 0.0f;
@@ -34,14 +42,44 @@ public class State_Dash : StateManagerPlayer.State
         // Scale back to normal
         currDashStageTime = mCombatController.mPlayerBaseStats.mMovementStats.DashDuration / 4;
         mDashActionList.AddActionScale(mParentObject, new Vector2(ogScale.x, ogScale.y), currDashStageTime, timeElapsed, Action_.EasingTypes.EaseOutMedium);
+
+        mMoveInputGiven = false;
+
+        // Gets last very recent movement input
+        mOldMovementDirectionToUse = mInputBuffer.GetLastInputVector(InputBuffer.BufferTrackedInputs.Move, mCombatController.mPlayerBaseStats.mMovementStats.DashOldInputRecencyLimit);
+
     }
 
     public override void OnUpdate(float dt)
     {
+        // Check if move input has been given
+        //mCombatController.GetComponent<InputBuffer>()
+        Vector2 moveInputToUse = mCombatController.CurrMoveInput;
+
+        // If no move input given yet, use last input direction or a default direction
+        if (mMoveInputGiven == false && moveInputToUse.magnitude == 0)
+        {
+            // Gets last very recent movement input
+            moveInputToUse = mOldMovementDirectionToUse;
+
+            if (moveInputToUse.magnitude == 0) // If no recent input within the threshold
+            {
+                // Default to moving toward the opponent
+                Vector2 vecTowardOpponent = mCombatController.OpponentRef.transform.position - mParentObject.transform.position;
+
+                moveInputToUse = vecTowardOpponent.normalized;
+
+            }
+        }
+        else
+        {
+            mMoveInputGiven = true;
+        }
+
         // Calculate speed and direction
         float currSpeed = mCombatController.mPlayerBaseStats.mMovementStats.DashingJerk;
 
-        Vector2 moveVec = mCombatController.CurrMoveInput * currSpeed;
+        Vector2 moveVec = moveInputToUse * currSpeed;
 
         // Applies jerk
         mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
