@@ -283,7 +283,7 @@ public class PlayerCombatController : MonoBehaviour
     public void OnMove(InputActionPhase inputPhase, Vector2 inputValue)
     {
         // If combat actions are blocked, don't attack
-        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.MovementAction))
+        if (LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().IsInputTypeBlocked(InputBlockingManager.InputType.MovementAction, mPlayerIndex))
         {
             mMoveInput = Vector2.zero; // Stop any previous movement input
             return;
