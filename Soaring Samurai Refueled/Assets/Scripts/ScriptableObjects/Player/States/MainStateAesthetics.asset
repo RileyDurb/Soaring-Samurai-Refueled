@@ -25,4 +25,12 @@ MonoBehaviour:
     MaxDistanceOffsetRandom: 0.05
   DefeatedStats:
     MatchDefeatedGravityScale: 40
+    MatchDefeatedPoseTime: 0.2
     MatchDefeatedGravityDelay: 1
+    MatchDefeatedTimeAfterFallBeforeCameraLoss: 1
+    MatchDefeatedFallIgnoreCollidionLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    MatchDefeatedMaxFallDistance: -2000
+    MatchDefeatedWinnerCamZoomSpeed: 2
+    MatchDefeatedWinnerCamMoveSpeed: 3

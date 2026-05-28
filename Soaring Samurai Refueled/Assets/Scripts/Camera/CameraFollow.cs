@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    enum FollowMode
+    public enum FollowMode
     {
         AllPlayers,
         TargetFirstPlayer,
@@ -15,11 +15,12 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Editor accessible values
-    [Header("Tunable Vlues")]
+    [Header("Tunable Values")]
     public float CameraMoveSpeed = 1.0f;
     public float CameraZoomSpeed = 5.0f;
     public float MinZoomMarginSpace = 10.0f; // gives at least this much space on the sides of players
     public float MaxZoomMarginSpace = 50.0f; // Maximum space on the sides of players
+    public float MatchEndMinMarginSpace = 5.0f;
     [SerializeField] FollowMode mCurrFollowMode = FollowMode.AllPlayers;
 
 
@@ -42,7 +43,45 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] float mMarginTrimmingWindowBeforeMaxDistance = 3.0f;
     BehaviourMovementBounds mBoundsManager = null;
 
+    // Overrides
+    bool mIsOverridingCamMoveSpeed = false;
+    float mOverrideCamMoveSpeed = 2.0f;
+    bool mIsOverridingCamZoomSpeed = false;
+    float mOverrideCamZoomSpeed = 3.0f;
+
     // Getters and setters
+
+    public GameObject ManualCameraTarget
+    {
+        set { mManualFollowObject = value; }
+    }
+
+    public FollowMode CurrFollowMode
+    {
+        set { mCurrFollowMode = value; }
+    }
+
+    public void SetOverrideCamMoveSpeed(float newOverrideCamSpeed)
+    {
+        mOverrideCamMoveSpeed = newOverrideCamSpeed;
+        mIsOverridingCamMoveSpeed = true;
+    }
+
+    public void TurnOverrideCamMoveSpeedOff()
+    {
+        mIsOverridingCamMoveSpeed = false;
+    }
+
+    public void SetOverrideCamZoomSpeed(float newOverrideCamSpeed)
+    {
+        mOverrideCamZoomSpeed = newOverrideCamSpeed;
+        mIsOverridingCamZoomSpeed = true;
+    }
+
+    public void TurnOverrideCamZoomSpeedOff()
+    {
+        mIsOverridingCamZoomSpeed = false;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -101,7 +140,12 @@ public class CameraFollow : MonoBehaviour
         
         // Lerp position closer to target position
         CurrFollowTarget = new Vector3(CurrFollowTarget.x, CurrFollowTarget.y, transform.position.z);
-        transform.position = transform.position + (CurrFollowTarget - transform.position) * CameraMoveSpeed * Time.deltaTime;
+        float currCamMoveSpeed = CameraMoveSpeed;
+        if (mIsOverridingCamMoveSpeed)
+        {
+            currCamMoveSpeed = mOverrideCamMoveSpeed;
+        }
+        transform.position = transform.position + (CurrFollowTarget - transform.position) * currCamMoveSpeed * Time.deltaTime;
         //transform.position = targetPos;
 
         // Calculate zoom
@@ -176,7 +220,7 @@ public class CameraFollow : MonoBehaviour
                 {
                     CurrTargetVelocityMag = mManualFollowObject.GetComponent<Rigidbody2D>().velocity.magnitude;  // Use manually set target
 
-                    mMinOrthographicSize = 0.0f; // No minimum
+                    mMinOrthographicSize = MatchEndMinMarginSpace; // DifferentMin
                     mMaxOrthographicSize = float.MaxValue; // No set max
                     break;
                 }
@@ -193,7 +237,12 @@ public class CameraFollow : MonoBehaviour
     void SetZoomOnlyCamSpeedBased()
     {
         float targetValue = mMinOrthographicSize;
-        GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize + (targetValue - GetComponent<Camera>().orthographicSize) * CameraZoomSpeed * Time.deltaTime;
+        float currCamZoomSpeed = CameraZoomSpeed;
+        if (mIsOverridingCamZoomSpeed)
+        {
+            currCamZoomSpeed = mOverrideCamZoomSpeed;
+        }
+        GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize + (targetValue - GetComponent<Camera>().orthographicSize) * currCamZoomSpeed * Time.deltaTime;
     }
 
     // Older zoom setting, scaling up as player speeds were higher

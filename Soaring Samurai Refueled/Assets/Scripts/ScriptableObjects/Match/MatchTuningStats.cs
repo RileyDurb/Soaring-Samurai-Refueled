@@ -24,4 +24,7 @@ public class MatchTuningStats : ScriptableObject
     public float FirstPreRoundLength = 4.0f;
     public float SubsequentPreRoundsLength = 3.0f;
 
+    [Header("Match End Sequence Aesthetics")]
+    public float MatchEndMenuPopupDelay = 1.0f;
+
 }

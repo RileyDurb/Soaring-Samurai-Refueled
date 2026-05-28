@@ -1208,6 +1208,7 @@ MonoBehaviour:
   CameraZoomSpeed: 5
   MinZoomMarginSpace: 5
   MaxZoomMarginSpace: 50
+  MatchEndMinMarginSpace: 4
   mCurrFollowMode: 0
   CurrFollowTarget: {x: 0, y: 0, z: 0}
   CurrTargetVelocityMag: 0
