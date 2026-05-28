@@ -20,7 +20,8 @@ public class CameraFollow : MonoBehaviour
     public float CameraZoomSpeed = 5.0f;
     public float MinZoomMarginSpace = 10.0f; // gives at least this much space on the sides of players
     public float MaxZoomMarginSpace = 50.0f; // Maximum space on the sides of players
-    public float MatchEndMinMarginSpace = 5.0f;
+    public float ManualTargetMinMarginSpace = 6.0f;
+    public float ManualTargetVelocityMarginPercent = 0.2f; // From 0-1 being 0-100%, how much of the target's velocity is added to the min margin size
     [SerializeField] FollowMode mCurrFollowMode = FollowMode.AllPlayers;
 
 
@@ -220,7 +221,7 @@ public class CameraFollow : MonoBehaviour
                 {
                     CurrTargetVelocityMag = mManualFollowObject.GetComponent<Rigidbody2D>().velocity.magnitude;  // Use manually set target
 
-                    mMinOrthographicSize = MatchEndMinMarginSpace; // DifferentMin
+                    mMinOrthographicSize = ManualTargetMinMarginSpace + CurrTargetVelocityMag * ManualTargetVelocityMarginPercent; // DifferentMin
                     mMaxOrthographicSize = float.MaxValue; // No set max
                     break;
                 }
