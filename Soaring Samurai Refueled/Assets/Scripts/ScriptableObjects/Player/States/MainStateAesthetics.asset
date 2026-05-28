@@ -23,3 +23,6 @@ MonoBehaviour:
     MaxTimeOffsetRandom: 0.8
     MinDistanceOffsetRandom: 0
     MaxDistanceOffsetRandom: 0.05
+  DefeatedStats:
+    MatchDefeatedGravityScale: 40
+    MatchDefeatedGravityDelay: 1

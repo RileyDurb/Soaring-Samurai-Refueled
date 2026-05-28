@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player_RoundLossHit
+  m_Name: Player_RoundLossHurt
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0

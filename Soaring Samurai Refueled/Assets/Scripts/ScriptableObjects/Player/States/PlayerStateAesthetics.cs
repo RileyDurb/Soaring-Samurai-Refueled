@@ -25,5 +25,15 @@ public class PlayerStateAesthetics : ScriptableObject
         //public Action_.EasingTypes LastQuarterEasing = Action_.EasingTypes.None;
     }
 
+    [System.Serializable]
+    public class DefeatedData
+    {
+        public float MatchDefeatedGravityScale = 10.0f;
+        public float MatchDefeatedGravityDelay = 3.0f;
+    }
+
+
     public IdleData IdleStats = new IdleData();
+
+    public DefeatedData DefeatedStats = new DefeatedData();
 }
