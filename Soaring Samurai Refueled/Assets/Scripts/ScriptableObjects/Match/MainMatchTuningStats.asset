@@ -17,9 +17,9 @@ MonoBehaviour:
   PlayerStartOffsetDistance: 2.55
   ClearForcesOnRestart: 1
   MaxRoundTime: 45
-  NumRoundsToWin: 1
+  NumRoundsToWin: 2
   SuddenDeathHealthValue: 2
   MatchEndRestartDelay: 5
   FirstPreRoundLength: 4
   SubsequentPreRoundsLength: 4
-  MatchEndMenuPopupDelay: 2.3
+  MatchEndMenuPopupDelay: 3.6

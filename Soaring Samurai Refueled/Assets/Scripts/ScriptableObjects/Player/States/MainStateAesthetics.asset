@@ -27,7 +27,7 @@ MonoBehaviour:
     MatchDefeatedGravityScale: 40
     MatchDefeatedPoseTime: 0.2
     MatchDefeatedGravityDelay: 1
-    MatchDefeatedTimeAfterFallBeforeCameraLoss: 1
+    MatchDefeatedTimeAfterFallBeforeCameraLoss: 2
     MatchDefeatedFallIgnoreCollidionLayers:
       serializedVersion: 2
       m_Bits: 4294967295
