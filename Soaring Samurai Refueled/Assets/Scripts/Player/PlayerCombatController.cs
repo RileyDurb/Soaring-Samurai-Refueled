@@ -49,7 +49,6 @@ public class PlayerCombatController : MonoBehaviour
 
 
 
-
     [SerializeField] AttackDataObject DirectionalSlashAttackStats;
 
     [SerializeField] GasMeterStats GasMeterData;

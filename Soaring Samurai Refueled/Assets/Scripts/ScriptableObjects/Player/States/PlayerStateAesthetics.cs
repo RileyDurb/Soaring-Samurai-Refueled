@@ -19,10 +19,19 @@ public class PlayerStateAesthetics : ScriptableObject
         public float MaxTimeOffsetRandom = 0.8f;
         public float MinDistanceOffsetRandom = 0.0f;
         public float MaxDistanceOffsetRandom = 0.05f;
+        public float MaxMoveRotationAngle = 30.0f;
+        public float MoveRotationSpeed = 50.0f;
         //public Action_.EasingTypes FirstQuarterEasing = Action_.EasingTypes.None;
         //public Action_.EasingTypes SecondQuarterEasing = Action_.EasingTypes.None;
         //public Action_.EasingTypes MiddleHalfEasing = Action_.EasingTypes.None;
         //public Action_.EasingTypes LastQuarterEasing = Action_.EasingTypes.None;
+    }
+
+    [System.Serializable]
+    public class DashAestheticData
+    {
+        public float MaxMoveRotationAngle = 30.0f;
+        public float MoveRotationSpeed = 50.0f;
     }
 
     [System.Serializable]
@@ -42,4 +51,6 @@ public class PlayerStateAesthetics : ScriptableObject
     public IdleData IdleStats = new IdleData();
 
     public DefeatedData DefeatedStats = new DefeatedData();
+
+    public DashAestheticData DashAestheticStats = new DashAestheticData();
 }

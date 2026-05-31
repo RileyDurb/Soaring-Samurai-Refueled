@@ -84,9 +84,19 @@ public class State_Dash : StateManagerPlayer.State
         // Applies jerk
         mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
 
+        // rotate in movement direction, or back to straight up when not moving
+        Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));
+        float targetAngleFromUp = Vector2.SignedAngle(Vector2.up, rotationTargetDirection.normalized);
+
+        targetAngleFromUp = Mathf.Clamp(targetAngleFromUp, -mCombatController.StateAesthetics.DashAestheticStats.MaxMoveRotationAngle, mCombatController.StateAesthetics.DashAestheticStats.MaxMoveRotationAngle);
+
+        mCombatController.SpriteObject.transform.rotation = Quaternion.Lerp(mCombatController.SpriteObject.transform.rotation, Quaternion.AngleAxis(targetAngleFromUp, Vector3.forward), mCombatController.StateAesthetics.DashAestheticStats.MoveRotationSpeed * Time.deltaTime);
+
     }
     public override void OnExit()
     {
         mDashActionList.Clear();
+        mCombatController.SpriteObject.transform.rotation = Quaternion.identity;
+
     }
 }

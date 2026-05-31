@@ -84,7 +84,14 @@ public class State_Ready : StateManagerPlayer.State
         Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
 
         mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
-        
+
+        // rotate in movement direction, or back to straight up when not moving
+        Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));
+        float targetAngleFromUp = Vector2.SignedAngle(Vector2.up, rotationTargetDirection.normalized);
+
+        targetAngleFromUp = Mathf.Clamp(targetAngleFromUp, -mCombatControllerRef.StateAesthetics.IdleStats.MaxMoveRotationAngle, mCombatControllerRef.StateAesthetics.IdleStats.MaxMoveRotationAngle);
+
+        mCombatControllerRef.SpriteObject.transform.rotation = Quaternion.Lerp(mCombatControllerRef.SpriteObject.transform.rotation, Quaternion.AngleAxis(targetAngleFromUp, Vector3.forward), mCombatControllerRef.StateAesthetics.IdleStats.MoveRotationSpeed * Time.deltaTime);
         
     }
 
@@ -92,6 +99,8 @@ public class State_Ready : StateManagerPlayer.State
     {
         mReadyActionList.Clear();
         mCombatControllerRef.SpriteObject.transform.localPosition = Vector2.zero; // Resets local position to 0
+        mCombatControllerRef.SpriteObject.transform.rotation = Quaternion.identity;
+
     }
 
     void StartIdleLoop(float cycleTime)

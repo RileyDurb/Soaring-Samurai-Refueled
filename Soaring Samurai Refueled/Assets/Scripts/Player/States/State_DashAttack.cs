@@ -146,6 +146,9 @@ public class State_DashAttack : StateManagerPlayer.State
             // Applies jerk
             mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
         }
+
+
+
     }
 
     public override void OnExit()
