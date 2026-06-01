@@ -734,6 +734,12 @@ public class PlayerCombatController : MonoBehaviour
 
         }
 
+        // Play SFX 
+        if (attackData.IsClashing == false)
+        {
+            PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(baseAttackInfo.HitSound);
+        }
+
         
 
         // Notify match of the player being defeated

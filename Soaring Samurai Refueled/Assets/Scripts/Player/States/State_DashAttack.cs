@@ -52,7 +52,10 @@ public class State_DashAttack : StateManagerPlayer.State
         // Start charging animation
         mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackCharge");
         mDashAttackActionList.AddActionCallback(() => mCurrDashAttackState = DashAttackStates.Ready, mDashAttackStats.ChargeTime); // Set timer for charge to be ready
-        
+
+        // Play charging start sound
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mDashAttackStats.ChargeStartSound);
+
         // Set to exclude layers we've defined
         Rigidbody2D physics = mCombatController.GetComponent<Rigidbody2D>();
         mOriginalCollisionExcludeLayers = physics.excludeLayers;
@@ -86,6 +89,7 @@ public class State_DashAttack : StateManagerPlayer.State
 
             // Spawns attack hitbox right around the player
             mParentObject.GetComponent<PlayerCombatController>().SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats);
+
 
             // Set to go into recovery after active time is done
             mDashAttackActionList.AddActionCallback(() => StartDashAttackRecovery(), mDashAttackStats.mStats.ActiveTime);
@@ -169,6 +173,9 @@ public class State_DashAttack : StateManagerPlayer.State
         mCurrDashAttackState = DashAttackStates.Recovery;
 
         mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackRecoverySheathed");
+
+        // Play recovery sound
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mDashAttackStats.RecoveryStartSound);
 
         mDashAttackActionList.AddActionCallback(() => { EndDashAttackRecovery(); }, mDashAttackStats.RecoveryTime);
     }

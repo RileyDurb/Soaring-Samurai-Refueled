@@ -13,6 +13,19 @@ MonoBehaviour:
   m_Name: MainAudioBank
   m_EditorClassIdentifier: 
   mSounds:
-  - Name: 0
+  - Name: 1
     ClipOptions:
     - {fileID: 8300000, guid: 8b57c36da2ee3a74b8e53db58bb0a330, type: 3}
+  - Name: 2
+    ClipOptions:
+    - {fileID: 8300000, guid: 1e08b41a1d002d4479f82f118d9e7c06, type: 3}
+    - {fileID: 8300000, guid: 0fa23038d462f3340894a86e08c5c34c, type: 3}
+  - Name: 3
+    ClipOptions:
+    - {fileID: 8300000, guid: 29a0298b17b62044cbb4c838f6fa7315, type: 3}
+  - Name: 4
+    ClipOptions:
+    - {fileID: 8300000, guid: a0fe9b9c6288f114db6f53bfbd918cfa, type: 3}
+  - Name: 5
+    ClipOptions:
+    - {fileID: 8300000, guid: 14377d1b2c22c2c4187692119682f5c4, type: 3}

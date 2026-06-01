@@ -1,3 +1,4 @@
+using AudioEvents;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour
 {
-    public enum SoundEvent
-    {
-        PLAY_PLAYER_SWORDSWING
-    }
+
 
     [SerializeField]
     AudioSource mAudioSourceRef;
@@ -26,7 +24,7 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PlayEvent(SoundEvent eventName)

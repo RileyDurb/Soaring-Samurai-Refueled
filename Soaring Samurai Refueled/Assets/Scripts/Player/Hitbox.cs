@@ -1,3 +1,4 @@
+using AudioEvents;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -39,8 +40,8 @@ public class Hitbox : MonoBehaviour
         [SerializeField] GameObject mHitParticlesPrefab = null;
         [SerializeField] bool mHitParticlesFollowTarget = false;
         [Header("Audio")]
-        [SerializeField]
-        AudioManager.SoundEvent mAttackStartSoundEvent;
+        [SerializeField] SoundEvent mAttackStartSoundEvent;
+        [SerializeField] SoundEvent mHitSound;
 
         // Getters
         public float Damage { get { return mDamage; } }
@@ -58,7 +59,8 @@ public class Hitbox : MonoBehaviour
         public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
         public GameObject HitParticlesPrefab { get { return mHitParticlesPrefab; } }
         public bool HitParticlesFollowTarget { get { return mHitParticlesFollowTarget; } }
-        public AudioManager.SoundEvent AttackStartSoundEvent {  get {  return mAttackStartSoundEvent; } }
+        public SoundEvent AttackStartSoundEvent {  get {  return mAttackStartSoundEvent; } }
+        public SoundEvent HitSound {  get {  return mHitSound; } }
     }
 
     [System.Serializable]

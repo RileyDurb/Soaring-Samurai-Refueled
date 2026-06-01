@@ -1,3 +1,4 @@
+using AudioEvents;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,5 +14,9 @@ public class DashAttackDataObject : AttackDataObject
     public float DashingJerk = 1200.0f;
 
     public LayerMask ExcludeLayersForPlayerCollision;
+
+    [Header("Audio")]
+    public SoundEvent ChargeStartSound;
+    public SoundEvent RecoveryStartSound;
 
 }
