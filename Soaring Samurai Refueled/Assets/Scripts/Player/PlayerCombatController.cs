@@ -763,6 +763,9 @@ public class PlayerCombatController : MonoBehaviour
         newHitbox.transform.localPosition += new Vector3(offsetFromPlayer.x, offsetFromPlayer.y); // Adds the given offset
         newHitbox.GetComponent<Hitbox>().InitAttack(attackInfo, PlayerIndex);
 
+        // Play attack sound
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(attackInfo.AttackStartSoundEvent);
+
         if (SimManager.Instance.DebugModeOn)
         {
             Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);

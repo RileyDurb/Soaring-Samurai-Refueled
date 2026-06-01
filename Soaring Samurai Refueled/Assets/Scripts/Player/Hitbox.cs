@@ -38,6 +38,9 @@ public class Hitbox : MonoBehaviour
         [SerializeField] AnimationCurve mSquishCurve;
         [SerializeField] GameObject mHitParticlesPrefab = null;
         [SerializeField] bool mHitParticlesFollowTarget = false;
+        [Header("Audio")]
+        [SerializeField]
+        AudioManager.SoundEvent mAttackStartSoundEvent;
 
         // Getters
         public float Damage { get { return mDamage; } }
@@ -55,6 +58,7 @@ public class Hitbox : MonoBehaviour
         public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
         public GameObject HitParticlesPrefab { get { return mHitParticlesPrefab; } }
         public bool HitParticlesFollowTarget { get { return mHitParticlesFollowTarget; } }
+        public AudioManager.SoundEvent AttackStartSoundEvent {  get {  return mAttackStartSoundEvent; } }
     }
 
     [System.Serializable]

@@ -23,6 +23,8 @@ MonoBehaviour:
     MaxTimeOffsetRandom: 0.8
     MinDistanceOffsetRandom: 0
     MaxDistanceOffsetRandom: 0.05
+    MaxMoveRotationAngle: 4
+    MoveRotationSpeed: 6
   DefeatedStats:
     MatchDefeatedGravityScale: 40
     MatchDefeatedPoseTime: 0.2
@@ -34,3 +36,6 @@ MonoBehaviour:
     MatchDefeatedMaxFallDistance: -2000
     MatchDefeatedWinnerCamZoomSpeed: 2
     MatchDefeatedWinnerCamMoveSpeed: 3
+  DashAestheticStats:
+    MaxMoveRotationAngle: 15
+    MoveRotationSpeed: 10
