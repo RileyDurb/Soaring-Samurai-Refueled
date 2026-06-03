@@ -41,6 +41,10 @@ public class State_Defeated : StateManagerPlayer.State
             mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_RoundLossHurt"); // Play round loss animation, that transitions into the exhausted animation
         }
 
+
+        // Save original physics exclude layers
+        Rigidbody2D physics = mCombatController.GetComponent<Rigidbody2D>();
+        mOriginalCollisionLayerIgnores = physics.excludeLayers;
     }
 
     public override void OnUpdate(float dt)

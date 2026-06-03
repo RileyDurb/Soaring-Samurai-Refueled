@@ -88,7 +88,7 @@ public class MatchStateManager : MonoBehaviour
         mPlayers.Clear(); // Don't need to clear list if scence is always reloading, so can remove this if we only reload, but otherwise, want to clear the list and readd all players
 
         // Makes a list of all current players
-        PlayerCombatController[] players = FindObjectsOfType<PlayerCombatController>();
+        PlayerCombatController[] players = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
         int i = 0;
         foreach (PlayerCombatController player in players)
         {

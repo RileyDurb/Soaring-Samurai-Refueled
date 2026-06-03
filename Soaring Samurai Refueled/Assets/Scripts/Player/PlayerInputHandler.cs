@@ -21,7 +21,7 @@ public class PlayerInputHandler : MonoBehaviour
         input = GetComponent<PlayerInput>(); // Saves a reference to the input component
 
         // Looks for an unassigned player object
-        PlayerCombatController[] controllerList = FindObjectsOfType<PlayerCombatController>();
+        PlayerCombatController[] controllerList = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
         foreach (PlayerCombatController controller in controllerList)
         {
             if (controller.PlayerIndex == input.playerIndex) // If unassigned player found

@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-8791010424184555665
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShortSlash3MultiHit3_{-8791010424184555665}
+  m_AudioClip: {fileID: 8300000, guid: 0cc8ea1d56258db4da9a6b4530eb5a92, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
+--- !u!1233149941 &-7172177414064647533
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShortSlash3MultiHit1_{-7172177414064647533}
+  m_AudioClip: {fileID: 8300000, guid: c0a56ca9a4a14b34b97763f6c2af0dd3, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
+--- !u!1233149941 &-2165866819729630860
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShortSlash3MultiHit4_{-2165866819729630860}
+  m_AudioClip: {fileID: 8300000, guid: d1e99343e0a514644a9fe1c0d0123ec5, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
+--- !u!1233149941 &-1893573429542539323
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShortSlashHit1Clipped.sosa_{-1893573429542539323}
+  m_AudioClip: {fileID: 8300000, guid: f7bab3ef5ed3630438c36d73b2e07e78, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ChargedAttackHitRandom
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0.03
+  m_LoopCount: 30
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: -38.305737, y: 39.042175}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0.1}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -7172177414064647533}
+  - {fileID: 8971458472758421143}
+  - {fileID: -8791010424184555665}
+  - {fileID: -2165866819729630860}
+  - {fileID: -1893573429542539323}
+  m_AvoidRepeatingLast: 0
+  m_PlaybackMode: 1
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 0
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 1
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &8971458472758421143
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShortSlash3MultiHit2_{8971458472758421143}
+  m_AudioClip: {fileID: 8300000, guid: 98a048d5ba4981842a7588ef0a9d9c82, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
