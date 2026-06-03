@@ -1,4 +1,5 @@
 using AudioEvents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,20 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     MainAudioBank mMainAudioBank;
 
-    List<AudioSource> mSpawnedAudioSources = new List<AudioSource>();
+    class SpawnedAudioSourcePackage
+    {
+        public SpawnedAudioSourcePackage(AudioSource audioSource, float delay)
+        {
+            mAudioSource = audioSource;
+            mDelayTime = delay;
+        }
+
+        public AudioSource mAudioSource;
+        public float mCurrDelayTimer = 0.0f;
+        public float mDelayTime = -1.0f;
+    }
+
+    List<SpawnedAudioSourcePackage> mSpawnedAudioSources = new List<SpawnedAudioSourcePackage>();
 
     // Start is called before the first frame update
     void Start()
@@ -29,10 +43,16 @@ public class AudioManager : MonoBehaviour
     {
         for (int i = mSpawnedAudioSources.Count - 1; i >= 0; i--)
         {
-            // If source has stopped playing
-            if (mSpawnedAudioSources[i].isPlaying == false)
+            SpawnedAudioSourcePackage currAudioSource = mSpawnedAudioSources[i];
+
+            if (currAudioSource.mCurrDelayTimer <= currAudioSource.mDelayTime)
             {
-                Destroy(mSpawnedAudioSources[i].gameObject);
+                currAudioSource.mCurrDelayTimer += Time.deltaTime;
+            }
+            // If source has stopped playing
+            if (currAudioSource.mAudioSource.isPlaying == false && currAudioSource.mCurrDelayTimer > currAudioSource.mDelayTime)
+            {
+                Destroy(currAudioSource.mAudioSource.gameObject);
 
                 // Destroy the object now that it's stopped playing
                 mSpawnedAudioSources.RemoveAt(i);
@@ -51,10 +71,17 @@ public class AudioManager : MonoBehaviour
             {
                 GameObject newAudioSource = Instantiate(foundSound.AudioSourcePrefab, PersistentScopeManagers.Instance.GetComponent<AudioManager>().transform);
                 AudioSource audioComp = newAudioSource.GetComponent<AudioSource>();
-                mSpawnedAudioSources.Add(audioComp); // Add to tracked list of spawned audio sources
+                mSpawnedAudioSources.Add(new SpawnedAudioSourcePackage(audioComp, foundSound.Delay)); // Add to tracked list of spawned audio sources
 
                 audioComp.resource = resourceToUse;
-                audioComp.Play();
+                if (foundSound.Delay >=0)
+                {
+                    audioComp.PlayDelayed(foundSound.Delay);
+                }
+                else
+                {
+                    audioComp.Play();
+                }
 
             }
             else // Just play the audio clip as a one shot (can only play audio clips

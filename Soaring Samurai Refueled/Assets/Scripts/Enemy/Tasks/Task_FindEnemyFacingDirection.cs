@@ -33,7 +33,6 @@ public class Task_FindEnemyFacingDirection : Leaf
         Vector2 attackDirectionVec = Vector2.up + Vector2.right;
 
         float vecToOpponentUpAngle = Vector2.SignedAngle(vecTowardOpponent, Vector2.up);
-        Debug.Log("SignedAngle: " + vecToOpponentUpAngle.ToString());
 
         if (vecTowardOpponent.y > 0) // if y value is positive, upper right left or right quadrant  (or exactly straight on, which we'll decide to count as the upper quadrant)
         {
