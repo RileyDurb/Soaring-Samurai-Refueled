@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
+using AudioEvents;
 
 public class MatchStateManager : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class MatchStateManager : MonoBehaviour
 
     public GameObject mTempSharedClashParticlesPrefab;
     GameObject mTempSharedClashParticlesObjectRef;
+
+    public SoundEvent mClashSFXEvent;
 
     // Round timer variables
     [SerializeField] GameObject mRoundTimerPrefab;
@@ -128,7 +131,7 @@ public class MatchStateManager : MonoBehaviour
             {
                 for (int i = mHitsThisFrame.Count - 1; i >= 0; i--)
                 {
-                    if (mHitsThisFrame[i].Item2.IsClashing && mTempSharedClashParticlesPrefab != null)
+                    if (mHitsThisFrame[i].Item2.IsClashing)
                     {
                         // If the found attack is the other clashing attack, where it's attacking source is the player that clashed with the attack we're checking,
                         Tuple<int, Hitbox.AttackCurrentData> otherClashingAttack = mHitsThisFrame.Find((Tuple<int, Hitbox.AttackCurrentData> otherAttack) => { return otherAttack.Item2.AttackingSourcePlayerID == mHitsThisFrame[i].Item1; });
@@ -137,8 +140,13 @@ public class MatchStateManager : MonoBehaviour
                         {
                             PlayerCombatController clashingPlayer1 = GetPlayerByIndex(mHitsThisFrame[i].Item1);
         
-                            // Spawn mutual clash background shockwave in between the two players
-                            mTempSharedClashParticlesObjectRef = Instantiate(mTempSharedClashParticlesPrefab, clashingPlayer1.transform.position + (clashingPlayer1.OpponentRef.transform.position - clashingPlayer1.transform.position) * .5f, Quaternion.identity);
+                            if (mTempSharedClashParticlesPrefab != null)
+                            {
+                                // Spawn mutual clash background shockwave in between the two players
+                                mTempSharedClashParticlesObjectRef = Instantiate(mTempSharedClashParticlesPrefab, clashingPlayer1.transform.position + (clashingPlayer1.OpponentRef.transform.position - clashingPlayer1.transform.position) * .5f, Quaternion.identity);
+                            }
+
+                            PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mClashSFXEvent);
 
                             // Remove both clashing hits, now that they've been handlex
                             mHitsThisFrame.RemoveAt(i);

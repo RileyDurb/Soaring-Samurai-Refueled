@@ -92,6 +92,7 @@ MonoBehaviour:
   mRoundWinMessagePrefab: {fileID: 122320547184230791, guid: aac34eecd9a9b6944b8ca418e68822d8, type: 3}
   mRoundTieMessagePrefab: {fileID: 122320547184230791, guid: ebf2069e0f914844a8de578330c09c61, type: 3}
   mTempSharedClashParticlesPrefab: {fileID: 0}
+  mClashSFXEvent: 7
   mRoundTimerPrefab: {fileID: 689383211063943229, guid: fa0468b1d4cf9de46bef43e35d1276c2, type: 3}
 --- !u!114 &6965499727050373144
 MonoBehaviour:
