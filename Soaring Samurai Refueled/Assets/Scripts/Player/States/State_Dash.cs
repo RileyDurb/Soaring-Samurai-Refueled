@@ -48,6 +48,7 @@ public class State_Dash : StateManagerPlayer.State
         // Gets last very recent movement input
         mOldMovementDirectionToUse = mInputBuffer.GetLastInputVector(InputBuffer.BufferTrackedInputs.Move, mCombatController.mPlayerBaseStats.mMovementStats.DashOldInputRecencyLimit);
 
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mCombatController.StateAesthetics.DashAestheticStats.DashSFXEvent); // Play dash sound
     }
 
     public override void OnUpdate(float dt)

@@ -1,3 +1,4 @@
+using AudioEvents;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,7 @@ public class PlayerStateAesthetics : ScriptableObject
     {
         public float MaxMoveRotationAngle = 30.0f;
         public float MoveRotationSpeed = 50.0f;
+        public SoundEvent DashSFXEvent;
     }
 
     [System.Serializable]
