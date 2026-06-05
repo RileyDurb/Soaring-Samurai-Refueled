@@ -294,6 +294,8 @@ public class MatchStateManager : MonoBehaviour
             mRoundWinMessageObject = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundWinMessagePrefab); // Add round win message
         }
 
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(MatchStats.RoundFinishSFX); // Play SFX for round end
+
         mActionList.AddActionCallback(() => { RestartRound(); }, mMatchStats.MatchEndRestartDelay);
     }
 
@@ -308,6 +310,8 @@ public class MatchStateManager : MonoBehaviour
             mMatchWinMenuObject.GetComponent<MatchEndMenuFeatures>().SetWinnerNameMessage("Player " + (winningPlayerID + 1).ToString() + " Has Won This Fight");
         },
         mMatchStats.MatchEndMenuPopupDelay);
+
+        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(MatchStats.RoundFinishSFX); // Play SFX for round end (Right now plays the same SFX for the round ending as the match ending)
 
     }
 

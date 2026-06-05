@@ -1,3 +1,4 @@
+using AudioEvents;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,5 +27,8 @@ public class MatchTuningStats : ScriptableObject
 
     [Header("Match End Sequence Aesthetics")]
     public float MatchEndMenuPopupDelay = 1.0f;
+
+    [Header("SFX")]
+    public SoundEvent RoundFinishSFX;
 
 }
