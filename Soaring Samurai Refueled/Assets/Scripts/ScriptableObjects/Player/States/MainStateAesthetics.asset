@@ -39,3 +39,4 @@ MonoBehaviour:
   DashAestheticStats:
     MaxMoveRotationAngle: 15
     MoveRotationSpeed: 10
+    DashSFXEvent: 8
