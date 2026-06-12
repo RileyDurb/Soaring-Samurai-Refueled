@@ -88,7 +88,7 @@ public class State_DashAttack : StateManagerPlayer.State
             mCombatController.SpriteObject.GetComponent<AnimationController>().SetAnimationState("Player_DashAttackActive"); // Play animation
 
             // Spawns attack hitbox right around the player
-            mParentObject.GetComponent<PlayerCombatController>().SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats);
+            mParentObject.GetComponent<PlayerCombatController>().SpawnDirectionalAttack(new Vector2(0, 0), mDashAttackStats.mStats, PlayerMoves.DashAttack);
 
 
             // Set to go into recovery after active time is done

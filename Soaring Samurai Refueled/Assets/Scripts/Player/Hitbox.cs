@@ -1,4 +1,5 @@
 using AudioEvents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -146,14 +147,19 @@ public class Hitbox : MonoBehaviour
             // Sends attack
             // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
             AttackCurrentData currAttackData = new AttackCurrentData(knockbackVec, mOwningPlayerID, false, transform.localPosition);
-            collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(currAttackData, mAttackInfo);
+
+            MatchStateManager.AttackHitPackage newHitPackage = new MatchStateManager.AttackHitPackage();
+            newHitPackage.AttackingPlayerIndex = mOwningPlayerID;
+            // Saves info for attack, like the current knockback, and all attack data, like how much hit squish to apply
+            newHitPackage.RecievingPlayerIndex = collision.gameObject.GetComponent<PlayerCombatController>().PlayerIndex;
+            newHitPackage.AttackCurrentData = currAttackData;
+            newHitPackage.AttackInfo = mAttackInfo;
+
+            // Queues hit to be resolved with all other hits this frame in sequence
+            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().mAttackHitsThisFrame.Add(newHitPackage);
 
             // Marks hitbox as already hit, so it doesn't trigger again
             mAlreadyHit = true;
-
-
-            // Tell the attacking player it hit an opponent, for things like meter gain on attack hitr
-            transform.parent.GetComponent<PlayerCombatController>().HitOpponentWithAttack(currAttackData, mAttackInfo);
 
         }
         else if (collision.collider.gameObject.tag.Contains("Hitbox")) // If hit only another hitbox, trigger a clash
@@ -186,9 +192,17 @@ public class Hitbox : MonoBehaviour
                 Vector2 vecToReceiver = collision.transform.position - parentAttacker.transform.position;
                 Vector2 knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
 
-                // Sends attack
-                // Passess in specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
-                collision.gameObject.GetComponent<PlayerCombatController>().TakeDamage(new AttackCurrentData(knockbackVec, mOwningPlayerID, true, transform.localPosition), mAttackInfo);
+                // Queues attack hit to be resolved
+                MatchStateManager.AttackHitPackage newHitPackage = new MatchStateManager.AttackHitPackage();
+                newHitPackage.AttackingPlayerIndex = mOwningPlayerID;
+
+                // Saves specifc attack info like knockback vec, and all the attack's data for other purposes like how it squishes the opponent visually
+                newHitPackage.RecievingPlayerIndex = collision.gameObject.GetComponentInParent<PlayerCombatController>().PlayerIndex;
+                newHitPackage.AttackCurrentData = new AttackCurrentData(knockbackVec, mOwningPlayerID, true, transform.localPosition);
+                newHitPackage.AttackInfo = mAttackInfo;
+
+                // Puts hit in queue to be resolved in sequence with other hits
+                LevelScopeManagers.Instance.GetComponent<MatchStateManager>().mAttackHitsThisFrame.Add(newHitPackage);
 
                 // Marks hitbox as already hit, so it doesn't trigger again
                 mAlreadyHit = true;

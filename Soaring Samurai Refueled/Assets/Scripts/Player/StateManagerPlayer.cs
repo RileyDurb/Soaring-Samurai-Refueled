@@ -22,6 +22,7 @@ public class StateManagerPlayer : StateManagerEnum<PlayerStates>
         // Create any states that are have specfiic code NOTE: Make sure states are added in the same order as the enum, so they get named properly
         mStateList.Add(new State_Ready());
         mStateList.Add(new State_Defeated());
+        mStateList.Add(new State_SlashAttack());
         mStateList.Add(new State_DashAttack());
         mStateList.Add(new State_Dash());
         mStateList.Add(new State_Flinch());

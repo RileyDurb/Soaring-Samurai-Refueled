@@ -18,6 +18,15 @@ public class MatchStateManager : MonoBehaviour
         GameEnd
     }
 
+    public class AttackHitPackage
+    {
+        public int AttackingPlayerIndex = -1;
+        public int RecievingPlayerIndex = -1;
+        public Hitbox.AttackCurrentData AttackCurrentData;
+        public Hitbox.AttackDefinition AttackInfo;
+    }
+
+
     // Events //////////////////////////////////////////////////////////////////////////////////////
     public Action<int> PlayerDefeated;
     public Action<int, int> PlayerRoundWin; // Event for saying a player has won, sends the player index as the 1st parameter, and the new number of round wins in this match as the second parameter
@@ -69,6 +78,7 @@ public class MatchStateManager : MonoBehaviour
     bool mTimerPaused = false;
 
     public List<Tuple<int, Hitbox.AttackCurrentData>> mHitsThisFrame = new List<Tuple<int, Hitbox.AttackCurrentData>>();
+    public List<AttackHitPackage> mAttackHitsThisFrame = new List<AttackHitPackage>();
 
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
@@ -117,6 +127,7 @@ public class MatchStateManager : MonoBehaviour
     {
         mActionList.Update(Time.deltaTime);
 
+        // Update match time
         if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false && mTimerPaused == false)
         {
             mCurrMatchTimer -= Time.deltaTime;
@@ -126,43 +137,64 @@ public class MatchStateManager : MonoBehaviour
                 // Handle timeout win
                 HandleTimerUp();   
             }
+        }
 
-            if (mHitsThisFrame.Count > 0)
+        // Handle all queued hits
+        if (mAttackHitsThisFrame.Count > 0)
+        {
+            for (int i = mAttackHitsThisFrame.Count - 1; i >= 0; i--)
             {
-                for (int i = mHitsThisFrame.Count - 1; i >= 0; i--)
+                // Apply the current attack
+                AttackHitPackage currAttack = mAttackHitsThisFrame[i];
+                if (currAttack.AttackCurrentData.IsClashing) // Handle clashing by also playing certain other FX, mainly the clash sound effect
                 {
-                    if (mHitsThisFrame[i].Item2.IsClashing)
+                    // If we can find the other clashing attack, where the attacking player of that attack is the one recieving the current attack
+                    AttackHitPackage otherClashingAttack = mAttackHitsThisFrame.Find((AttackHitPackage otherAttack) => { return otherAttack.AttackingPlayerIndex == currAttack.RecievingPlayerIndex; });
+
+                    if (otherClashingAttack != null)
                     {
-                        // If the found attack is the other clashing attack, where it's attacking source is the player that clashed with the attack we're checking,
-                        Tuple<int, Hitbox.AttackCurrentData> otherClashingAttack = mHitsThisFrame.Find((Tuple<int, Hitbox.AttackCurrentData> otherAttack) => { return otherAttack.Item2.AttackingSourcePlayerID == mHitsThisFrame[i].Item1; });
+                        PlayerCombatController recievingClashingPlayer = GetPlayerByIndex(currAttack.RecievingPlayerIndex);
 
-                        if (otherClashingAttack != null)
+                        if (mTempSharedClashParticlesPrefab != null)
                         {
-                            PlayerCombatController clashingPlayer1 = GetPlayerByIndex(mHitsThisFrame[i].Item1);
-        
-                            if (mTempSharedClashParticlesPrefab != null)
-                            {
-                                // Spawn mutual clash background shockwave in between the two players
-                                mTempSharedClashParticlesObjectRef = Instantiate(mTempSharedClashParticlesPrefab, clashingPlayer1.transform.position + (clashingPlayer1.OpponentRef.transform.position - clashingPlayer1.transform.position) * .5f, Quaternion.identity);
-                            }
-
-                            PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mClashSFXEvent);
-
-                            // Remove both clashing hits, now that they've been handlex
-                            mHitsThisFrame.RemoveAt(i);
-                            mHitsThisFrame.Remove(otherClashingAttack);
-
-                            i--; // Decrement i because we removed 2 objects
-
-
+                            // Spawn mutual clash background shockwave in between the two players
+                            mTempSharedClashParticlesObjectRef = Instantiate(mTempSharedClashParticlesPrefab, recievingClashingPlayer.transform.position + (recievingClashingPlayer.OpponentRef.transform.position - recievingClashingPlayer.transform.position) * .5f, Quaternion.identity);
                         }
 
-                    }
-                }
+                        PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(mClashSFXEvent);
 
-                // After all potential clashes have been handled, clear list of hits
-                mHitsThisFrame.Clear();
+
+                        // Make each player take the attack
+                        recievingClashingPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                        recievingClashingPlayer.OpponentRef.TakeDamage(otherClashingAttack.AttackCurrentData, otherClashingAttack.AttackInfo);
+
+
+                        // Remove both clashing hits, now that they've been handled
+                        mAttackHitsThisFrame.RemoveAt(i);
+                        mAttackHitsThisFrame.Remove(otherClashingAttack);
+
+                        i--; // Decrement i because we removed 2 objects
+
+                    }
+                    else // For some reason could not find other clashing attack. Just make opponent take damage from this attack, should investigate though to see if this is an issue
+                    {
+                        PlayerCombatController recievingClashingPlayer = GetPlayerByIndex(currAttack.RecievingPlayerIndex);
+                        recievingClashingPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                    }
+
+                }
+                else // Handle the hit normally by just sending the attack to the damaged player, and letting the attacker know it hit
+                {
+                    PlayerCombatController hitPlayer = GetPlayerByIndex(currAttack.RecievingPlayerIndex);
+                    hitPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+
+                    PlayerCombatController attackingPlayer = GetPlayerByIndex(currAttack.AttackingPlayerIndex);
+                    attackingPlayer.HitOpponentWithAttack(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                }
             }
+
+            // After all potential clashes have been handled, clear list of hits
+            mAttackHitsThisFrame.Clear();
         }
     }
 
