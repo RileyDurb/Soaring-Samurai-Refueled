@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class State_SlashAttack : StateManagerPlayer.State
 {
-    State_SlashAttack() : base(PlayerStates.SlashAttack) { }
+    public State_SlashAttack() : base(PlayerStates.SlashAttack) { }
+
+    public PlayerCombatController.PlayerMoves mAttackType;
 
     // References
     PlayerCombatController mCombatControllerRef;
@@ -15,12 +17,15 @@ public class State_SlashAttack : StateManagerPlayer.State
     }
     public override void OnUpdate(float dt)
     {
-        float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
+        //float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
 
-        Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
+        //Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
 
-        mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
+        //mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
     }
 
-
+    public override void OnExit()
+    {
+        mCombatControllerRef.ClearHitboxType(mAttackType);
+    }
 }

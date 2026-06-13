@@ -1,5 +1,5 @@
 using System;
-using System.Xml;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,6 +35,13 @@ public class PlayerCombatController : MonoBehaviour
         public float DashStretchMax = 1.6f;
         public Action_.EasingTypes DashStrechEasing = Action_.EasingTypes.None;
     }
+
+    public class HitboxPackage
+    {
+        public PlayerMoves AttackName;
+        public Hitbox HitboxRef;
+    }
+
 
 
 
@@ -121,6 +128,8 @@ public class PlayerCombatController : MonoBehaviour
     private bool mNonPlayerControlled = false;
 
     CharacterDataManager.Characters mCurrentCharacterVisuals;
+
+    List<HitboxPackage> mActiveHitboxes = new List<HitboxPackage>();
 
     // Component references
     AnimationController mAnimationController;
@@ -351,7 +360,10 @@ public class PlayerCombatController : MonoBehaviour
 
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.DLAttack);
+
+            State_SlashAttack slashAttackState = mStateManager.GetState(PlayerStates.SlashAttack) as State_SlashAttack;
+            slashAttackState.mAttackType = PlayerMoves.DLAttack;
 
             // Set animation and facting direction
             SetFacingDirection(FacingDirection.Left);
@@ -388,7 +400,10 @@ public class PlayerCombatController : MonoBehaviour
 
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.ULAttack);
+
+            State_SlashAttack slashAttackState = mStateManager.GetState(PlayerStates.SlashAttack) as State_SlashAttack;
+            slashAttackState.mAttackType = PlayerMoves.ULAttack;
 
             // Set animation and facing direction
             SetFacingDirection(FacingDirection.Left);
@@ -427,7 +442,10 @@ public class PlayerCombatController : MonoBehaviour
 
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.DRAttack);
+
+            State_SlashAttack slashAttackState = mStateManager.GetState(PlayerStates.SlashAttack) as State_SlashAttack;
+            slashAttackState.mAttackType = PlayerMoves.DRAttack;
 
             // Set animation and facing direction
             SetFacingDirection(FacingDirection.Right);
@@ -465,7 +483,10 @@ public class PlayerCombatController : MonoBehaviour
 
             mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
 
-            SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats);
+            SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.URAttack);
+
+            State_SlashAttack slashAttackState = mStateManager.GetState(PlayerStates.SlashAttack) as State_SlashAttack;
+            slashAttackState.mAttackType = PlayerMoves.URAttack;
 
             // Set animation and facing direction
             SetFacingDirection(FacingDirection.Right);
@@ -680,8 +701,8 @@ public class PlayerCombatController : MonoBehaviour
                 Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + particleSystemDirectionVec * 10.0f, Color.blue, 10.0f);
             }
 
-            // Add queued clash, so only one VFX gets spawned for both clashes
-            LevelScopeManagers.Instance.GetComponent<MatchStateManager>().mHitsThisFrame.Add(new Tuple<int, Hitbox.AttackCurrentData>(PlayerIndex, attackData));
+            //// Add queued clash, so only one VFX gets spawned for both clashes
+            //LevelScopeManagers.Instance.GetComponent<MatchStateManager>().mHitsThisFrame.Add(new Tuple<int, Hitbox.AttackCurrentData>(PlayerIndex, attackData));
         }
         else if (baseAttackInfo.HitParticlesPrefab != null) // Normal hit
         {
@@ -760,7 +781,8 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
-    public void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo)
+    // Spawns an attack hitbox based on the given info, and offset from the player. Returns the hitbox object spawned
+    public void SpawnDirectionalAttack(Vector2 offsetFromPlayer, Hitbox.AttackDefinition attackInfo, PlayerMoves moveType)
     {
         GameObject newHitbox = Instantiate(SimManager.Instance.GetPrefab("BaseHitbox_V2"), transform); // Spawn a hitbox
 
@@ -776,6 +798,13 @@ public class PlayerCombatController : MonoBehaviour
         {
             Debug.DrawLine(transform.position, transform.position + new Vector3(offsetFromPlayer.x, offsetFromPlayer.y), Color.white, 5.0f);
         }
+
+
+        HitboxPackage newTrackedHitbox = new HitboxPackage();
+        newTrackedHitbox.AttackName = moveType;
+        newTrackedHitbox.HitboxRef = newHitbox.GetComponent<Hitbox>();
+
+        mActiveHitboxes.Add(newTrackedHitbox);
     }
 
     public void HitOpponentWithAttack(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
@@ -799,6 +828,24 @@ public class PlayerCombatController : MonoBehaviour
         if (OnCharacterChanged != null)
         {
             OnCharacterChanged.Invoke(mCurrentCharacterVisuals);
+        }
+    }
+
+    public void ClearHitboxType(PlayerMoves move)
+    {
+        for (int i = mActiveHitboxes.Count - 1; i >= 0; i--)
+        {
+            if (mActiveHitboxes[i].AttackName == move)
+            {
+                if (mActiveHitboxes[i].HitboxRef != null)
+                {
+                    // Destroy the hitbox object
+                    Destroy(mActiveHitboxes[i].HitboxRef.gameObject);
+
+                    // Remove from hitbox list
+                    mActiveHitboxes.RemoveAt(i);
+                }
+            }
         }
     }
 }
