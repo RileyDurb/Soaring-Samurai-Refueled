@@ -16,6 +16,7 @@ MonoBehaviour:
   - Name: 1
     AudioAssetOptions:
     - {fileID: 8300000, guid: 8b57c36da2ee3a74b8e53db58bb0a330, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 0}
     Delay: 0
@@ -23,48 +24,56 @@ MonoBehaviour:
     AudioAssetOptions:
     - {fileID: 8300000, guid: 1e08b41a1d002d4479f82f118d9e7c06, type: 3}
     - {fileID: 8300000, guid: 0fa23038d462f3340894a86e08c5c34c, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 0}
     Delay: 0
   - Name: 3
     AudioAssetOptions:
     - {fileID: 8300000, guid: 29a0298b17b62044cbb4c838f6fa7315, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 0}
     Delay: 0
   - Name: 4
     AudioAssetOptions:
     - {fileID: 8300000, guid: a0fe9b9c6288f114db6f53bfbd918cfa, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 0}
     Delay: 0
   - Name: 5
     AudioAssetOptions:
     - {fileID: 8300000, guid: 14377d1b2c22c2c4187692119682f5c4, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 0}
     Delay: 0
   - Name: 6
     AudioAssetOptions:
     - {fileID: 6418180475301049370, guid: 477b49c7945bf5a4db5969af2de1657d, type: 2}
+    SoundGroup: 1
     UseSeparateAudioSource: 1
     AudioSourcePrefab: {fileID: 9157118242790257358, guid: 8d5744921f9c2c940904c2a339cd6a85, type: 3}
     Delay: 0.8
   - Name: 7
     AudioAssetOptions:
     - {fileID: 6418180475301049370, guid: 88dffd931cc9ac34983f05e46ec718a7, type: 2}
+    SoundGroup: 1
     UseSeparateAudioSource: 1
     AudioSourcePrefab: {fileID: 9157118242790257358, guid: 8d5744921f9c2c940904c2a339cd6a85, type: 3}
     Delay: 0
   - Name: 8
     AudioAssetOptions:
     - {fileID: 8300000, guid: e458b86b28c0a6240b246de6c9c67179, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 9157118242790257358, guid: 8d5744921f9c2c940904c2a339cd6a85, type: 3}
     Delay: 0
   - Name: 9
     AudioAssetOptions:
     - {fileID: 8300000, guid: dd14cf40b14b4484fa73967c7b4f6e8f, type: 3}
+    SoundGroup: 1
     UseSeparateAudioSource: 0
     AudioSourcePrefab: {fileID: 9157118242790257358, guid: 8d5744921f9c2c940904c2a339cd6a85, type: 3}
     Delay: 0

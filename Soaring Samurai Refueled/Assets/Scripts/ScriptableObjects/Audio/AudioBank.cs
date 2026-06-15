@@ -11,6 +11,8 @@ public class AudioBank<T> : ScriptableObject where T : Enum
     {
         public T Name;
         public AudioResource[] AudioAssetOptions; // Audio to play, likely either audio clips or random containers
+        [Header("Audio Group")]
+        public AudioManager.MixerType SoundGroup;
         [Header("Separate Audio Source Settings")]
         public bool UseSeparateAudioSource = false; // Whether to instantiate a prefab with an audio source to play the sound on. If this is false, audio assets MUST be audio clips
         public GameObject AudioSourcePrefab;

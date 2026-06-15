@@ -3,25 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SerializableDictionary<keyType, valueType> : Dictionary<keyType,valueType>, ISerializationCallbackReceiver
-{
-    public void OnBeforeSerialize()
-    {
-       
-    }
-    public void OnAfterDeserialize()
-    {
 
-    }
-
-    void OnGUI()
-    {
-        foreach (var kvp in  this)
-        {
-            GUILayout.Label("Key: " + kvp.Key + " value: " + kvp.Value);
-        }
-    }
-}
 
 public class PoolContainer : MonoBehaviour
 {

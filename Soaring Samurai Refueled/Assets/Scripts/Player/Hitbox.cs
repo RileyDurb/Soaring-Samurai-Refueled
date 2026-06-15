@@ -100,6 +100,10 @@ public class Hitbox : MonoBehaviour
     void Start()
     {
         mCurrLifeTimer = 0.0f;
+
+        // Enables debug draw if in debug mode, disables if not
+        // NOTE: Size not accurate at the moment
+        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugModeOn;
     }
 
     // Update is called once per frame
