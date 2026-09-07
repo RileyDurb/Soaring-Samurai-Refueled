@@ -20,30 +20,43 @@ public class MovementBoundsObject : MonoBehaviour
     public void SetBoundDimensions(Vector2 newDimensions)
     {
         // Uses the width of the left and up bound objects, assumes all bound objects have the same thickness
-        float xDistance = (newDimensions.x / 2.0f) + (mBoundsSides[(int)BoundDirections.Left].transform.lossyScale.x / 2.0f);
-        float yDistance = (newDimensions.y / 2.0f) + (mBoundsSides[(int)BoundDirections.Up].transform.lossyScale.x / 2.0f);
+        float xDistance = (newDimensions.x / 2.0f) + (mBoundsSides[(int)BoundDirections.Left].transform.localScale.x / 2.0f);
+        float yDistance = (newDimensions.y / 2.0f) + (mBoundsSides[(int)BoundDirections.Up].transform.localScale.x / 2.0f);
 
         GameObject currBoundObject = mBoundsSides[(int)BoundDirections.Left];
-        Vector3 currLocalPosition = currBoundObject.transform.position;
 
-        currBoundObject.transform.localPosition.Set(-xDistance, currLocalPosition.y, currLocalPosition.z);
+        // For left side
+        // Set local position to be half the dimension width
+        Vector3 currLocalPosition = currBoundObject.transform.localPosition;
 
+        currBoundObject.transform.localPosition = new Vector3(-xDistance, currLocalPosition.y, currLocalPosition.z);
+
+
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
+
+        // For right side
         currBoundObject = mBoundsSides[(int)BoundDirections.Right];
-        currLocalPosition = currBoundObject.transform.position;
+        currLocalPosition = currBoundObject.transform.localPosition;
 
-        currBoundObject.transform.localPosition.Set(xDistance, currLocalPosition.y, currLocalPosition.z);
+        currBoundObject.transform.localPosition = new Vector3(xDistance, currLocalPosition.y, currLocalPosition.z);
 
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
+
+        // For top side
         currBoundObject = mBoundsSides[(int)BoundDirections.Up];
-        currLocalPosition = currBoundObject.transform.position;
+        currLocalPosition = currBoundObject.transform.localPosition;
 
-        currBoundObject.transform.localPosition.Set(currLocalPosition.x, yDistance, currLocalPosition.z);
+        currBoundObject.transform.localPosition = new Vector3(currLocalPosition.x, yDistance, currLocalPosition.z);
 
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
+
+        // For bottom side
         currBoundObject = mBoundsSides[(int)BoundDirections.Down];
-        currLocalPosition = currBoundObject.transform.position;
+        currLocalPosition = currBoundObject.transform.localPosition;
 
-        currBoundObject.transform.localPosition.Set(currLocalPosition.x, -yDistance, currLocalPosition.z);
+        currBoundObject.transform.localPosition = new Vector3(currLocalPosition.x, -yDistance, currLocalPosition.z);
 
-
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
 
     }
 

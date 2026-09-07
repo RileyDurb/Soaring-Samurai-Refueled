@@ -13,8 +13,7 @@ public class BehaviourMovementBounds : MonoBehaviour
     [SerializeField] private GameObject mMovementBoundsObject = null;
     [SerializeField] private GameObject mBackgroundImage = null; // Either remove this ref, or change to background container class ref when that system is created. For now it's just an image
     private GameObject mCamRef = null; // Camera to use for positiining
-    [SerializeField] float mNonMaxDistanceBoundsMargin = 0.0f; // When bounds are not at max, the margin it gives on each side
-    [SerializeField] Vector2 mMaxMoveBounds = new Vector2(50, 50); // Max xy bounds the move bounds will stretch to
+    StageStats mStats;
 
 
 
@@ -23,19 +22,25 @@ public class BehaviourMovementBounds : MonoBehaviour
     Vector2 mMaxDistFromCenter = new Vector2();
     Vector3 mCurrPos = new Vector3();
 
+    Vector2 mCurrPlayerGapBounds = Vector2.zero;
+
     // Getters and setters
-    public Vector2 MaxMoveBounds {  get { return mMaxMoveBounds; } }
     public Vector2 MovementBoundsObjectScale { get { return mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundDimensions(); } }
 
+    
     // Start is called before the first frame update
     void Start()
     {
         mCamRef = GameObject.Find("Main Camera");
+        mStats = GetComponent<StageDataManager>().mStageStats;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Calculate follow target
+
+
         // Get the player's average center position
         mCurrPlayersCenter = mCamRef.GetComponent<CameraFollow>().CurrFollowTarget;
 
@@ -65,23 +70,6 @@ public class BehaviourMovementBounds : MonoBehaviour
             }
         }
 
-        // Add margins
-        //Vector2 currBoundsHalfLength = maxPlayerCenterDistances;
-
-        //currBoundsHalfLength += new Vector2(mNonMaxDistanceBoundsMargin, mNonMaxDistanceBoundsMargin) / 2.0f;
-
-        //// Find desired width of the boundaries, which is just outside the current camera
-        //float cameraOrthoSize = Camera.main.orthographicSize;
-        //float minMarginSpace = Camera.main.GetComponent<CameraFollow>().MinZoomMarginSpace;
-        //Vector2 targetDimensions = new Vector2((cameraOrthoSize / 2 * Screen.width / Screen.height) + (minMarginSpace / 2), cameraOrthoSize / 2 + (minMarginSpace / 2));
-        ////Vector2 boundsSideWidth = mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundsWidth();
-        ////targetDimensions.Set(targetDimensions.x + boundsSideWidth.x / 2, targetDimensions.y + boundsSideWidth.y / 2);
-
-        //// Clamp to max bounds
-        //currBoundsHalfLength.Set(Mathf.Clamp(currBoundsHalfLength.x, targetDimensions.x, mMaxMoveBounds.x), Mathf.Clamp(currBoundsHalfLength.y, targetDimensions.y, mMaxMoveBounds.y));
-
-        //// Set the scale
-        //mMovementBoundsObject.transform.localScale = new Vector3(currBoundsHalfLength.x, mMovementBoundsObject.transform.lossyScale.z, currBoundsHalfLength.y);
 
         // Update Position
         UpdateMaxCenterDistance();
@@ -91,6 +79,15 @@ public class BehaviourMovementBounds : MonoBehaviour
                               , mCurrPlayersCenter.z);
         mMovementBoundsObject.transform.position = mCurrPos;
 
+
+        // Detecting stat changes
+
+
+        if (mCurrPlayerGapBounds != mStats.MaxPlayerSpacingBounds)
+        {
+            // Set size for how much space can be between players before they are blocked by boundaries
+            mMovementBoundsObject.GetComponent<MovementBoundsObject>().SetBoundDimensions(mStats.MaxPlayerSpacingBounds);
+        }
     }
     
     void UpdateMaxCenterDistance()
@@ -99,12 +96,12 @@ public class BehaviourMovementBounds : MonoBehaviour
         Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Color.red);
 
         // Calculate max distance bounds can be from center on x axis
-        float xBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f;
+        float xBackgroundExtent = mStats.MaxMoveBounds.x / 2.0f;
         float minDistanceFromEdgeX = xBackgroundExtent - mMovementBoundsObject.transform.lossyScale.x / 2.0f;
         mMaxDistFromCenter.x = Mathf.Abs(minDistanceFromEdgeX) - Mathf.Abs(mCurrPlayersCenter.x);
 
         // Calculate max distance bounds can be from center on y axis
-        float yBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f;
+        float yBackgroundExtent = mStats.MaxMoveBounds.y / 2.0f;
         float minDistanceFromEdgeY = yBackgroundExtent - mMovementBoundsObject.transform.lossyScale.y / 2.0f;
         mMaxDistFromCenter.y = Mathf.Abs(minDistanceFromEdgeY) - Mathf.Abs(mCurrPlayersCenter.y);
 
@@ -112,5 +109,25 @@ public class BehaviourMovementBounds : MonoBehaviour
         Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
 
     }
+
+    //void UpdateMaxCenterDistance()
+    //{
+    //    Debug.DrawLine(new Vector3(), new Vector3(-mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f, 0.0f, 0.0f));
+    //    Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Color.red);
+
+    //    // Calculate max distance bounds can be from center on x axis
+    //    float xBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f;
+    //    float minDistanceFromEdgeX = xBackgroundExtent - mMovementBoundsObject.transform.lossyScale.x / 2.0f;
+    //    mMaxDistFromCenter.x = Mathf.Abs(minDistanceFromEdgeX) - Mathf.Abs(mCurrPlayersCenter.x);
+
+    //    // Calculate max distance bounds can be from center on y axis
+    //    float yBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f;
+    //    float minDistanceFromEdgeY = yBackgroundExtent - mMovementBoundsObject.transform.lossyScale.y / 2.0f;
+    //    mMaxDistFromCenter.y = Mathf.Abs(minDistanceFromEdgeY) - Mathf.Abs(mCurrPlayersCenter.y);
+
+    //    Debug.DrawLine(new Vector3(), new Vector3(-mMaxDistFromCenter.x, 0.0f, 0.0f), Color.blue);
+    //    Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
+
+    //}
 
 }

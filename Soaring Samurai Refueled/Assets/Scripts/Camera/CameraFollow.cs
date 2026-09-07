@@ -42,7 +42,7 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] bool mUseMarginTrimmingAtMaxDistance = false;
     [SerializeField] float mMarginTrimmingWindowBeforeMaxDistance = 3.0f;
-    BehaviourMovementBounds mBoundsManager = null;
+    BehaviourMovementBounds mBoundsManager;
 
     // Overrides
     bool mIsOverridingCamMoveSpeed = false;

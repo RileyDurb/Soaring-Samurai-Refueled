@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1197633629061251800}
   - component: {fileID: 1922338874349361592}
+  - component: {fileID: 1699032418457062185}
+  - component: {fileID: 6517976640501071433}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -44,3 +46,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb86b1966d137e24e9ebf78931acd476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mMovementBoundsObject: {fileID: 0}
+  mBackgroundImage: {fileID: 0}
+--- !u!114 &1699032418457062185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411063955269159739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412d05613be3d6144a242dc19480adcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mStageStats: {fileID: 11400000, guid: 34913781dc47d7c4ab9a30ce24a238de, type: 2}
+--- !u!114 &6517976640501071433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411063955269159739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9601216c55ab644bad6ec5533571bf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mCurrBackgroundmode: 0
+  panoramaTextureObjects: []
+  panoramaTextureXOffsets: []
+  mBackgroundImageObject: {fileID: 0}

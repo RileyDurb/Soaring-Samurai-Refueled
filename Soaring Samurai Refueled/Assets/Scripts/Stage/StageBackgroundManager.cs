@@ -19,25 +19,52 @@ public class StageBackgroundManager : MonoBehaviour
     [SerializeField] List<GameObject> panoramaTextureObjects;
     [SerializeField] List<float> panoramaTextureXOffsets;
 
+    [SerializeField] GameObject mBackgroundImageObject = null;
+
+    StageStats mStats;
+
+    SpriteRenderer mBackgroundSpriteComp;
+
+    float mCurrBackgroundScale = -1.0f;
+
+
     // /////////////////////////////////////////////////////////////////
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 centerPanoramaTexturePos = panoramaTextureObjects[panoramaTextureObjects.Count / 2].transform.position;
-        
-        // T
-        for (int i = 0; i < panoramaTextureObjects.Count; i++)
+        mStats = GetComponent<StageDataManager>().mStageStats;
+        if (mBackgroundImageObject != null)
         {
-            GameObject currTextureObject = panoramaTextureObjects[i];
-
-            panoramaTextureXOffsets[i] = centerPanoramaTexturePos.x - currTextureObject.transform.position.x;
+            mBackgroundSpriteComp = mBackgroundImageObject.GetComponent<SpriteRenderer>();
+            mBackgroundSpriteComp.sprite = mStats.BackgroundImage;
+            mBackgroundImageObject.transform.localScale = Vector2.one * mStats.BackgroundImageScale;
+            mCurrBackgroundScale = mStats.BackgroundImageScale;
         }
+        //Vector3 centerPanoramaTexturePos = panoramaTextureObjects[panoramaTextureObjects.Count / 2].transform.position;
+
+        //// T
+        //for (int i = 0; i < panoramaTextureObjects.Count; i++)
+        //{
+        //    GameObject currTextureObject = panoramaTextureObjects[i];
+
+        //    panoramaTextureXOffsets[i] = centerPanoramaTexturePos.x - currTextureObject.transform.position.x;
+        //}
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        // Check for background changes
+        if (mBackgroundSpriteComp.sprite != mStats.BackgroundImage)
+        {
+            mBackgroundSpriteComp.sprite = mStats.BackgroundImage; // Set new background image
+        }
+
+        if (mCurrBackgroundScale != mStats.BackgroundImageScale)
+        {
+            mBackgroundImageObject.transform.localScale = Vector2.one * mStats.BackgroundImageScale; // Set new background image scale
+
+        }
     }
 
     void InitPanoramaMode()
