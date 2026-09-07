@@ -60,6 +60,7 @@ public class StageBackgroundManager : MonoBehaviour
         if (mBackgroundSpriteComp.sprite != mStats.BackgroundImage)
         {
             mBackgroundSpriteComp.sprite = mStats.BackgroundImage; // Set new background image
+            mBackgroundImageObject.transform.localScale = Vector2.one * mStats.BackgroundImageScale; // Set new background image scale
         }
 
         if (mCurrBackgroundScale != mStats.BackgroundImageScale)

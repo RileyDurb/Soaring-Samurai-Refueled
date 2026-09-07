@@ -14,6 +14,8 @@ public class DebugMenuFunctions : MonoBehaviour
     [SerializeField] TextMeshProUGUI SelectedPlayerText;
     [SerializeField] TMP_Dropdown CPUModeDropdown;
     [SerializeField] TMP_Dropdown StageSelectDropdown;
+    [SerializeField] Button CPU1Toggle;
+    [SerializeField] Button CPU2Toggle;
 
     StageDataManager mStageDataManagerObject;
 
@@ -73,6 +75,9 @@ public class DebugMenuFunctions : MonoBehaviour
         StageSelectDropdown.AddOptions(stageSelectOptions);
 
         StageSelectDropdown.onValueChanged.AddListener(SelectStage);
+
+        CPU1Toggle.onClick.AddListener(() => { ToggleCPUModeSpecificPlayer(0); });
+        CPU2Toggle.onClick.AddListener(() => { ToggleCPUModeSpecificPlayer(1); });
     }
 
     public void ToggleDebugMode()
@@ -174,5 +179,29 @@ public class DebugMenuFunctions : MonoBehaviour
         mStageDataManagerObject.SetStage(StageSelectDropdown.options[optionIndex].text);
 
         LevelScopeManagers.Instance.GetComponent<MatchStateManager>().ResetPlayerPositions();
+    }
+
+    public void ToggleCPUModeSpecificPlayer(int playerIndex)
+    {
+
+        // Get selected player
+        int targetPlayerIndex = playerIndex;
+        List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
+        PlayerCombatController targetPlayer = players.Find((PlayerCombatController player) => { return player.PlayerIndex == playerIndex; });
+        if (targetPlayer == null)
+        {
+            print("DebugMenuFunctions:SelectCPUMode: no player of index " + targetPlayerIndex.ToString() + " could be found.");
+            return;
+        }
+        AIBehaviour playerAIBehaviour = targetPlayer.GetComponent<AIBehaviour>();
+
+        AIBehaviour.AIMode currAIMode = playerAIBehaviour.CurrAIMode;
+
+        // Get new AI mode to Behaviour tree if not, or normal if not
+
+
+        AIBehaviour.AIMode modeToChangeTo = currAIMode != AIBehaviour.AIMode.BehaviourTree ? AIBehaviour.AIMode.BehaviourTree : AIBehaviour.AIMode.PlayerInput;
+        targetPlayer.GetComponent<AIBehaviour>().SetAIMode(modeToChangeTo);
+
     }
 }
