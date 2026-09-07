@@ -13,5 +13,9 @@ public class StageStats : ScriptableObject
     [SerializeField] public Vector2 MaxMoveBounds = new Vector2(10.0f, 10.0f);
     [SerializeField] public Vector2 MaxPlayerSpacingBounds = new Vector2(10.0f, 10.0f);
 
+    [Header("Debug")]
+    public bool ShowMaxMoveBoundLines = false;
+    public bool ShowPlayerSpacingBounds = false;
+
 
 }

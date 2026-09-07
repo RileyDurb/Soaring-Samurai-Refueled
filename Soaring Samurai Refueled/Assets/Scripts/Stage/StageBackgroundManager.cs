@@ -40,6 +40,8 @@ public class StageBackgroundManager : MonoBehaviour
             mBackgroundImageObject.transform.localScale = Vector2.one * mStats.BackgroundImageScale;
             mCurrBackgroundScale = mStats.BackgroundImageScale;
         }
+
+        GetComponent<StageDataManager>().mOnStageChanged += UpdateInfoFromStageChange;
         //Vector3 centerPanoramaTexturePos = panoramaTextureObjects[panoramaTextureObjects.Count / 2].transform.position;
 
         //// T
@@ -70,5 +72,10 @@ public class StageBackgroundManager : MonoBehaviour
     void InitPanoramaMode()
     {
 
+    }
+
+    void UpdateInfoFromStageChange(StageDataManager.StageInfo newStage)
+    {
+        mStats = newStage.StatsObject;
     }
 }

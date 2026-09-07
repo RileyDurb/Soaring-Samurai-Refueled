@@ -790,6 +790,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7644529891004468329, guid: 82b6853b7be0dbd49ad09408ecd91fb0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1557,6 +1561,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mStageStats
+      value: 
+      objectReference: {fileID: 11400000, guid: b5ae334b12663bf4d9fc5492219bf317, type: 2}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[0].Name
+      value: Port City
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[1].Name
+      value: Busy Mausoleum
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[2].Name
+      value: Serene Mountain
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[3].Name
+      value: Market Alleyway
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[0].StatsObject
+      value: 
+      objectReference: {fileID: 11400000, guid: b5ae334b12663bf4d9fc5492219bf317, type: 2}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[1].StatsObject
+      value: 
+      objectReference: {fileID: 11400000, guid: 5c374d603446ca74e938eade9b105da0, type: 2}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[2].StatsObject
+      value: 
+      objectReference: {fileID: 11400000, guid: d70f39fc99a4f964f8a77dfc327efd6d, type: 2}
+    - target: {fileID: 1699032418457062185, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
+      propertyPath: mAvailableStages.Array.data[3].StatsObject
+      value: 
+      objectReference: {fileID: 11400000, guid: d70f39fc99a4f964f8a77dfc327efd6d, type: 2}
     - target: {fileID: 1922338874349361592, guid: 568b6e7d372d51742ab49abf6b7a4369, type: 3}
       propertyPath: mStats
       value: 

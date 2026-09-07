@@ -15,6 +15,8 @@ public class BehaviourMovementBounds : MonoBehaviour
     private GameObject mCamRef = null; // Camera to use for positiining
     StageStats mStats;
 
+    DebugSpriteView mMovementBoundsDebugSpriteView;
+
 
 
     // Tracked target values
@@ -33,6 +35,8 @@ public class BehaviourMovementBounds : MonoBehaviour
     {
         mCamRef = GameObject.Find("Main Camera");
         mStats = GetComponent<StageDataManager>().mStageStats;
+        GetComponent<StageDataManager>().mOnStageChanged += UpdateInfoFromStageChange;
+        mMovementBoundsDebugSpriteView = mMovementBoundsObject.GetComponent<DebugSpriteView>();
     }
 
     // Update is called once per frame
@@ -88,46 +92,38 @@ public class BehaviourMovementBounds : MonoBehaviour
             // Set size for how much space can be between players before they are blocked by boundaries
             mMovementBoundsObject.GetComponent<MovementBoundsObject>().SetBoundDimensions(mStats.MaxPlayerSpacingBounds);
         }
+
+        if (mStats.ShowMaxMoveBoundLines)
+        {
+            Debug.DrawLine(new Vector3(), new Vector3(-mMaxDistFromCenter.x, 0.0f, 0.0f), Color.blue);
+            Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
+        }
+
+        mMovementBoundsDebugSpriteView.SetShowInGame = mStats.ShowPlayerSpacingBounds;
     }
     
     void UpdateMaxCenterDistance()
     {
-        Debug.DrawLine(new Vector3(), new Vector3(-mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f, 0.0f, 0.0f));
-        Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Color.red);
+        //Debug.DrawLine(new Vector3(), new Vector3(-mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f, 0.0f, 0.0f));
+        //Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Color.red);
 
         // Calculate max distance bounds can be from center on x axis
         float xBackgroundExtent = mStats.MaxMoveBounds.x / 2.0f;
-        float minDistanceFromEdgeX = xBackgroundExtent - mMovementBoundsObject.transform.lossyScale.x / 2.0f;
-        mMaxDistFromCenter.x = Mathf.Abs(minDistanceFromEdgeX) - Mathf.Abs(mCurrPlayersCenter.x);
+        //float minDistanceFromEdgeX = xBackgroundExtent - mMovementBoundsObject.transform.lossyScale.x / 2.0f;
+        mMaxDistFromCenter.x = /*Mathf.Abs(minDistanceFromEdgeX) - Mathf.Abs(mCurrPlayersCenter.x);*/ xBackgroundExtent;
 
         // Calculate max distance bounds can be from center on y axis
         float yBackgroundExtent = mStats.MaxMoveBounds.y / 2.0f;
-        float minDistanceFromEdgeY = yBackgroundExtent - mMovementBoundsObject.transform.lossyScale.y / 2.0f;
-        mMaxDistFromCenter.y = Mathf.Abs(minDistanceFromEdgeY) - Mathf.Abs(mCurrPlayersCenter.y);
+        //float minDistanceFromEdgeY = yBackgroundExtent - mMovementBoundsObject.transform.lossyScale.y / 2.0f;
+        mMaxDistFromCenter.y = /*Mathf.Abs(minDistanceFromEdgeY) - Mathf.Abs(mCurrPlayersCenter.y);*/ yBackgroundExtent;
 
-        Debug.DrawLine(new Vector3(), new Vector3(-mMaxDistFromCenter.x, 0.0f, 0.0f), Color.blue);
-        Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
+        //Debug.DrawLine(new Vector3(), new Vector3(-mMaxDistFromCenter.x, 0.0f, 0.0f), Color.blue);
+        //Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
 
     }
 
-    //void UpdateMaxCenterDistance()
-    //{
-    //    Debug.DrawLine(new Vector3(), new Vector3(-mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f, 0.0f, 0.0f));
-    //    Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Color.red);
-
-    //    // Calculate max distance bounds can be from center on x axis
-    //    float xBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.x / 2.0f;
-    //    float minDistanceFromEdgeX = xBackgroundExtent - mMovementBoundsObject.transform.lossyScale.x / 2.0f;
-    //    mMaxDistFromCenter.x = Mathf.Abs(minDistanceFromEdgeX) - Mathf.Abs(mCurrPlayersCenter.x);
-
-    //    // Calculate max distance bounds can be from center on y axis
-    //    float yBackgroundExtent = mBackgroundImage.GetComponent<SpriteRenderer>().bounds.size.y / 2.0f;
-    //    float minDistanceFromEdgeY = yBackgroundExtent - mMovementBoundsObject.transform.lossyScale.y / 2.0f;
-    //    mMaxDistFromCenter.y = Mathf.Abs(minDistanceFromEdgeY) - Mathf.Abs(mCurrPlayersCenter.y);
-
-    //    Debug.DrawLine(new Vector3(), new Vector3(-mMaxDistFromCenter.x, 0.0f, 0.0f), Color.blue);
-    //    Debug.DrawLine(new Vector3(), new Vector3(0.0f, -mMaxDistFromCenter.y, 0.0f), Color.blue);
-
-    //}
-
+    void UpdateInfoFromStageChange(StageDataManager.StageInfo newStage)
+    {
+        mStats = newStage.StatsObject;
+    }
 }

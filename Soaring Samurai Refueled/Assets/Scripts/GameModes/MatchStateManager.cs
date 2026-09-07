@@ -576,4 +576,34 @@ public class MatchStateManager : MonoBehaviour
         PlayerCombatController targetPlayer = mPlayers.Find((PlayerCombatController player) => { return player.PlayerIndex == playerIndex; });
         return targetPlayer;
     }
+
+    public void ResetPlayerPositions()
+    {
+        int numPlayers = mPlayers.Count;
+        Vector2 currSpawnVec = Vector2.left * mMatchStats.PlayerStartOffsetDistance;
+
+        float playerOffsetAngle = 360.0f / numPlayers;
+
+        for (int i = 0; i < numPlayers; i++)
+        {
+            PlayerCombatController currPlayer = mPlayers[i];
+
+            // Reset player position
+            currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec;
+
+
+            if (mMatchStats.ClearForcesOnRestart)
+            {
+                PhysicsApplier physicsApplier = currPlayer.GetComponent<PhysicsApplier>();
+                physicsApplier.mDirectionalForces.ClearAllForces();
+                physicsApplier.mUncappedDirectionalForces.ClearAllForces();
+                physicsApplier.mRotationalForces.ClearAllForces();
+            }
+
+            currPlayer.GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Ready);
+
+            // Rotate spawn vec
+            currSpawnVec = Quaternion.Euler(0, 0, playerOffsetAngle) * currSpawnVec;
+        }
+    }
 }

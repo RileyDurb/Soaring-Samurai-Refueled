@@ -13,6 +13,9 @@ public class DebugMenuFunctions : MonoBehaviour
     [SerializeField] Slider PlayerToChangeSlider;
     [SerializeField] TextMeshProUGUI SelectedPlayerText;
     [SerializeField] TMP_Dropdown CPUModeDropdown;
+    [SerializeField] TMP_Dropdown StageSelectDropdown;
+
+    StageDataManager mStageDataManagerObject;
 
     int mSelectedPlayerIndex = 0;
     // Start is called before the first frame update
@@ -52,6 +55,24 @@ public class DebugMenuFunctions : MonoBehaviour
 
         // Set number of players for player edit target slider
         PlayerToChangeSlider.maxValue = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList.Count - 1;
+
+
+        // Get stage data
+        mStageDataManagerObject = FindAnyObjectByType<StageDataManager>();
+
+        StageSelectDropdown.ClearOptions();
+        List<StageDataManager.StageInfo> stages = mStageDataManagerObject.GetAvailableStages();
+        List<TMP_Dropdown.OptionData> stageSelectOptions = new List<TMP_Dropdown.OptionData>();
+        foreach (StageDataManager.StageInfo stage in stages)
+        {
+            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
+            option.text = stage.Name;
+            stageSelectOptions.Add(option);
+        }
+
+        StageSelectDropdown.AddOptions(stageSelectOptions);
+
+        StageSelectDropdown.onValueChanged.AddListener(SelectStage);
     }
 
     public void ToggleDebugMode()
@@ -146,5 +167,12 @@ public class DebugMenuFunctions : MonoBehaviour
     public void ToggleTimePaused()
     {
         LevelScopeManagers.Instance.GetComponent<DebugHotkeyManager>().ToggleTimerPaused();
+    }
+
+    public void SelectStage(int optionIndex)
+    {
+        mStageDataManagerObject.SetStage(StageSelectDropdown.options[optionIndex].text);
+
+        LevelScopeManagers.Instance.GetComponent<MatchStateManager>().ResetPlayerPositions();
     }
 }
