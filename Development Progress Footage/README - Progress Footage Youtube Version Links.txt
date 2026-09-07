@@ -3,3 +3,6 @@ https://youtu.be/iUM1wqJMLFk
 
 Soaring Samurai Progress 2: Easy Feedback With Actions:
 https://youtu.be/G2aPD-WBgrw
+
+Soaring Samurai Progress 3: Combat Footage Snippet
+https://youtu.be/5HloANzy4e8
