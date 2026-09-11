@@ -43,12 +43,15 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] bool mUseMarginTrimmingAtMaxDistance = false;
     [SerializeField] float mMarginTrimmingWindowBeforeMaxDistance = 3.0f;
     BehaviourMovementBounds mBoundsManager;
+    StageStats mStageStats;
 
     // Overrides
     bool mIsOverridingCamMoveSpeed = false;
     float mOverrideCamMoveSpeed = 2.0f;
     bool mIsOverridingCamZoomSpeed = false;
     float mOverrideCamZoomSpeed = 3.0f;
+
+    [SerializeField] bool mUseOldCameraMethod = false;
 
     // Getters and setters
 
@@ -91,7 +94,13 @@ public class CameraFollow : MonoBehaviour
         mBaseOrthographicSize = GetComponent<Camera>().orthographicSize;
 
         // Save stage manager
-        mBoundsManager = GameObject.Find("StageManager").GetComponent<BehaviourMovementBounds>();
+        GameObject stageManager = GameObject.Find("StageManager");
+        mBoundsManager = stageManager.GetComponent<BehaviourMovementBounds>();
+
+        // Save stage stats and bind to recieving stage stat updates
+        StageDataManager stageDataMan = stageManager.GetComponent<StageDataManager>();
+        mStageStats = stageDataMan.mStageStats;
+        stageDataMan.mOnStageChanged += RecieveNewStageStats;
 
         // Add each player as a follow object
         List<PlayerCombatController> players = LevelScopeManagers.Instance.GetComponent<MatchStateManager>().PlayerList;
@@ -147,7 +156,6 @@ public class CameraFollow : MonoBehaviour
             currCamMoveSpeed = mOverrideCamMoveSpeed;
         }
         transform.position = transform.position + (CurrFollowTarget - transform.position) * currCamMoveSpeed * Time.deltaTime;
-        //transform.position = targetPos;
 
         // Calculate zoom
 
@@ -173,41 +181,90 @@ public class CameraFollow : MonoBehaviour
                         for (int j = i + 1;  j < mFollowObjects.Count; j++)
                         {
                             Vector2 vecBetweenPlayers = currTarget.transform.position - mFollowObjects[j].transform.position;
+
+                            // Save new max distances, if any
+                            if (Mathf.Abs(vecBetweenPlayers.x) > maxDistanceVec.x)
+                            {
+                                maxDistanceVec.Set(Mathf.Abs(vecBetweenPlayers.x), maxDistanceVec.y);
+                            }
+
+                            if (Mathf.Abs(vecBetweenPlayers.y) > maxDistanceVec.y)
+                            {
+                                maxDistanceVec.Set(maxDistanceVec.x, Mathf.Abs(vecBetweenPlayers.y));
+                            }
                             float distance = vecBetweenPlayers.magnitude;
 
                             if (distance > maxPlayerDistance)
                             {
                                 maxPlayerDistance = distance;
-                                maxDistanceVec = vecBetweenPlayers;
+                                //maxDistanceVec = vecBetweenPlayers;
                             }
                         }
                     }
 
                     // Calculate camera zoom
-
-                    // Calculate target zoom for if players are perfectly horizontal, and vertical
-                    float verticalFittingZoom = maxPlayerDistance;
-                    float horizontalFittingZoom = maxPlayerDistance * Screen.height / Screen.width;
-
-                    float closenessToBeingVertical = Mathf.Abs(Vector2.Dot(Vector2.up, maxDistanceVec.normalized));
-
-                    // Lerp between the horizontal and vertical zooms to match the current player orientation, between those targets
-                    float cameraZoomToFitPlayersX2 = Mathf.Lerp(horizontalFittingZoom, verticalFittingZoom, closenessToBeingVertical);
-
-                    // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
-                    float currMinMargin = MinZoomMarginSpace;
-                    float maxDistance = Mathf.Lerp(mBoundsManager.MovementBoundsObjectScale.x, mBoundsManager.MovementBoundsObjectScale.y, closenessToBeingVertical);
-
-                    float marginTrimZoneStart = (maxDistance - mMarginTrimmingWindowBeforeMaxDistance);
-
-                    if (mUseMarginTrimmingAtMaxDistance && maxDistanceVec.magnitude > marginTrimZoneStart)
+                    if (mUseOldCameraMethod == false)
                     {
-                        float currAmountOfMarginTrimZone = maxDistance - maxDistanceVec.magnitude;
+                        // Calculate target zoom for if players are perfectly horizontal, and vertical
+                        float verticalFittingZoom = maxPlayerDistance;
+                        float horizontalFittingZoom = maxPlayerDistance * Screen.height / Screen.width;
 
-                        currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, (mMarginTrimmingWindowBeforeMaxDistance - currAmountOfMarginTrimZone) / mMarginTrimmingWindowBeforeMaxDistance);
+                        float closenessToBeingVertical = Mathf.Abs(Vector2.Dot(Vector2.up, maxDistanceVec.normalized));
+
+                        // Lerp between the horizontal and vertical zooms to match the current player orientation, between those targets
+                        //float cameraZoomToFitPlayersX2 = Mathf.Lerp(horizontalFittingZoom, verticalFittingZoom, closenessToBeingVertical);
+
+                        // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
+                        float currMinMargin = MinZoomMarginSpace;
+
+                        float maxDistance = Mathf.Lerp(mBoundsManager.MovementBoundsObjectScale.x, mBoundsManager.MovementBoundsObjectScale.y, closenessToBeingVertical);
+
+
+                        float marginTrimZoneStart = (maxDistance - mMarginTrimmingWindowBeforeMaxDistance);
+
+                        if (mUseMarginTrimmingAtMaxDistance && maxDistanceVec.magnitude > marginTrimZoneStart)
+                        {
+                            float currAmountOfMarginTrimZone = maxDistance - maxDistanceVec.magnitude;
+
+                            currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, (mMarginTrimmingWindowBeforeMaxDistance - currAmountOfMarginTrimZone) / mMarginTrimmingWindowBeforeMaxDistance);
+                        }
+
+                        float cameraZoomToFitPlayersX2 = Mathf.Max(maxDistanceVec.x * Screen.height / Screen.width,maxDistanceVec.y/*)*/);
+                        //float cameraZoomAdjustedForScreenWidth = cameraZoomToFitPlayersX2 * Screen.height / Screen.width;
+
+                        //cameraZoomToFitPlayersX2 = Mathf.Lerp(cameraZoomAdjustedForScreenWidth, cameraZoomToFitPlayersX2, closenessToBeingVertical);
+                        //cameraZoomToFitPlayersX2 = closenessToBeingVertical > 0.5f ? cameraZoomToFitPlayersX2 : cameraZoomAdjustedForScreenWidth;
+
+                        mMinOrthographicSize = (cameraZoomToFitPlayersX2 + currMinMargin) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
+                                                                                  //mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin
                     }
-                    mMinOrthographicSize = (cameraZoomToFitPlayersX2 + currMinMargin) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
-                    mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin
+                    else
+                    {
+                        // Calculate target zoom for if players are perfectly horizontal, and vertical
+                        float verticalFittingZoom = maxPlayerDistance;
+                        float horizontalFittingZoom = maxPlayerDistance * Screen.height / Screen.width;
+
+                        float closenessToBeingVertical = Mathf.Abs(Vector2.Dot(Vector2.up, maxDistanceVec.normalized));
+
+                        // Lerp between the horizontal and vertical zooms to match the current player orientation, between those targets
+                        float cameraZoomToFitPlayersX2 = Mathf.Lerp(horizontalFittingZoom, verticalFittingZoom, closenessToBeingVertical);
+
+                        // Apply margin space, and convert to half height, as that's what the orthogonal size we use this value for is
+                        float currMinMargin = MinZoomMarginSpace;
+                        float maxDistance = Mathf.Lerp(mBoundsManager.MovementBoundsObjectScale.x, mBoundsManager.MovementBoundsObjectScale.y, closenessToBeingVertical);
+
+                        float marginTrimZoneStart = (maxDistance - mMarginTrimmingWindowBeforeMaxDistance);
+
+                        if (mUseMarginTrimmingAtMaxDistance && maxDistanceVec.magnitude > marginTrimZoneStart)
+                        {
+                            float currAmountOfMarginTrimZone = maxDistance - maxDistanceVec.magnitude;
+
+                            currMinMargin = Mathf.Lerp(currMinMargin, 0.0f, (mMarginTrimmingWindowBeforeMaxDistance - currAmountOfMarginTrimZone) / mMarginTrimmingWindowBeforeMaxDistance);
+                        }
+                        mMinOrthographicSize = (cameraZoomToFitPlayersX2 + currMinMargin) * 0.5f; // Sets min target zoom to be the max gap between players plus the given margin
+                        mMaxOrthographicSize = (cameraZoomToFitPlayersX2 + MaxZoomMarginSpace) * 0.5f; // Sets max target zoom to be the max gap between players plus the given margin
+                    }
+
                     break;
                 }
             case FollowMode.TargetFirstPlayer:
@@ -227,8 +284,6 @@ public class CameraFollow : MonoBehaviour
                 }
         }
         // Set the zoom
-        //SetZoom(CurrTargetVelocityMag);
-        //SetZoomImmediate();
         SetZoomOnlyCamSpeedBased();
     }
 
@@ -318,7 +373,21 @@ public class CameraFollow : MonoBehaviour
         averageX /= mFollowObjects.Count;
         averageY /= mFollowObjects.Count;
 
-        Vector3 followTarget = new Vector3(averageX, averageY, followZ);
+        // Get the total width of the stage movement boundary move restrictions
+        Vector2 stageBorderCenterBounds = mStageStats.MaxMoveBounds;
+
+        // get width of inside the stage border
+        Vector2 movementBoundsScale = mBoundsManager.MovementBoundsObjectScale;
+
+        // Get width of camera
+        Camera mainCam = GetComponent<Camera>();
+        Vector2 cameraHalfSize = new Vector2(mainCam.orthographicSize * Screen.width / Screen.height, mainCam.orthographicSize);
+
+        // Finx the max boundary the camera can move so that it can go up against the edge of the player boundaries, but not over (can still exceed move boundaries while the camera is moving over time to smaller boundaries)
+        Vector2 cameraMoveMax = movementBoundsScale / 2 + stageBorderCenterBounds / 2 - cameraHalfSize;
+
+        // Clamp follow target within the maximum bounds to stay within the player move boundaries
+        Vector3 followTarget = new Vector3(Mathf.Clamp(averageX, -cameraMoveMax.x, cameraMoveMax.x), Mathf.Clamp(averageY, -cameraMoveMax.y, cameraMoveMax.y), followZ);
         return followTarget;
     }
 
@@ -343,6 +412,10 @@ public class CameraFollow : MonoBehaviour
     }
 
 
+    void RecieveNewStageStats(StageDataManager.StageInfo newStageInfo)
+    {
+        mStageStats = newStageInfo.StatsObject;
+    }
     // //////////////////////////////////////////////////////////////////////////////
     // Public Interface /////////////////////////////////////////////////////////////
     public void InstantMoveToTarget()

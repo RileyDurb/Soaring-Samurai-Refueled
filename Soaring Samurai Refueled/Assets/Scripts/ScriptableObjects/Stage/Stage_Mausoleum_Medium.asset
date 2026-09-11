@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BackgroundImage: {fileID: 21300000, guid: 78e1136181f8d8e40a3ec2ece068aca9, type: 3}
   BackgroundImageScale: 2
-  MaxMoveBounds: {x: 40, y: 40}
-  MaxPlayerSpacingBounds: {x: 3, y: 3}
-  ShowMaxMoveBoundLines: 0
-  ShowPlayerSpacingBounds: 0
+  MaxMoveBounds: {x: 40, y: 30}
+  MaxPlayerSpacingBounds: {x: 5, y: 3}
+  ShowMaxMoveBoundLines: 1
+  ShowPlayerSpacingBounds: 1

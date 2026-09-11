@@ -28,6 +28,8 @@ public class BehaviourMovementBounds : MonoBehaviour
 
     // Getters and setters
     public Vector2 MovementBoundsObjectScale { get { return mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundDimensions(); } }
+    public Vector2 MovementBoundsObjectLocalScale { get { return mMovementBoundsObject.GetComponent<MovementBoundsObject>().GetBoundDimensionsLocalScale(); } }
+    public Vector2 MovementBoundsObjectPosition { get { return mMovementBoundsObject.transform.position; } }
 
     
     // Start is called before the first frame update

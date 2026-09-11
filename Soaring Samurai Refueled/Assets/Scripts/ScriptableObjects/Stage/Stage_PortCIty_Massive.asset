@@ -16,5 +16,5 @@ MonoBehaviour:
   BackgroundImageScale: 12.99
   MaxMoveBounds: {x: 350, y: 270}
   MaxPlayerSpacingBounds: {x: 3.5, y: 3.5}
-  ShowMaxMoveBoundLines: 0
-  ShowPlayerSpacingBounds: 0
+  ShowMaxMoveBoundLines: 1
+  ShowPlayerSpacingBounds: 1

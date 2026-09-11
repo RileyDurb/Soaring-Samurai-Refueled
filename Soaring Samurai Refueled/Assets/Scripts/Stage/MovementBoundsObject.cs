@@ -48,7 +48,7 @@ public class MovementBoundsObject : MonoBehaviour
 
         currBoundObject.transform.localPosition = new Vector3(currLocalPosition.x, yDistance, currLocalPosition.z);
 
-        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.x);
 
         // For bottom side
         currBoundObject = mBoundsSides[(int)BoundDirections.Down];
@@ -56,7 +56,7 @@ public class MovementBoundsObject : MonoBehaviour
 
         currBoundObject.transform.localPosition = new Vector3(currLocalPosition.x, -yDistance, currLocalPosition.z);
 
-        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.y);
+        currBoundObject.transform.localScale = new Vector2(currBoundObject.transform.localScale.x, newDimensions.x);
 
     }
 
@@ -69,6 +69,11 @@ public class MovementBoundsObject : MonoBehaviour
     {
         Vector2 boundsWidth = GetBoundsWidth();
         return new Vector2((mBoundsSides[(int)BoundDirections.Right].transform.position - mBoundsSides[(int)BoundDirections.Left].transform.position).magnitude - boundsWidth.x
-            , (mBoundsSides[(int)BoundDirections.Up].transform.position - mBoundsSides[(int)BoundDirections.Down].transform.position).magnitude);
+            , (mBoundsSides[(int)BoundDirections.Up].transform.position - mBoundsSides[(int)BoundDirections.Down].transform.position).magnitude - boundsWidth.x);
+    }
+
+    public Vector2 GetBoundDimensionsLocalScale()
+    {
+        return new Vector2(mBoundsSides[(int)BoundDirections.Left].transform.localScale.y, mBoundsSides[(int)BoundDirections.Up].transform.localScale.y);
     }
 }
