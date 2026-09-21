@@ -15,9 +15,10 @@ MonoBehaviour:
   mMaxVelocity: 6
   mMaxAcceleration: 75
   mMaxJerk: 10000
-  DampeningMultiplier: 3
+  DampeningMultiplier: 1.5
   DragCoeff: 1.2
   mDampeningZeroThreshold: 0.1
   mDampeningType: 0
   mMaxDampeningTime: 1
   ApplyDragAsAcceleration: 0
+  UseImediateVelocityOnly: 1

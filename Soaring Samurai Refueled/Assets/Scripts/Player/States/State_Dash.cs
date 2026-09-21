@@ -78,12 +78,29 @@ public class State_Dash : StateManagerPlayer.State
         }
 
         // Calculate speed and direction
-        float currSpeed = mCombatController.mPlayerBaseStats.mMovementStats.DashingJerk;
+        float currSpeed = 0.0f;
 
+        if (mCombatController.mPlayerBaseStats.mMovementStats.UseDirectVelocity)
+        {
+            currSpeed = mCombatController.mPlayerBaseStats.mMovementStats.DirectVelocityDash;
+        }
+        else
+        {
+            currSpeed = mCombatController.mPlayerBaseStats.mMovementStats.DashingJerk;
+        }
+            
         Vector2 moveVec = moveInputToUse * currSpeed;
 
-        // Applies jerk
-        mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+        if (mCombatController.mPlayerBaseStats.mMovementStats.UseDirectVelocity)
+        {
+            mCombatController.SetUncappedVelocity(moveVec);
+        }
+        else
+        {
+            // Applies jerk
+            mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+        }
+
 
         // rotate in movement direction, or back to straight up when not moving
         Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));

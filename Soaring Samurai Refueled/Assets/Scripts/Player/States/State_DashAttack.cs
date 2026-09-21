@@ -96,7 +96,17 @@ public class State_DashAttack : StateManagerPlayer.State
         }
 
         // Calculate current speed
-        float currSpeed = mDashAttackStats.DashingJerk;
+        float currSpeed = 0.0f;
+
+        if (mDashAttackStats.UseDirectVelocity)
+        {
+            currSpeed = mDashAttackStats.DirectVelocity;
+        }
+        else
+        {
+            currSpeed = mDashAttackStats.DashingJerk;
+        }
+
 
         PhysicsApplier physics = mParentObject.GetComponent<PhysicsApplier>();
 
@@ -147,8 +157,15 @@ public class State_DashAttack : StateManagerPlayer.State
 
         if (stateManager.CurrStateName == PlayerStates.Dash || stateManager.CurrStateName == PlayerStates.DashAttack)
         {
-            // Applies jerk
-            mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+            if (mDashAttackStats.UseDirectVelocity)
+            {
+                mCombatController.SetUncappedVelocity(moveVec);
+            }
+            else
+            {
+                // Applies jerk
+                mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+            }
         }
 
 

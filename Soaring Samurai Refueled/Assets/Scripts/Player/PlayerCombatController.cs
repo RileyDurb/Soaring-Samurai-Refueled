@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -639,6 +640,18 @@ public class PlayerCombatController : MonoBehaviour
         physics.mUncappedDirectionalForces.ApplyJerk(moveVec * dt);
     }
 
+    public void SetCappedVelocity(Vector2 moveVec)
+    {
+        PhysicsApplier physics = GetComponent<PhysicsApplier>();
+        physics.mDirectionalForces.SetVelocity(moveVec);
+    }
+
+    public void SetUncappedVelocity(Vector2 moveVec)
+    {
+        PhysicsApplier physics = GetComponent<PhysicsApplier>();
+        physics.mUncappedDirectionalForces.SetVelocity(moveVec);
+    }
+
     // Combat related functions //////////////////////////////////////////////////////////////////////////////////////////////////////
     public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
@@ -671,7 +684,14 @@ public class PlayerCombatController : MonoBehaviour
         // Apply knockback
         if (attackData.Knockback.magnitude > 0.0f)
         {
-            mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
+            if (mPlayerBaseStats.mMovementStats.UseDirectVelocity)
+            {
+                mActionList.AddActionEqualizedKnockbackVelocity(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
+            }
+            else // Apply knockback through jerk
+            {
+                mActionList.AddActionEqualizedKnockback(gameObject, attackData.Knockback, baseAttackInfo.KnockbackEqualizationPercent, baseAttackInfo.KnockbackDuration);
+            }
         }
 
         // Apply hit squish

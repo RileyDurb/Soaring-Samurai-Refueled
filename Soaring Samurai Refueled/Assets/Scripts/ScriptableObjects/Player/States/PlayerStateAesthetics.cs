@@ -40,6 +40,7 @@ public class PlayerStateAesthetics : ScriptableObject
     public class DefeatedData
     {
         public float MatchDefeatedGravityScale = 10.0f;
+        public float MatchDefeatedMaxFallSpeed = 12.0f;
         public float MatchDefeatedPoseTime = 2.0f;
         public float MatchDefeatedGravityDelay = 3.0f;
         public float MatchDefeatedTimeAfterFallBeforeCameraLoss = 2.0f;

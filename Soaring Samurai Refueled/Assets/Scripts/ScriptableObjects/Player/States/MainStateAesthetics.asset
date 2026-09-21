@@ -26,7 +26,8 @@ MonoBehaviour:
     MaxMoveRotationAngle: 4
     MoveRotationSpeed: 6
   DefeatedStats:
-    MatchDefeatedGravityScale: 40
+    MatchDefeatedGravityScale: 3
+    MatchDefeatedMaxFallSpeed: 12
     MatchDefeatedPoseTime: 0.2
     MatchDefeatedGravityDelay: 1
     MatchDefeatedTimeAfterFallBeforeCameraLoss: 2

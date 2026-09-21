@@ -772,10 +772,13 @@ class Action_EqualizedKnockback : Action_
         {
             if (mParentObj != null)
             {
-                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
+                PhysicsApplier physicsComp = mParentObj.GetComponent<PhysicsApplier>();
+                physicsComp.mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
                 // Apply knockback
-                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
-                mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
+
+                physicsComp.mUncappedDirectionalForces.ApplyUncappedForce(mKnockbackForce);
+
+                physicsComp.mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
             }
 
             mKnockbackInitted = true;
@@ -788,6 +791,76 @@ class Action_EqualizedKnockback : Action_
 
         mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ApplyUncappedForce(currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
 
+
+        mLastPercentDone = mPercentDone; // Save current percent done for next frame
+
+
+
+        // If interpolation is complete
+        if (mPercentDone == 1)
+        {
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.ReleaseMaxForceUnlock("EqualizedKnockback");
+            mParentObj.GetComponent<PhysicsApplier>().mUncappedDirectionalForces.InputBeingApplied = false;
+            return false; // Action done, return false to stop
+        }
+
+        return true; // Action not done, return true to continue
+    }
+}
+
+class Action_EqualizedKnockbackVelocity : Action_
+{
+    // Private members
+    GameObject mParentObj;
+    Vector2 mKnockbackForce;
+    Vector2 mEquilazationForce;
+    float mLastPercentDone = 0.0f;
+    bool mKnockbackInitted = false;
+
+    public Action_EqualizedKnockbackVelocity(GameObject parent, Vector2 knockbackForce, float equalizationPercent, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None)
+    {
+        mParentObj = parent;
+        //if (parent != null)
+        //{
+        //    mStartRotation = parent.GetComponent<Transform>().rotation.eulerAngles;
+        //}
+        mKnockbackForce = knockbackForce;
+        mEquilazationForce = -knockbackForce * equalizationPercent;
+        mDuration = duration;
+        mDelay = delay;
+
+        mEasingType = easingType;
+    }
+
+    public override bool Update(float dt)
+    {
+        if (mParentObj == null)
+        {
+            return false; // Action cannot continue with null object, return false to stop
+        }
+        PhysicsApplier physicsComp = mParentObj.GetComponent<PhysicsApplier>();
+
+        if (mKnockbackInitted == false)
+        {
+            if (mParentObj != null)
+            {
+
+                physicsComp.mUncappedDirectionalForces.UnlockMaxForces("EqualizedKnockback");
+                // Apply knockback
+                physicsComp.mUncappedDirectionalForces.SetVelocity(physicsComp.mUncappedDirectionalForces.GetVelocity() + mKnockbackForce);
+
+                physicsComp.mUncappedDirectionalForces.InputBeingApplied = true; // TODO: Change to a stack if I continue to use input being applied here, because there could be multiple instances of knockback
+            }
+
+            mKnockbackInitted = true;
+            return true; // Don't start bleeding force the frame we apply it
+        }
+
+        float currentStep = mPercentDone - mLastPercentDone; // Get time difference from last update
+
+        Vector2 currentStepForce = mEquilazationForce * currentStep; // Lerp for the current time step
+
+        physicsComp.mUncappedDirectionalForces.SetVelocity(physicsComp.mUncappedDirectionalForces.GetVelocity() + currentStepForce); // Apply force of current time step, but currently not using, because I already bleed off forces with drag
 
         mLastPercentDone = mPercentDone; // Save current percent done for next frame
 

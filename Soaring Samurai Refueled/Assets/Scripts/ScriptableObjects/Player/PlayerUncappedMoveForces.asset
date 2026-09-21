@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd17cb25da9f7741a98f97544570f47, type: 3}
   m_Name: PlayerUncappedMoveForces
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsApplier/PhysicsTuningStatSet
-  mMaxVelocity: 100
+  mMaxVelocity: 1000
   mMaxAcceleration: 0
   mMaxJerk: 0
   DampeningMultiplier: 6
@@ -21,3 +21,4 @@ MonoBehaviour:
   mDampeningType: 0
   mMaxDampeningTime: 1.03
   ApplyDragAsAcceleration: 0
+  UseImediateVelocityOnly: 1

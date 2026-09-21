@@ -52,6 +52,14 @@ public class State_Defeated : StateManagerPlayer.State
 
         mDefeatedActionList.Update(Time.deltaTime);
 
+        // Clamp fall speed to the set max value, if any
+        if (mAestheticStats.DefeatedStats.MatchDefeatedMaxFallSpeed >= 0)
+        {
+            PhysicsApplier physicsControl = mParentObject.GetComponent<PhysicsApplier>();
+            physicsControl.mUncappedDirectionalForces.SetVelocity(Vector2.ClampMagnitude(physicsControl.mUncappedDirectionalForces.GetVelocity(), mAestheticStats.DefeatedStats.MatchDefeatedMaxFallSpeed));
+        }
+
+
         if (mParentObject.transform.position.y < mAestheticStats.DefeatedStats.MatchDefeatedMaxFallDistance) // Fallen more than we could possibly need to go off screen (and if it's more, can tune this value
         {
             mCombatController.GetComponent<Rigidbody2D>().gravityScale = 0.0f; // Turns off gravity

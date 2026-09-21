@@ -35,6 +35,9 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mKnockbackStrength = 0.0f;
         [SerializeField] float mKnockbackEqualizationPercent = 1.0f;
         [SerializeField] float mKnockbackDuration = 0.3f;
+        [SerializeField] bool mUseDirectVelocity = false;
+        [SerializeField] float mDirectVelocityStrength = 0.0f;
+
         [Header("VFX")]
         [SerializeField] bool mUseCustomCurveHitSquish = false;
         [SerializeField] AnimationCurve mSquishCurve;
@@ -54,6 +57,8 @@ public class Hitbox : MonoBehaviour
         public float GasGainOnUse {  get { return mGasGainOnUse; } }
         public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
         public float KnockbackDuration { get { return mKnockbackDuration; } }
+        public bool UseDirectVelocity { get { return mUseDirectVelocity; } }
+        public float DirectVelocityStrength { get { return mDirectVelocityStrength; } }
         public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
         public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
         public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
@@ -145,7 +150,17 @@ public class Hitbox : MonoBehaviour
 
             // Gets knockback vector
             Vector2 vecToReceiver = collision.transform.position - parentAttacker.transform.position;
-            Vector2 knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+
+            Vector2 knockbackVec;
+            
+            if (mAttackInfo.UseDirectVelocity)
+            {
+                knockbackVec = vecToReceiver.normalized * mAttackInfo.DirectVelocityStrength; // Apply the velocity knockback value
+            }
+            else // Apply the jerk knockback value
+            {
+                knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+            }
 
 
             // Sends attack
@@ -194,7 +209,15 @@ public class Hitbox : MonoBehaviour
 
                 // Gets knockback vector
                 Vector2 vecToReceiver = collision.transform.position - parentAttacker.transform.position;
-                Vector2 knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+                Vector2 knockbackVec;
+                if (mAttackInfo.UseDirectVelocity)
+                {
+                    knockbackVec = vecToReceiver.normalized * mAttackInfo.DirectVelocityStrength; // Apply the velocity knockback value
+                }
+                else // Apply the jerk knockback value
+                {
+                    knockbackVec = vecToReceiver.normalized * mAttackInfo.KnockbackStrength;
+                }
 
                 // Queues attack hit to be resolved
                 MatchStateManager.AttackHitPackage newHitPackage = new MatchStateManager.AttackHitPackage();

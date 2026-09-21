@@ -21,3 +21,4 @@ MonoBehaviour:
   mDampeningType: 0
   mMaxDampeningTime: 1
   ApplyDragAsAcceleration: 0
+  UseImediateVelocityOnly: 1

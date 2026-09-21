@@ -20,10 +20,12 @@ MonoBehaviour:
     mHitStunTime: 3
     mGasCost: 50
     mGasGainOnUse: 0
-    mGasGainOnHit: 15
+    mGasGainOnHit: 0
     mKnockbackStrength: 0
     mKnockbackEqualizationPercent: 1
     mKnockbackDuration: 0
+    mUseDirectVelocity: 0
+    mDirectVelocityStrength: 0
     mUseCustomCurveHitSquish: 0
     mSquishCurve:
       serializedVersion: 2
@@ -83,6 +85,8 @@ MonoBehaviour:
   ChargeTime: 1
   RecoveryTime: 0.65
   DashingJerk: 1800000
+  UseDirectVelocity: 1
+  DirectVelocity: 70
   ExcludeLayersForPlayerCollision:
     serializedVersion: 2
     m_Bits: 128

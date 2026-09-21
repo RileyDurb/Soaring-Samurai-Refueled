@@ -22,5 +22,6 @@ public class PhysicsTuningStatSet : ScriptableObject
 
     [Header("Switches")]
     public bool ApplyDragAsAcceleration = false;
+    public bool UseImediateVelocityOnly = false;
 
 }

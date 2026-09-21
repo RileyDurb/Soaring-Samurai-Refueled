@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
@@ -69,21 +70,46 @@ public class State_Ready : StateManagerPlayer.State
         }
 
 
-            // Apply movement
+        // Apply movement
 
-            // Find current movement input, starting with base jert to apply
-            float currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
-        
-        // If using a curve to apply different jerk at different amounts of the input diretion
-        if (currMovementStats.UseMaxJerkCurve)
+        // Find current movement input, starting with base jerk to apply
+        float currSpeed = 0.0f;
+        if (mCombatControllerRef.mPlayerBaseStats.mMovementStats.UseDirectVelocity)
         {
-            float inputScalar = currMovementStats.InputValueToMaxJerkCurve.Evaluate(mCombatControllerRef.CurrMoveInput.magnitude);
-            currSpeed *= inputScalar;// Scale speed based on how much of the max input we're giving
+            currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.DirectVelocityNormal;
+
         }
+        else
+        {
+            currSpeed = mCombatControllerRef.mPlayerBaseStats.mMovementStats.MoveJerk;
+
+            // If using a curve to apply different jerk at different amounts of the input diretion
+            if (currMovementStats.UseMaxJerkCurve)
+            {
+                float inputScalar = currMovementStats.InputValueToMaxJerkCurve.Evaluate(mCombatControllerRef.CurrMoveInput.magnitude);
+                currSpeed *= inputScalar;// Scale speed based on how much of the max input we're giving
+            }
+        }
+        
+
 
         Vector2 moveVec = mCombatControllerRef.CurrMoveInput * currSpeed;
 
-        mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
+        // if using velocity
+        if (mCombatControllerRef.mPlayerBaseStats.mMovementStats.UseDirectVelocity)
+        {
+            // If we have a move input, apply it
+            if (mCombatControllerRef.CurrMoveInput.magnitude > 0)
+            {
+                mCombatControllerRef.SetCappedVelocity(moveVec);
+            }
+            // Otherwise do nothing so we keep the previous velocity and it slows down over time
+        }
+        else
+        {
+            mCombatControllerRef.ApplyCappedMovementJerk(moveVec, Time.deltaTime);
+        }
+
 
         // rotate in movement direction, or back to straight up when not moving
         Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));

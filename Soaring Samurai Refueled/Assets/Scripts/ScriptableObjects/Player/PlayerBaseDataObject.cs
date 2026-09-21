@@ -9,6 +9,9 @@ public class PlayerMovementStats
     public float MoveJerk = 18000.0f;
     public float DashingJerk = 18000.0f;
     public bool UseMaxJerkCurve = false;
+    public bool UseDirectVelocity = false;
+    public float DirectVelocityNormal = 10.0f;
+    public float DirectVelocityDash = 20.0f;
     public AnimationCurve InputValueToMaxJerkCurve;
     public float PartialInputMovementStatsThreshold; // Percentage of max movement input value before full movement stats are applied
     public PhysicsTuningStatSet PartialInputMovementStats;

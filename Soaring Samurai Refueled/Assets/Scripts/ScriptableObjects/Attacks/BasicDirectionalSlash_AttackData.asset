@@ -22,8 +22,10 @@ MonoBehaviour:
     mGasGainOnUse: 0
     mGasGainOnHit: 15
     mKnockbackStrength: 800
-    mKnockbackEqualizationPercent: 0.5
-    mKnockbackDuration: 0.1
+    mKnockbackEqualizationPercent: 0
+    mKnockbackDuration: 1
+    mUseDirectVelocity: 1
+    mDirectVelocityStrength: 20
     mUseCustomCurveHitSquish: 1
     mSquishCurve:
       serializedVersion: 2

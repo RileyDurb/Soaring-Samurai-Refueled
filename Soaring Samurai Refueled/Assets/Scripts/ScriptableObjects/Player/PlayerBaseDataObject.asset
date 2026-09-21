@@ -16,6 +16,9 @@ MonoBehaviour:
     MoveJerk: 400000
     DashingJerk: 500000
     UseMaxJerkCurve: 0
+    UseDirectVelocity: 1
+    DirectVelocityNormal: 14
+    DirectVelocityDash: 50
     InputValueToMaxJerkCurve:
       serializedVersion: 2
       m_Curve: []

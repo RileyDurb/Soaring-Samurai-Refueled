@@ -89,11 +89,20 @@ public class PhysicsApplier : MonoBehaviour
             {
                 mAcceleration = Clamp(mAcceleration, Stats.mMaxAcceleration);
             }
-            
-            T currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
+
+            T currVelocity = GetVelocity();
+            if (Stats.UseImediateVelocityOnly)
+            {
+                // Just use velocity that was already set
+            }
+            else // Apply velocity based on the calculated acceleration
+            {
+                currVelocity = Add(GetVelocity(), Scale(mAcceleration, dt));
+            }
+
 
             // Always allow for clamping clamp max velocity, weird stuff if we don't
-            currVelocity = Clamp(currVelocity, Stats.mMaxVelocity);
+            //currVelocity = Clamp(currVelocity, Stats.mMaxVelocity);
 
             // Apply new velocity
             if (physics != null)
@@ -141,11 +150,24 @@ public class PhysicsApplier : MonoBehaviour
                 // Cut off acceleration at a predefined threshold
                 // Do this to prevent infinite drifting, and potential oscillations in the direction of acceleration, which drag can cause at small values
                 // TODO: Probably switch this to instead of hard stopping everything, switch to linear dampening, with a constant, or adjustable amount, so that it will actually hit 0, but isn't so abrupt. Could just lerp, or decay depending on the amount
-                if (Abs(mAcceleration) <= Stats.mDampeningZeroThreshold)
+                if (Stats.UseImediateVelocityOnly == true)
                 {
-                    mAcceleration = default; // Cancel acceleration
-                    return 1;
+
+                    if (Abs(GetVelocity()) <= Stats.mDampeningZeroThreshold)
+                    {
+                        SetVelocity(default); // Cancel velocity
+                        return 1;
+                    }
                 }
+                else // Cancel acceleration
+                {
+                    if (Abs(mAcceleration) <= Stats.mDampeningZeroThreshold)
+                    {
+                        mAcceleration = default; // Cancel acceleration
+                        return 1;
+                    }
+                }
+
                 return 0;
             }
             else // Interpolated
@@ -245,7 +267,7 @@ public class PhysicsApplier : MonoBehaviour
             mParent = parent;
         }
         public abstract T GetVelocity();
-        protected abstract void SetVelocity(T newValue);
+        public abstract void SetVelocity(T newValue);
         public abstract void SetStartingVelocity(T newVelocity);
 
         // For interpolation mode
@@ -338,6 +360,13 @@ public class PhysicsApplier : MonoBehaviour
 
         public override void ApplyDrag(float dt)
         {
+            // If only using velocity, don't apply drag
+            if (Stats.UseImediateVelocityOnly == true)
+            {
+                return;
+            }
+
+
             float drag = Stats.DragCoeff * mParent.GetComponent<Rigidbody2D>().mass * (Square(Velocity) / 2) * dt;
             Vector2 dragVec = Velocity.normalized * -1 * drag;
 
@@ -350,6 +379,7 @@ public class PhysicsApplier : MonoBehaviour
             //}
             //else // Won't flip directions
             //{
+
             if (Stats.ApplyDragAsAcceleration) // If we want to experimentally apply drag as acceleration, for more floaty movement
             {
                 mAcceleration += dragVec;
@@ -383,7 +413,7 @@ public class PhysicsApplier : MonoBehaviour
             return mParent.GetComponent<Rigidbody2D>().velocity;
         }
 
-        protected override void SetVelocity(Vector2 newValue)
+        public override void SetVelocity(Vector2 newValue)
         {
             if (mParent == null)
             {
@@ -488,7 +518,7 @@ public class PhysicsApplier : MonoBehaviour
             return mParent.GetComponent<Rigidbody2D>().angularVelocity;
         }
         
-        protected override void SetVelocity(float newValue)
+        public override void SetVelocity(float newValue)
         {
             if (mParent == null)
             {
@@ -634,6 +664,10 @@ public class PhysicsApplier : MonoBehaviour
 
         mDirectionalForces.ApplyDrag(Time.fixedDeltaTime);
 
+        if (mDirectionalForces.GetVelocity().magnitude > 0 && mDirectionalForces.InputBeingApplied == false)
+        {
+            print("I am here!");
+        }
         // First update capped
         int cancelVelocity = mDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
 

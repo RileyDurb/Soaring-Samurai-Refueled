@@ -142,6 +142,12 @@ public class ActionList
         mActions.Add(new Action_EqualizedKnockback(parent, knockbackForce, equalizationPercent, duration, delay));
     }
 
+    public void AddActionEqualizedKnockbackVelocity(GameObject parent, Vector2 knockbackForce, float equalizationPercent, float duration, float delay = 0.0f)
+    {
+        mActions.Add(new Action_EqualizedKnockbackVelocity(parent, knockbackForce, equalizationPercent, duration, delay));
+    }
+
+
     // Effects
     // Does screenshake on the given camera, or on the main camera if given camera is null
     public void AddActionScreenShake(GameObject parentCam, float shakeStrength, float duration, float delay = 0.0f)
