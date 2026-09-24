@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: ChargedDashAttack
   m_EditorClassIdentifier: 
   mStats:
+    mName: Charged Dash Attack
     mDamage: 20
     mActiveTime: 0.7
     mAttackOffsetDistance: 0
     mHitboxScaleFromPlayer: {x: 1, y: 1}
     mHitStunTime: 3
+    mUseHitStunAsClashStun: 0
+    mClashStunTime: 1.8
     mGasCost: 50
     mGasGainOnUse: 0
     mGasGainOnHit: 0
@@ -80,6 +83,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     mHitParticlesPrefab: {fileID: 5548152038656650806, guid: 7984bf321db724b47a1e780ef93afcfb, type: 3}
     mHitParticlesFollowTarget: 1
+    mHitstopTime: 0
     mAttackStartSoundEvent: 5
     mHitSound: 6
   ChargeTime: 1

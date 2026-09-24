@@ -664,10 +664,6 @@ public class PhysicsApplier : MonoBehaviour
 
         mDirectionalForces.ApplyDrag(Time.fixedDeltaTime);
 
-        if (mDirectionalForces.GetVelocity().magnitude > 0 && mDirectionalForces.InputBeingApplied == false)
-        {
-            print("I am here!");
-        }
         // First update capped
         int cancelVelocity = mDirectionalForces.PhysicsUpdate(Time.fixedDeltaTime);
 

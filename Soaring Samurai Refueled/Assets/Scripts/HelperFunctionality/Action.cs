@@ -929,6 +929,60 @@ class Action_ScreenShake : Action_
     }
 }
 
+class Action_Hitstop : Action_
+{
+    // Private members
+    GameObject mParentObj;
+    float mHitstopTime = 0.0f;
+    bool mHitstopInitted = false;
+    string mHitstopReason;
+    string mFullHitstopReason;
+    TimescaleManager mTimeManager;
+
+    public Action_Hitstop(GameObject parent, string hitstopReason, float duration, float delay = 0.0f)
+    {
+        mParentObj = parent;
+
+        mTimeManager = LevelScopeManagers.Instance.GetComponent<TimescaleManager>();
+
+        mHitstopReason = hitstopReason;
+
+        mDuration = duration;
+        mDelay = delay;
+    }
+
+    public override bool Update(float dt)
+    {
+        // if not initialized, apply the hitstop
+        if (mHitstopInitted == false)
+        {
+            if (mParentObj != null)
+            {
+                mFullHitstopReason = mParentObj.name + ": " + mHitstopReason;
+                mTimeManager.AddHitstop(mFullHitstopReason, mDuration); // Apply hitstop, and manager handles stopping it so it can update with unscaled delta time, as this action list likely does not
+            }
+
+            mHitstopInitted = true;
+        }
+
+        if (mParentObj == null)
+        {
+
+            return false; // Action cannot continue with null object, return false to stop
+        }
+
+
+        // If action is complete
+        if (mPercentDone == 1)
+        {
+            //mTimeManager.RemoveHitstop(mFullHitstopReason); // Stop hitstop
+            return false; // Action done, return false to stop
+        }
+
+        return true; // Action not done, return true to continue
+    }
+}
+
 //class Action_Stub : Action_
 //{
 //    // Private members

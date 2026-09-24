@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1484640635900181618}
   - component: {fileID: -1159165677199331076}
   - component: {fileID: 3680314576665779589}
+  - component: {fileID: -471477971343604047}
   m_Layer: 0
   m_Name: LevelScopeManagersHolder
   m_TagString: Untagged
@@ -204,3 +205,15 @@ MonoBehaviour:
     AnchorMin: {x: 0.5, y: 0}
     AnchorMax: {x: 0.5, y: 0}
     Pivot: {x: 0.5, y: 0}
+--- !u!114 &-471477971343604047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9060300855654909695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5e9d860f72d3f4d808924c76f28877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

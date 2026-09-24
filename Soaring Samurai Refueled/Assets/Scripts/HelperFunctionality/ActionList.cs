@@ -155,6 +155,12 @@ public class ActionList
         mActions.Add(new Action_ScreenShake(parentCam, shakeStrength, duration, delay));
     }
 
+    // Applies hitstop (pausing time. Multiple hitstops can be applied, which will remain active untill all of their times are up
+    public void AddActionHitstop(GameObject parentPlayer, string hitstopReason, float duration, float delay = 0.0f)
+    {
+        mActions.Add(new Action_Hitstop(parentPlayer, hitstopReason, duration, delay));
+    }
+
 
     // Private Helper functions //////////////////////////////////////////////////
     // Updates the current action in the action list

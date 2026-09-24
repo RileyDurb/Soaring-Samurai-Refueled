@@ -29,4 +29,6 @@ public class PlayerBaseDataObject : ScriptableObject
     [Header("Movememt Stats")]
     public PlayerMovementStats mMovementStats;
 
+
+    public int mahThing = 1;
 }

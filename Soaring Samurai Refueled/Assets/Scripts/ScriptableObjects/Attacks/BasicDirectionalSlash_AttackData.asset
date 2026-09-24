@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: BasicDirectionalSlash_AttackData
   m_EditorClassIdentifier: 
   mStats:
+    mName: Directional Slash
     mDamage: 10
     mActiveTime: 0.3
     mAttackOffsetDistance: 0.3
     mHitboxScaleFromPlayer: {x: 0.5, y: 0.5}
     mHitStunTime: 0.5
+    mUseHitStunAsClashStun: 1
+    mClashStunTime: 1
     mGasCost: 0
     mGasGainOnUse: 0
     mGasGainOnHit: 15
@@ -80,5 +83,6 @@ MonoBehaviour:
       m_RotationOrder: 4
     mHitParticlesPrefab: {fileID: 9200201252025249482, guid: b171ba2a2fe3643489d9485897d164a6, type: 3}
     mHitParticlesFollowTarget: 0
+    mHitstopTime: 0
     mAttackStartSoundEvent: 1
     mHitSound: 2

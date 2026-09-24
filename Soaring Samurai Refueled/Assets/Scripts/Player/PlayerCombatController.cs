@@ -705,6 +705,7 @@ public class PlayerCombatController : MonoBehaviour
         }
         mActionList.AddActionScale(gameObject, new Vector2(mOGScale.x, mOGScale.y), .1f, .1f);
 
+
         // Spawn hit particles
         // TODO: Spawn normal hit particles (TODO: Change both these systems to come from the attack definition
         if (attackData.IsClashing)
@@ -775,6 +776,12 @@ public class PlayerCombatController : MonoBehaviour
 
         }
 
+        // Apply hitstop
+        if (baseAttackInfo.HitstopTime > 0)
+        {
+            LevelScopeManagers.Instance.GetComponent<TimescaleManager>().AddHitstop(gameObject.name + " Hit By " + baseAttackInfo.Name, baseAttackInfo.HitstopTime);
+        }
+
         // Play SFX 
         if (attackData.IsClashing == false)
         {
@@ -792,7 +799,18 @@ public class PlayerCombatController : MonoBehaviour
         }
         else if (mStateManager.CanEnterState(PlayerStates.Flinch)) // If can flinch
         {
-            mStateManager.EnterState(PlayerStates.Flinch, baseAttackInfo.HitStunTime, PlayerStates.Ready); // Go into flinching
+            float flinchTime = 0;
+            // if we aren't clashing, or we've set the clash stun value to always be the same as hit
+            if (attackData.IsClashing == false || baseAttackInfo.UseHitStunTimeAsClashStun)
+            {
+                flinchTime = baseAttackInfo.HitStunTime;
+            }
+            else // We are clashing, and want to use the individual clash stun value
+            {
+                flinchTime = baseAttackInfo.ClashStunTime;
+            }
+
+            mStateManager.EnterState(PlayerStates.Flinch, flinchTime, PlayerStates.Ready); // Go into flinching
         }
 
         if (OnDamageTaken != null)

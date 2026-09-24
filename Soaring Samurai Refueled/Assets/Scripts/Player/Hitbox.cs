@@ -2,6 +2,7 @@ using AudioEvents;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -21,12 +22,16 @@ public class Hitbox : MonoBehaviour
 
             // Constructor is only meant for use with making hardcoded attacks for testing, and setting of other variables likely isn't needed
         }
+        [Header("Description")]
+        [SerializeField] string mName;
         [Header("Main Effectiveness")]
         [SerializeField] float mDamage = 0.0f;
         [SerializeField] float mActiveTime = 1.0f;
         [SerializeField] float mAttackOffsetDistance = 1.0f;
         [SerializeField] Vector2 mHitboxScaleFromPlayer = new Vector2(1.0f, 1.0f);
         [SerializeField] float mHitStunTime = 1.0f;
+        [SerializeField] bool mUseHitStunAsClashStun = true;
+        [SerializeField] float mClashStunTime = 1.0f;
         [Header("Resources")]
         [SerializeField] float mGasCost = 0.0f;
         [SerializeField] float mGasGainOnUse = 0.0f;
@@ -43,15 +48,20 @@ public class Hitbox : MonoBehaviour
         [SerializeField] AnimationCurve mSquishCurve;
         [SerializeField] GameObject mHitParticlesPrefab = null;
         [SerializeField] bool mHitParticlesFollowTarget = false;
+        [SerializeField] float mHitstopTime = 0.0f;
         [Header("Audio")]
         [SerializeField] SoundEvent mAttackStartSoundEvent;
         [SerializeField] SoundEvent mHitSound;
 
+
         // Getters
+        public string Name { get { return mName; } }
         public float Damage { get { return mDamage; } }
         public float KnockbackStrength { get { return mKnockbackStrength; } }
         public float ActiveTime { get { return mActiveTime; } }
         public float HitStunTime { get { return mHitStunTime; } }
+        public bool UseHitStunTimeAsClashStun { get { return mUseHitStunAsClashStun; } }
+        public float ClashStunTime { get { return mClashStunTime; } }
         public float GasCost {  get { return mGasCost; } }
         public float GasGainOnHit {  get { return mGasGainOnHit; } }
         public float GasGainOnUse {  get { return mGasGainOnUse; } }
@@ -61,6 +71,7 @@ public class Hitbox : MonoBehaviour
         public float DirectVelocityStrength { get { return mDirectVelocityStrength; } }
         public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
         public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
+        public float HitstopTime { get { return mHitstopTime; } }
         public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
         public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
         public GameObject HitParticlesPrefab { get { return mHitParticlesPrefab; } }
