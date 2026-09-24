@@ -28,7 +28,4 @@ public class PlayerBaseDataObject : ScriptableObject
     // Stat data for adjusting in the editor
     [Header("Movememt Stats")]
     public PlayerMovementStats mMovementStats;
-
-
-    public int mahThing = 1;
 }

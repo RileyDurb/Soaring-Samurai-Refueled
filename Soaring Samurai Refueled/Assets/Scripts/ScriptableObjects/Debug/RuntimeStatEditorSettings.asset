@@ -16,4 +16,12 @@ MonoBehaviour:
   - mSupportedTypeNames:
     - System.Float
     - System.Int32
+    - System.Single
     mEditorPrefab: {fileID: 1372763268752757977, guid: ee1a3cfd656fb5e4b80735d5636c04df, type: 3}
+  mNestedObjectHeaderPrefab: {fileID: 8890069032266701822, guid: ac264a617dcb0b143b89dd1463261b7b, type: 3}
+  mMaxFieldDepthToShow: 1
+  mListItemPadding:
+    m_Left: 10
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0

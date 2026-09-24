@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class RuntimeStatEditorFunctions : MonoBehaviour
 {
-    [SerializeField] TMP_InputField TestScriptableObjectEditorButton;
+    //[SerializeField] TMP_InputField TestScriptableObjectEditorButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        TestScriptableObjectEditorButton.onSubmit.AddListener(ApplyTestSpeedChange);
+        //TestScriptableObjectEditorButton.onSubmit.AddListener(ApplyTestSpeedChange);
     }
 
     // Update is called once per frame

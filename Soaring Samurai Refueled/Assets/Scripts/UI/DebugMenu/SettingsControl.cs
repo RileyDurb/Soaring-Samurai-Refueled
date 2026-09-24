@@ -9,7 +9,7 @@ public class SettingsControl : MonoBehaviour
     protected SetStatCommand mStatSetCommandObject;
 
     protected ICommand_ mCommandToExecute;
-    [SerializeField] protected object mScriptableObjectToSetOn;
+    [SerializeField] protected ScriptableObject mScriptableObjectToSetOn;
     [SerializeField] protected string mPropertyNameToSet;
     public object mInitialValue;
 
@@ -17,7 +17,7 @@ public class SettingsControl : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        print("Here");
+        //print("Here");
     }
 
 

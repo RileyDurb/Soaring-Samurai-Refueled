@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScriptableObjectDebugList : MonoBehaviour
 {
@@ -28,18 +29,32 @@ public class ScriptableObjectDebugList : MonoBehaviour
 
 
         Type type = objectToMakeEditorFor.GetType();
-        FieldInfo[] objectFields = type.GetFields();
 
-        // For each field
+        DisplayObjectFields_Rec(type, 0);
+
+    }
+
+    // Helper functions
+
+    private void DisplayObjectFields_Rec(Type typeToShow, int fieldDepth)
+    {
+        if (fieldDepth > mEditorSettings.mMaxFieldDepthToShow)
+        {
+            return;
+        }
+
+        // Adds a header for this object
+        GameObject currentObjectHeader = Instantiate(mEditorSettings.mNestedObjectHeaderPrefab, transform);
+        currentObjectHeader.GetComponent<ObjectListHeader>().SetText(typeToShow.Name);
+
+        FieldInfo[] objectFields = typeToShow.GetFields();
+
+        // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
         foreach (FieldInfo field in objectFields)
         {
             GameObject editorIfAny = null;
-            if (field.FieldType == typeof(float) || field.FieldType == typeof(Int32))
-            {
-                editorIfAny = mEditorSettings.GetVariableTypeEditor(field.FieldType);
 
-            }
-
+            editorIfAny = mEditorSettings.GetVariableTypeEditor(field.FieldType);
             // If editor exists for field type
             if (editorIfAny != null)
             {
@@ -47,9 +62,14 @@ public class ScriptableObjectDebugList : MonoBehaviour
 
                 // Assign the object, and this particular field, for the editor to edit
                 newValueEditor.GetComponent<SettingsControl>().AssignPropertyOrFieldToSet(mScriptableObjectToShow, field.Name);
+
+                newValueEditor.GetComponent<HorizontalLayoutGroup>().padding = mEditorSettings.mListItemPadding;
+            }
+            else if (fieldDepth + 1 <= mEditorSettings.mMaxFieldDepthToShow) // if not a regular editor type, try showing nested fields
+            {
+                DisplayObjectFields_Rec(field.FieldType, fieldDepth + 1);
             }
         }
     }
-
 
 }
