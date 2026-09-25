@@ -10,6 +10,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
 
     [SerializeField] RuntimeStatEditorSettings mEditorSettings;
     [SerializeField] ScriptableObject mScriptableObjectToShow;
+    [SerializeField] GameObject mListParent;
 
     public ScriptableObject ScriptableObjectToShow { 
         get { return mScriptableObjectToShow; } 
@@ -31,7 +32,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
     public void PopulateValueList(ScriptableObject objectToMakeEditorFor)
     {
         mScriptableObjectToShow = objectToMakeEditorFor;
-        transform.DetachChildren(); // Clears all children, to start the list fresh
+        mListParent.transform.DetachChildren(); // Clears all children, to start the list fresh
 
 
         Type type = objectToMakeEditorFor.GetType();
@@ -50,7 +51,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
         }
 
         // Adds a header for this object
-        GameObject currentObjectHeader = Instantiate(mEditorSettings.mNestedObjectHeaderPrefab, transform);
+        GameObject currentObjectHeader = Instantiate(mEditorSettings.mNestedObjectHeaderPrefab, mListParent.transform);
         currentObjectHeader.GetComponent<ObjectListHeader>().SetText(typeToShow.Name);
 
         FieldInfo[] objectFields = typeToShow.GetFields();
@@ -65,7 +66,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
             // If editor exists for field type
             if (editorIfAny != null)
             {
-                GameObject newValueEditor = Instantiate(editorIfAny, transform); // Spawn editor as a child
+                GameObject newValueEditor = Instantiate(editorIfAny, mListParent.transform); // Spawn editor as a child
 
                 // Assign the object, and this particular field, for the editor to edit
                 newValueEditor.GetComponent<SettingsControl>().AssignPropertyOrFieldToSet(mScriptableObjectToShow, field.Name);
