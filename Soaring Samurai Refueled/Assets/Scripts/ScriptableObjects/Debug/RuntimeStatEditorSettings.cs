@@ -25,6 +25,9 @@ public class RuntimeStatEditorSettings : ScriptableObject
 
     public int mMaxFieldDepthToShow = 1;
 
+    [Header("Data To Edit")]
+    public List<ScriptableObject> mEditableScriptableObjectsToChooseFrom;
+
     [Header("Aesthetics")]
     public RectOffset mListItemPadding = new RectOffset();
 

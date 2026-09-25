@@ -18,8 +18,18 @@ MonoBehaviour:
     - System.Int32
     - System.Single
     mEditorPrefab: {fileID: 1372763268752757977, guid: ee1a3cfd656fb5e4b80735d5636c04df, type: 3}
+  - mSupportedTypeNames:
+    - System.Boolean
+    mEditorPrefab: {fileID: 1972739374712344703, guid: c7791d64cddb29a49b4445eed0fe12b7, type: 3}
   mNestedObjectHeaderPrefab: {fileID: 8890069032266701822, guid: ac264a617dcb0b143b89dd1463261b7b, type: 3}
   mMaxFieldDepthToShow: 1
+  mEditableScriptableObjectsToChooseFrom:
+  - {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
+  - {fileID: 11400000, guid: 33874066804b6fb48b3d240479bc2222, type: 2}
+  - {fileID: 11400000, guid: 53b449dc2a012174ca0be156fd8da34b, type: 2}
+  - {fileID: 11400000, guid: b282f329416721b43a61ce625b234179, type: 2}
+  - {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
+  - {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
   mListItemPadding:
     m_Left: 10
     m_Right: 0

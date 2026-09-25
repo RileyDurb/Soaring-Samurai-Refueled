@@ -31,4 +31,3 @@ MonoBehaviour:
     DashDuration: 0.4
     DashGasCost: 25
     DashOldInputRecencyLimit: 0.5
-  mahThing: 20

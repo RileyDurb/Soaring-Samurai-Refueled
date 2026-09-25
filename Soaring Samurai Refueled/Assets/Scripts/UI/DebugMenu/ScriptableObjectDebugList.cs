@@ -11,6 +11,11 @@ public class ScriptableObjectDebugList : MonoBehaviour
     [SerializeField] RuntimeStatEditorSettings mEditorSettings;
     [SerializeField] ScriptableObject mScriptableObjectToShow;
 
+    public ScriptableObject ScriptableObjectToShow { 
+        get { return mScriptableObjectToShow; } 
+        set { mScriptableObjectToShow = value; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +30,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
 
     public void PopulateValueList(ScriptableObject objectToMakeEditorFor)
     {
+        mScriptableObjectToShow = objectToMakeEditorFor;
         transform.DetachChildren(); // Clears all children, to start the list fresh
 
 
@@ -48,6 +54,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
         currentObjectHeader.GetComponent<ObjectListHeader>().SetText(typeToShow.Name);
 
         FieldInfo[] objectFields = typeToShow.GetFields();
+        //PropertyInfo[] objectProperties = typeToShow.GetProperties();
 
         // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
         foreach (FieldInfo field in objectFields)
@@ -67,7 +74,11 @@ public class ScriptableObjectDebugList : MonoBehaviour
             }
             else if (fieldDepth + 1 <= mEditorSettings.mMaxFieldDepthToShow) // if not a regular editor type, try showing nested fields
             {
-                DisplayObjectFields_Rec(field.FieldType, fieldDepth + 1);
+
+                if (field.FieldType.BaseType == typeof(System.Object))
+                {
+                    DisplayObjectFields_Rec(field.FieldType, fieldDepth + 1);
+                }
             }
         }
     }
