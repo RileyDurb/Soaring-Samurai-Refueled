@@ -93,17 +93,25 @@ public class State_Dash : StateManagerPlayer.State
 
         if (mCombatController.mPlayerBaseStats.mMovementStats.UseDirectVelocity)
         {
-            mCombatController.SetUncappedVelocity(moveVec);
+            // Apply movement if there is input, and only apply 0 input if we want to stop the dash once we stop our movement input
+            if (mCombatController.mPlayerBaseStats.mMovementStats.StopDashOnNoInput == true || moveVec.magnitude > 0 )
+            {
+                mCombatController.SetUncappedVelocity(moveVec);
+            }
         }
         else
         {
-            // Applies jerk
-            mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+            // Apply movement if there is input, and only apply 0 input if we want to stop the dash once we stop our movement input
+            if (mCombatController.mPlayerBaseStats.mMovementStats.StopDashOnNoInput == true || moveVec.magnitude > 0)
+            {
+                // Applies jerk
+                mCombatController.ApplyUncappedMovementJerk(moveVec, Time.deltaTime);
+            }
         }
 
 
-        // rotate in movement direction, or back to straight up when not moving
-        Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));
+            // rotate in movement direction, or back to straight up when not moving
+            Vector2 rotationTargetDirection = new Vector2(moveVec.x, Mathf.Abs(moveVec.y));
         float targetAngleFromUp = Vector2.SignedAngle(Vector2.up, rotationTargetDirection.normalized);
 
         targetAngleFromUp = Mathf.Clamp(targetAngleFromUp, -mCombatController.StateAesthetics.DashAestheticStats.MaxMoveRotationAngle, mCombatController.StateAesthetics.DashAestheticStats.MaxMoveRotationAngle);

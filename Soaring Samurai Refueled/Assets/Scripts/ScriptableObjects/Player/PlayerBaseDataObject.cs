@@ -12,6 +12,7 @@ public class PlayerMovementStats
     public bool UseDirectVelocity = false;
     public float DirectVelocityNormal = 10.0f;
     public float DirectVelocityDash = 20.0f;
+    public bool StopDashOnNoInput = true;
     public AnimationCurve InputValueToMaxJerkCurve;
     public float PartialInputMovementStatsThreshold; // Percentage of max movement input value before full movement stats are applied
     public PhysicsTuningStatSet PartialInputMovementStats;

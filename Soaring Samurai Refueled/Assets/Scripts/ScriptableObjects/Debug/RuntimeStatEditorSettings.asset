@@ -30,6 +30,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b282f329416721b43a61ce625b234179, type: 2}
   - {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   - {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
+  - {fileID: 11400000, guid: 81b200f92de64a949a9ebe28e484fc30, type: 2}
+  mDefaultFirstObjectToShow: {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
   mListItemPadding:
     m_Left: 10
     m_Right: 0

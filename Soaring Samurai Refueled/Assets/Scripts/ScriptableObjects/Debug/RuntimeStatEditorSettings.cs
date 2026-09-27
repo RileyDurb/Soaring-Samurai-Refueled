@@ -28,6 +28,9 @@ public class RuntimeStatEditorSettings : ScriptableObject
     [Header("Data To Edit")]
     public List<ScriptableObject> mEditableScriptableObjectsToChooseFrom;
 
+    [Header("Default Values")]
+    public ScriptableObject mDefaultFirstObjectToShow;
+
     [Header("Aesthetics")]
     public RectOffset mListItemPadding = new RectOffset();
 
