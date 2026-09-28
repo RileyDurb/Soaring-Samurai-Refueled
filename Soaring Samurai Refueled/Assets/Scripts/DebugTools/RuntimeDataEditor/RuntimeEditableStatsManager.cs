@@ -84,6 +84,7 @@ public class SetStatCommand : ICommand_
     protected FieldInfo mFieldToSet;
     protected PropertyInfo mPropertyToSet;
 
+    protected List<string> mFieldChainToAccessValue = new List<string>();
     protected List<string> mPropertyChainToAccessValue = new List<string>();
 
     protected object mSettingValue;
@@ -140,7 +141,24 @@ public class SetStatCommand : ICommand_
         }
         else
         {
-            mPropertyToSet.SetValue(mObjectToSetOn, mSettingValue);
+            object recursiveObjectToSetOn = mObjectToSetOn;
+
+            // If there are any subfields we need to go through to get to the proprty
+            if (mPropertyChainToAccessValue.Count > 0)
+            {
+                PropertyInfo currProperty = null;
+
+                // For each subfield
+                for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
+                {
+                    // Find the next field to go to
+                    currProperty = recursiveObjectToSetOn.GetType().GetProperty(mPropertyChainToAccessValue[i]);
+                    // Get the object at that field
+                    recursiveObjectToSetOn = currProperty.GetValue(recursiveObjectToSetOn);
+                }
+            }
+
+            mPropertyToSet.SetValue(recursiveObjectToSetOn, mSettingValue);
         }
 
         return true;
@@ -158,15 +176,15 @@ public class SetStatCommand : ICommand_
             object recursiveObjectToSetOn = mObjectToSetOn;
 
             // If there are any subfields we need to go through to get to the field
-            if (mPropertyChainToAccessValue.Count > 0)
+            if (mFieldChainToAccessValue.Count > 0)
             {
                 FieldInfo currField = null;
 
                 // For each subfield
-                for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
+                for (int i = 0; i < mFieldChainToAccessValue.Count; i++)
                 {
                     // Find the next field to go to
-                    currField = recursiveObjectToSetOn.GetType().GetField(mPropertyChainToAccessValue[i]);
+                    currField = recursiveObjectToSetOn.GetType().GetField(mFieldChainToAccessValue[i]);
                     // Get the object at that field
                     recursiveObjectToSetOn = currField.GetValue(recursiveObjectToSetOn);
                 }
@@ -175,9 +193,25 @@ public class SetStatCommand : ICommand_
             return mFieldToSet.GetValue(recursiveObjectToSetOn);
 
         }
-        else
+        else // Check the property
         {
-            return mPropertyToSet.GetValue(mObjectToSetOn);
+            object recursiveObjectToSetOn = mObjectToSetOn;
+
+            // If there are any subfields we need to go through to get to the field
+            if (mPropertyChainToAccessValue.Count > 0)
+            {
+                PropertyInfo currProperty = null;
+
+                // For each subfield
+                for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
+                {
+                    // Find the next field to go to
+                    currProperty = recursiveObjectToSetOn.GetType().GetProperty(mPropertyChainToAccessValue[i]);
+                    // Get the object at that field
+                    recursiveObjectToSetOn = currProperty.GetValue(recursiveObjectToSetOn);
+                }
+            }
+            return mPropertyToSet.GetValue(recursiveObjectToSetOn);
         }
     }
 
@@ -187,10 +221,10 @@ public class SetStatCommand : ICommand_
 
         System.Type scriptableObjectType = mObjectToSetOn.GetType();
 
-        int depthCount = 0; ;
+        int depthCount = 0;
         int maxDepthCount = 1;
         
-        FieldInfo foundField = FindField_Rec(scriptableObjectType, ref mPropertyNameToSet, depthCount, ref mPropertyChainToAccessValue, maxDepthCount);
+        FieldInfo foundField = FindField_Rec(scriptableObjectType, ref mPropertyNameToSet, depthCount, ref mFieldChainToAccessValue, maxDepthCount);
 
         return foundField;
     }
@@ -199,7 +233,13 @@ public class SetStatCommand : ICommand_
     protected PropertyInfo GetProperty()
     {
         System.Type scriptableObjectType = mObjectToSetOn.GetType();
-        return scriptableObjectType.GetProperty(mPropertyNameToSet);
+
+
+        int depthCount = 0;
+        int maxDepthCount = 1;
+
+        PropertyInfo foundProperty = FindProperty_Rec(scriptableObjectType, ref mPropertyNameToSet, depthCount, ref mPropertyChainToAccessValue, maxDepthCount);
+        return foundProperty;
     }
 
     protected bool IsNullableType(System.Type type)
@@ -207,7 +247,7 @@ public class SetStatCommand : ICommand_
         return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
     }
 
-    private FieldInfo FindField_Rec(Type typeToLookIn, ref string fieldName, int depthCount, ref List<string> propertyChain, int maxDepthCount = 1)
+    private FieldInfo FindField_Rec(Type typeToLookIn, ref string fieldName, int depthCount, ref List<string> fieldChain, int maxDepthCount = 1)
     {
         FieldInfo foundField = typeToLookIn.GetField(fieldName);
 
@@ -226,8 +266,8 @@ public class SetStatCommand : ICommand_
 
         foreach (FieldInfo field in typeFields)
         {
-            propertyChain.Add(field.Name);
-            foundField = FindField_Rec(field.FieldType, ref fieldName, depthCount + 1, ref propertyChain, maxDepthCount);
+            fieldChain.Add(field.Name);
+            foundField = FindField_Rec(field.FieldType, ref fieldName, depthCount + 1, ref fieldChain, maxDepthCount);
 
 
             if (foundField != null)
@@ -235,10 +275,45 @@ public class SetStatCommand : ICommand_
                 return foundField;
             }
 
-            propertyChain.RemoveAt(propertyChain.Count - 1);
+            fieldChain.RemoveAt(fieldChain.Count - 1);
         }
 
         // If no fields were found, return null
+        return null;
+    }
+
+    private PropertyInfo FindProperty_Rec(Type typeToLookIn, ref string fieldName, int depthCount, ref List<string> propertyChain, int maxDepthCount = 1)
+    {
+        PropertyInfo foundProperty = typeToLookIn.GetProperty(fieldName);
+
+        if (foundProperty != null) // if field found
+        {
+            return foundProperty; // Return it
+        }
+
+        // Search in each property, and see if they contain the property
+        PropertyInfo[] typeProperties = typeToLookIn.GetProperties();
+
+        if (typeProperties.Length == 0 || typeToLookIn == typeof(System.Single) || depthCount > maxDepthCount)
+        {
+            return null;
+        }
+
+        foreach (PropertyInfo property in typeProperties)
+        {
+            propertyChain.Add(property.Name);
+            foundProperty = FindProperty_Rec(property.PropertyType, ref fieldName, depthCount + 1, ref propertyChain, maxDepthCount);
+
+
+            if (foundProperty != null)
+            {
+                return foundProperty;
+            }
+
+            propertyChain.RemoveAt(propertyChain.Count - 1);
+        }
+
+        // If no properties were found, return null
         return null;
     }
 }

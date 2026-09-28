@@ -21,6 +21,7 @@ MonoBehaviour:
     mHitStunTime: 3
     mUseHitStunAsClashStun: 0
     mClashStunTime: 1.8
+    mDamageDelayTime: 1
     mGasCost: 50
     mGasGainOnUse: 0
     mGasGainOnHit: 0
@@ -84,6 +85,8 @@ MonoBehaviour:
     mHitParticlesPrefab: {fileID: 5548152038656650806, guid: 7984bf321db724b47a1e780ef93afcfb, type: 3}
     mHitParticlesFollowTarget: 1
     mHitstopTime: 0
+    mScreenshakeStrength: 0.1
+    mScreenshakeTime: 0.5
     mAttackStartSoundEvent: 5
     mHitSound: 6
   ChargeTime: 1

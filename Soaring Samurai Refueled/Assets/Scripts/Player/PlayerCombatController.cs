@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerCombatController : MonoBehaviour
+public class PlayerCombatController : MonoBehaviour, IDamageable
 {
     // Class and other Definitions ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public enum FacingDirection
@@ -653,7 +653,20 @@ public class PlayerCombatController : MonoBehaviour
     }
 
     // Combat related functions //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public void TakeDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
+    {
+        // Proccess damage right away if no delay
+        if (baseAttackInfo.DamageDelayTime <= 0 || attackData.IsClashing)
+        {
+            ProcessDamage(attackData, baseAttackInfo);
+        }
+        else // Apply damage after the given wait
+        {
+            mActionList.AddActionCallback(() => { ProcessDamage(attackData, baseAttackInfo); }, baseAttackInfo.DamageDelayTime);
+        }
+    }
+    public void ProcessDamage(Hitbox.AttackCurrentData attackData, Hitbox.AttackDefinition baseAttackInfo)
     {
         // Only allow damage while the match is in progress
         if (LevelScopeManagers.Instance.GetComponent<MatchStateManager>().CurrMatchState != MatchStateManager.MatchState.InProgress)
@@ -780,6 +793,11 @@ public class PlayerCombatController : MonoBehaviour
         if (baseAttackInfo.HitstopTime > 0)
         {
             LevelScopeManagers.Instance.GetComponent<TimescaleManager>().AddHitstop(gameObject.name + " Hit By " + baseAttackInfo.Name, baseAttackInfo.HitstopTime);
+        }
+
+        if (baseAttackInfo.ScreenshakeStrength > 0)
+        {
+            mActionList.AddActionScreenShake(Camera.main.gameObject, baseAttackInfo.ScreenshakeStrength, baseAttackInfo.ScreenshakeTime);
         }
 
         // Play SFX 

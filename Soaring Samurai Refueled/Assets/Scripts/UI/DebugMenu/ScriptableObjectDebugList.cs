@@ -60,6 +60,7 @@ public class ScriptableObjectDebugList : MonoBehaviour
         currentObjectHeader.GetComponent<ObjectListHeader>().SetText(typeToShow.Name);
 
         FieldInfo[] objectFields = typeToShow.GetFields();
+
         //PropertyInfo[] objectProperties = typeToShow.GetProperties();
 
         // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
@@ -84,6 +85,35 @@ public class ScriptableObjectDebugList : MonoBehaviour
                 if (field.FieldType.BaseType == typeof(System.Object))
                 {
                     DisplayObjectFields_Rec(field.FieldType, fieldDepth + 1);
+                }
+            }
+        }
+
+        PropertyInfo[] objectProperties = typeToShow.GetProperties();
+        //PropertyInfo[] objectProperties = typeToShow.GetProperties();
+
+        // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
+        foreach (PropertyInfo property in objectProperties)
+        {
+            GameObject editorIfAny = null;
+
+            editorIfAny = mEditorSettings.GetVariableTypeEditor(property.PropertyType);
+            // If editor exists for field type
+            if (editorIfAny != null)
+            {
+                GameObject newValueEditor = Instantiate(editorIfAny, mListParent.transform); // Spawn editor as a child
+
+                // Assign the object, and this particular field, for the editor to edit
+                newValueEditor.GetComponent<SettingsControl>().AssignPropertyOrFieldToSet(mScriptableObjectToShow, property.Name);
+
+                newValueEditor.GetComponent<HorizontalLayoutGroup>().padding = mEditorSettings.mListItemPadding;
+            }
+            else if (fieldDepth + 1 <= mEditorSettings.mMaxFieldDepthToShow) // if not a regular editor type, try showing nested fields
+            {
+
+                if (property.PropertyType.BaseType == typeof(System.Object))
+                {
+                    DisplayObjectFields_Rec(property.PropertyType, fieldDepth + 1);
                 }
             }
         }

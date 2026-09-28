@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {
+
     [System.Serializable]
     public class AttackDefinition
     {
@@ -32,6 +33,7 @@ public class Hitbox : MonoBehaviour
         [SerializeField] float mHitStunTime = 1.0f;
         [SerializeField] bool mUseHitStunAsClashStun = true;
         [SerializeField] float mClashStunTime = 1.0f;
+        [SerializeField] float mDamageDelayTime = 0.0f;
         [Header("Resources")]
         [SerializeField] float mGasCost = 0.0f;
         [SerializeField] float mGasGainOnUse = 0.0f;
@@ -49,6 +51,9 @@ public class Hitbox : MonoBehaviour
         [SerializeField] GameObject mHitParticlesPrefab = null;
         [SerializeField] bool mHitParticlesFollowTarget = false;
         [SerializeField] float mHitstopTime = 0.0f;
+        [SerializeField] float mScreenshakeStrength = 0.0f;
+        [SerializeField] float mScreenshakeTime = 0.0f;
+
         [Header("Audio")]
         [SerializeField] SoundEvent mAttackStartSoundEvent;
         [SerializeField] SoundEvent mHitSound;
@@ -60,6 +65,9 @@ public class Hitbox : MonoBehaviour
         public float KnockbackStrength { get { return mKnockbackStrength; } }
         public float ActiveTime { get { return mActiveTime; } }
         public float HitStunTime { get { return mHitStunTime; } }
+        public float DamageDelayTime { get { return mDamageDelayTime; } }
+        public float ScreenshakeStrength { get { return mScreenshakeStrength; } }
+        public float ScreenshakeTime { get { return mScreenshakeTime; } }
         public bool UseHitStunTimeAsClashStun { get { return mUseHitStunAsClashStun; } }
         public float ClashStunTime { get { return mClashStunTime; } }
         public float GasCost {  get { return mGasCost; } }

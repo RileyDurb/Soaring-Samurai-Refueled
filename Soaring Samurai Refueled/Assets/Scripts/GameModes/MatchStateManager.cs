@@ -165,8 +165,16 @@ public class MatchStateManager : MonoBehaviour
 
 
                         // Make each player take the attack
-                        recievingClashingPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
-                        recievingClashingPlayer.OpponentRef.TakeDamage(otherClashingAttack.AttackCurrentData, otherClashingAttack.AttackInfo);
+                        if (recievingClashingPlayer is IDamageable)
+                        {
+                            (recievingClashingPlayer as IDamageable).TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                        }
+
+
+                        if (recievingClashingPlayer.OpponentRef is IDamageable)
+                        {
+                            (recievingClashingPlayer.OpponentRef as IDamageable).TakeDamage(otherClashingAttack.AttackCurrentData, otherClashingAttack.AttackInfo);
+                        }
 
 
                         // Remove both clashing hits, now that they've been handled
@@ -179,17 +187,30 @@ public class MatchStateManager : MonoBehaviour
                     else // For some reason could not find other clashing attack. Just make opponent take damage from this attack, should investigate though to see if this is an issue
                     {
                         PlayerCombatController recievingClashingPlayer = GetPlayerByIndex(currAttack.RecievingPlayerIndex);
-                        recievingClashingPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+
+                        if (recievingClashingPlayer is IDamageable)
+                        {
+                            (recievingClashingPlayer as IDamageable).TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                        }
+
                     }
 
                 }
                 else // Handle the hit normally by just sending the attack to the damaged player, and letting the attacker know it hit
                 {
                     PlayerCombatController hitPlayer = GetPlayerByIndex(currAttack.RecievingPlayerIndex);
-                    hitPlayer.TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+
+                    if (hitPlayer is IDamageable)
+                    {
+                        (hitPlayer as IDamageable).TakeDamage(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                    }
 
                     PlayerCombatController attackingPlayer = GetPlayerByIndex(currAttack.AttackingPlayerIndex);
-                    attackingPlayer.HitOpponentWithAttack(currAttack.AttackCurrentData, currAttack.AttackInfo);
+
+                    if (attackingPlayer is IDamageable)
+                    {
+                        attackingPlayer.HitOpponentWithAttack(currAttack.AttackCurrentData, currAttack.AttackInfo);
+                    }
                 }
             }
 
