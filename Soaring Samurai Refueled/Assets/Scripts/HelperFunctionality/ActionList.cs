@@ -155,11 +155,18 @@ public class ActionList
         mActions.Add(new Action_ScreenShake(parentCam, shakeStrength, duration, delay));
     }
 
-    // Applies hitstop (pausing time. Multiple hitstops can be applied, which will remain active untill all of their times are up
+    // Applies hitstop (pausing time. Multiple hitstops can be applied, which will remain active untill all of their times are up)
     public void AddActionHitstop(GameObject parentPlayer, string hitstopReason, float duration, float delay = 0.0f)
     {
         mActions.Add(new Action_Hitstop(parentPlayer, hitstopReason, duration, delay));
     }
+
+    // Applies time scale (changing time speed. when multiple are applied, the most recent takes priority)
+    public void AddActionTimeScale(GameObject parent, float newTimeScale, bool scaleOverTime, string timeScaleReason, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None, AnimationCurve customCurve = null)
+    {
+        mActions.Add(new Action_TimeScale(parent, newTimeScale, scaleOverTime, timeScaleReason, duration, delay, easingType, customCurve));
+    }
+
 
 
     // Private Helper functions //////////////////////////////////////////////////

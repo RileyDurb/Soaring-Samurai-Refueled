@@ -983,6 +983,85 @@ class Action_Hitstop : Action_
     }
 }
 
+class Action_TimeScale : Action_
+{
+    // Private members
+    GameObject mParentObj;
+    float mTimeScale = 0.0f;
+    float mStartingTimeScale = 0.0f;
+    bool mScaleOverTime = false;
+    bool mTimeScaleInitted = false;
+    string mTimeScaleReason;
+    TimescaleManager mTimeManager;
+
+    public Action_TimeScale(GameObject parent, float newTimeScale, bool scaleOverTime, string timeScaleReason, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None, AnimationCurve customCurve = null)
+    {
+        mParentObj = parent;
+
+        mTimeManager = LevelScopeManagers.Instance.GetComponent<TimescaleManager>();
+
+        mTimeScale = newTimeScale;
+
+        mScaleOverTime = scaleOverTime;
+
+        mTimeScaleReason = timeScaleReason;
+
+        mDuration = duration;
+        mDelay = delay;
+
+        mEasingType = easingType;
+        mCustomEasingCurve = customCurve;
+
+        
+    }
+
+    public override bool Update(float dt)
+    {
+        // if not initialized, apply the hitstop
+        if (mTimeScaleInitted == false)
+        {
+            if (mParentObj != null)
+            {
+                mStartingTimeScale = Time.timeScale;
+
+                if (mScaleOverTime)
+                {
+                    mTimeManager.AddTimeScale(mStartingTimeScale, mTimeScaleReason); // Apply time scale
+
+                }
+                else
+                {
+                    mTimeManager.AddTimeScale(mTimeScale, mTimeScaleReason); // Apply time scale
+                }
+            }
+
+            mTimeScaleInitted = true;
+        }
+
+        if (mParentObj == null)
+        {
+
+            return false; // Action cannot continue with null object, return false to stop
+        }
+
+        // if we want to change the time scale value over time
+        if (mScaleOverTime)
+        {
+            float newTimeScale = mStartingTimeScale + (mTimeScale - mStartingTimeScale) * mPercentDone;
+            mTimeManager.EditTimeScaleValue(newTimeScale, mTimeScaleReason);
+        }
+
+        // If action is complete
+        if (mPercentDone == 1)
+        {
+            //mTimeManager.RemoveTimeScale(mFullTimeScaleReason); // Stop time scale
+            return false; // Action done, return false to stop
+        }
+
+        return true; // Action not done, return true to continue
+    }
+}
+
 //class Action_Stub : Action_
 //{
 //    // Private members

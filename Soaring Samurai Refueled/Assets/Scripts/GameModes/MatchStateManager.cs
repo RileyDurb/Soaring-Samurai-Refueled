@@ -128,7 +128,7 @@ public class MatchStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mActionList.Update(Time.deltaTime);
+        mActionList.Update(Time.unscaledDeltaTime);
 
         // Update match time
         if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false && mTimerPaused == false)
@@ -368,8 +368,16 @@ public class MatchStateManager : MonoBehaviour
         mMatchStats.MatchEndMenuPopupDelay);
 
         PersistentScopeManagers.Instance.GetComponent<AudioManager>().PlayEvent(MatchStats.RoundFinishSFX); // Play SFX for round end (Right now plays the same SFX for the round ending as the match ending)
+        mActionList.AddActionTimeScale(gameObject, MatchStats.MatchEndTimeScaleValue, true, "MatchWin", MatchStats.MatchEndTimeScaleDuration, 0.0f,
+            MatchStats.MatchEndTimeScaleEasing, // Easing type, if any
+            MatchStats.MatchEndTimeScaleCurve); // Custom easing curve, for if the custom easing mode is set
+
+        mActionList.AddActionCallback(gameObject, () => LevelScopeManagers.Instance.GetComponent<TimescaleManager>().RemoveTimeScale("MatchWin"), mMatchStats.MatchEndTimeScaleDuration);
+
+        //mActionList.AddActionCallback(LevelScopeManagers.Instance.GetComponent<TimescaleManager>().RemoveTimeScale())
 
     }
+
 
 
     void HandleTimerUp()
