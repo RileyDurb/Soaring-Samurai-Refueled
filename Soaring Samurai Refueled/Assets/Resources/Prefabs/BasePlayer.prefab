@@ -56,7 +56,6 @@ MonoBehaviour:
   mDashAttackStats: {fileID: 11400000, guid: 848f94f977d73ca4ab66012a53b95984, type: 2}
   StateAesthetics: {fileID: 11400000, guid: ef232ede7480e4645807102549c49b82, type: 2}
   mTempClashParticlesPrefab: {fileID: 2984393216414542340, guid: 7d435aa19428f0d4ca0651e98ce649fa, type: 3}
-  mTempSharedClashParticlesPrefab: {fileID: 9200201252025249482, guid: f8254fd35d0cbe942a6207544129ebe0, type: 3}
   DirectionalSlashAttackStats: {fileID: 11400000, guid: 94bc591d734521f4da11decba503aab9, type: 2}
   GasMeterData: {fileID: 11400000, guid: edc218f5bf9335c4a811a57e2c98c7fb, type: 2}
   mActionAesthetics:
@@ -126,6 +125,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652935351384745842}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -149,7 +149,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.05}
   m_Size: {x: 0.57, y: 1}
   m_Direction: 0
@@ -215,7 +216,7 @@ MonoBehaviour:
   - mName: 2
     mStatesCancellableInto: 00000000010000000300000005000000
   - mName: 3
-    mStatesCancellableInto: 00000000
+    mStatesCancellableInto: 0000000005000000
   - mName: 4
     mStatesCancellableInto: 
   - mName: 5
@@ -285,6 +286,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -322,7 +325,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &6763016822473387008
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -336,6 +339,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

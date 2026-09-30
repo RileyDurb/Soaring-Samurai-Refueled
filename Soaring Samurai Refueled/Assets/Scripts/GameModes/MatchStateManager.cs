@@ -116,6 +116,9 @@ public class MatchStateManager : MonoBehaviour
         // Subscribe player defeated function to player defeated event
         PlayerDefeated += HandlePlayerDefeated;
 
+        // Subscribe bgm playing to on init match
+        OnInitMatch += PlayMatchStartSoundtrack;
+
         // Create round timer
         LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundTimerPrefab);
 
@@ -584,6 +587,13 @@ public class MatchStateManager : MonoBehaviour
         HandlePlayerWin(winningPlayer.PlayerIndex);
     }
 
+    void PlayMatchStartSoundtrack()
+    {
+        AudioManager audioMan = PersistentScopeManagers.Instance.GetComponent<AudioManager>();
+        audioMan.StopEvent(MatchStats.MainMatchBGM); // Stop the bgm so it can restart
+        audioMan.PlayEvent(MatchStats.MainMatchBGM);
+
+    }
     // Public interface /////////////////////////////////////////////////////////////////////////////////
     public void RestartMatch()
     {

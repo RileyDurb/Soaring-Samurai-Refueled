@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: DebugSlap
   m_EditorClassIdentifier: 
   mStats:
+    mName: 
     mDamage: 0
     mActiveTime: 1
+    mAttackOffsetDistance: 1
+    mHitboxScaleFromPlayer: {x: 1, y: 1}
+    mHitStunTime: 1
+    mUseHitStunAsClashStun: 1
+    mClashStunTime: 1
+    mDamageDelayTime: 0
+    mAttackLevel: 5
+    mGasCost: 0
+    mGasGainOnUse: 0
+    mGasGainOnHit: 15
     mKnockbackStrength: 0
     mKnockbackEqualizationPercent: 1
     mKnockbackDuration: 0.3
+    mUseDirectVelocity: 0
+    mDirectVelocityStrength: 0
     mUseCustomCurveHitSquish: 0
     mSquishCurve:
       serializedVersion: 2
@@ -25,3 +38,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    mHitParticlesPrefab: {fileID: 0}
+    mHitParticlesFollowTarget: 0
+    mHitstopTime: 0
+    mScreenshakeStrength: 0
+    mScreenshakeTime: 0
+    mAttackStartSoundEvent: 0
+    mHitSound: 0

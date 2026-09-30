@@ -817,18 +817,31 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
         }
         else if (mStateManager.CanEnterState(PlayerStates.Flinch)) // If can flinch
         {
-            float flinchTime = 0;
-            // if we aren't clashing, or we've set the clash stun value to always be the same as hit
-            if (attackData.IsClashing == false || baseAttackInfo.UseHitStunTimeAsClashStun)
+            bool canFlinch = true;
+
+            // If current state has a flinch check, check that before allowing flinching
+            StateManagerPlayer.State currState = mStateManager.GetState(mStateManager.CurrStateName);
+
+            if (currState is IFlinchCheckable)
             {
-                flinchTime = baseAttackInfo.HitStunTime;
-            }
-            else // We are clashing, and want to use the individual clash stun value
-            {
-                flinchTime = baseAttackInfo.ClashStunTime;
+                canFlinch = ((IFlinchCheckable)currState).CanFlinchFromAttack(attackData, baseAttackInfo);
             }
 
-            mStateManager.EnterState(PlayerStates.Flinch, flinchTime, PlayerStates.Ready); // Go into flinching
+            if (canFlinch)
+            {
+                float flinchTime = 0;
+                // if we aren't clashing, or we've set the clash flnch value to always be the same as hit
+                if (attackData.IsClashing == false || baseAttackInfo.UseHitStunTimeAsClashStun)
+                {
+                    flinchTime = baseAttackInfo.HitStunTime;
+                }
+                else // We are clashing, and want to use the individual clash stun value
+                {
+                    flinchTime = baseAttackInfo.ClashStunTime;
+                }
+
+                mStateManager.EnterState(PlayerStates.Flinch, flinchTime, PlayerStates.Ready); // Go into flinching
+            }
         }
 
         if (OnDamageTaken != null)

@@ -25,12 +25,14 @@ public class AudioManager : MonoBehaviour
 
     class SpawnedAudioSourcePackage
     {
-        public SpawnedAudioSourcePackage(AudioSource audioSource, float delay)
+        public SpawnedAudioSourcePackage(AudioSource audioSource, float delay, SoundEvent associatedEvent)
         {
             mAudioSource = audioSource;
             mDelayTime = delay;
+            mAssociatedEvent = associatedEvent;
         }
 
+        public SoundEvent mAssociatedEvent = SoundEvent.NONE;
         public AudioSource mAudioSource;
         public float mCurrDelayTimer = 0.0f;
         public float mDelayTime = -1.0f;
@@ -124,7 +126,7 @@ public class AudioManager : MonoBehaviour
             {
                 GameObject newAudioSource = Instantiate(foundSound.AudioSourcePrefab, PersistentScopeManagers.Instance.GetComponent<AudioManager>().transform);
                 AudioSource audioComp = newAudioSource.GetComponent<AudioSource>();
-                mSpawnedAudioSources.Add(new SpawnedAudioSourcePackage(audioComp, foundSound.Delay)); // Add to tracked list of spawned audio sources
+                mSpawnedAudioSources.Add(new SpawnedAudioSourcePackage(audioComp, foundSound.Delay, eventName)); // Add to tracked list of spawned audio sources
 
                 audioComp.resource = resourceToUse;
 
@@ -148,6 +150,43 @@ public class AudioManager : MonoBehaviour
                     mAudioSourceRef.outputAudioMixerGroup = GetMixer(foundSound.SoundGroup).GroupAsset; // Set the mixer type for the sound to use
                     mAudioSourceRef.PlayOneShot(resourceAsAudioClip);
                 }
+            }
+
+        }
+    }
+
+    public void StopEvent(SoundEvent eventName)
+    {
+        AudioBank<SoundEvent>.SoundPackage foundSound = mMainAudioBank.mSounds.Find((AudioBank<SoundEvent>.SoundPackage soundPackage) => { return soundPackage.Name == eventName; });
+
+        if (foundSound != null)
+        {
+            if (foundSound.UseSeparateAudioSource)
+            {
+
+                // Stop any spawned audio sources for this event
+                for (int i = 0; i < mSpawnedAudioSources.Count; i++)
+                {
+                    if (mSpawnedAudioSources[i].mAssociatedEvent == eventName)
+                    {
+                        // Stop the audio
+                        mSpawnedAudioSources[i].mAudioSource.Stop();
+
+                        // Destroy the game object, 
+                        Destroy(mSpawnedAudioSources[i].mAudioSource.gameObject);
+
+                        // Remove the audio source package from the list
+                        mSpawnedAudioSources.RemoveAt(i);
+
+
+                        i--; // Decrement iterator to account for deletion
+                    }
+                }
+                
+            }
+            else // Just stop the generic audio source
+            {
+                mAudioSourceRef.Stop();
             }
 
         }

@@ -24,3 +24,4 @@ MonoBehaviour:
   SubsequentPreRoundsLength: 4
   MatchEndMenuPopupDelay: 3.6
   RoundFinishSFX: 9
+  MainMatchBGM: 0

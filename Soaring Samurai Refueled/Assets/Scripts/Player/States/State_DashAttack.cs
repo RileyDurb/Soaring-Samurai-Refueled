@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using static PlayerCombatController;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class State_DashAttack : StateManagerPlayer.State
+public class State_DashAttack : StateManagerPlayer.State, IFlinchCheckable
 {
     public State_DashAttack() : base(PlayerStates.DashAttack) { }
 
@@ -42,6 +44,7 @@ public class State_DashAttack : StateManagerPlayer.State
     // Start is called before the first frame update
     public override void OnEnter()
     {
+
         // Initialize variables
         mCombatController = mParentObject.GetComponent<PlayerCombatController>();
         mDashAttackStats = mCombatController.mDashAttackStats; // bring in dash attack stats
@@ -174,6 +177,10 @@ public class State_DashAttack : StateManagerPlayer.State
 
     public override void OnExit()
     {
+        if (mCurrDashAttackState == DashAttackStates.Charge)
+        {
+            Console.Write("Cancelling in charge");
+        }
         // Only clear if we're not in recovery, as in recovery, the attack states will end normally. Also, clearing the action list while in the update of an action, which can be caused when the endrecovery function changes the state, can cause issues.
         if (mCurrDashAttackState != DashAttackStates.Recovery)
         {
@@ -199,6 +206,10 @@ public class State_DashAttack : StateManagerPlayer.State
 
     void EndDashAttackRecovery()
     {
+        if (mCurrDashAttackState == DashAttackStates.Charge)
+        {
+            Console.Write("Cancelling in charge");
+        }
         StateManagerPlayer stateManager = mParentObject.GetComponent<StateManagerPlayer>();
         if (stateManager.CanEnterState(PlayerStates.Ready))
         {
@@ -207,5 +218,25 @@ public class State_DashAttack : StateManagerPlayer.State
 
         mCancelledThisState = true;
 
+    }
+
+    public bool CanFlinchFromAttack(Hitbox.AttackCurrentData currentAttackData, Hitbox.AttackDefinition baseAttackInfo)
+    {
+
+        // Dissalow flinching while in charging, ready, or active
+        if (mCurrDashAttackState == DashAttackStates.Charge || mCurrDashAttackState == DashAttackStates.Ready || mCurrDashAttackState == DashAttackStates.Active)
+        {
+            return false;
+        }
+
+
+        if (baseAttackInfo.AttackLevel >= mDashAttackStats.mStats.AttackLevel)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

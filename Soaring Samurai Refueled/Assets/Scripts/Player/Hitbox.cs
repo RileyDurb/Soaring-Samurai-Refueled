@@ -34,6 +34,7 @@ public class Hitbox : MonoBehaviour
         [SerializeField] bool mUseHitStunAsClashStun = true;
         [SerializeField] float mClashStunTime = 1.0f;
         [SerializeField] float mDamageDelayTime = 0.0f;
+        [SerializeField] int mAttackLevel = 1;
         [Header("Resources")]
         [SerializeField] float mGasCost = 0.0f;
         [SerializeField] float mGasGainOnUse = 0.0f;
@@ -60,32 +61,115 @@ public class Hitbox : MonoBehaviour
 
 
         // Getters
-        public string Name { get { return mName; } }
-        public float Damage { get { return mDamage; } }
-        public float KnockbackStrength { get { return mKnockbackStrength; } }
-        public float ActiveTime { get { return mActiveTime; } }
-        public float HitStunTime { get { return mHitStunTime; } }
-        public float DamageDelayTime { get { return mDamageDelayTime; } }
-        public float ScreenshakeStrength { get { return mScreenshakeStrength; } }
-        public float ScreenshakeTime { get { return mScreenshakeTime; } }
-        public bool UseHitStunTimeAsClashStun { get { return mUseHitStunAsClashStun; } }
-        public float ClashStunTime { get { return mClashStunTime; } }
-        public float GasCost {  get { return mGasCost; } }
-        public float GasGainOnHit {  get { return mGasGainOnHit; } }
-        public float GasGainOnUse {  get { return mGasGainOnUse; } }
-        public float KnockbackEqualizationPercent { get { return mKnockbackEqualizationPercent; } }
-        public float KnockbackDuration { get { return mKnockbackDuration; } }
-        public bool UseDirectVelocity { get { return mUseDirectVelocity; } }
-        public float DirectVelocityStrength { get { return mDirectVelocityStrength; } }
-        public AnimationCurve SquishCurve {  get { return mSquishCurve; } }
-        public bool UseCustomHitSquishCurve { get { return mUseCustomCurveHitSquish; } }
-        public float HitstopTime { get { return mHitstopTime; } }
-        public float AttackOffsetDistance {  get { return mAttackOffsetDistance; } }
-        public Vector2 HitboxScale { get { return mHitboxScaleFromPlayer; } }
-        public GameObject HitParticlesPrefab { get { return mHitParticlesPrefab; } }
-        public bool HitParticlesFollowTarget { get { return mHitParticlesFollowTarget; } }
-        public SoundEvent AttackStartSoundEvent {  get {  return mAttackStartSoundEvent; } }
-        public SoundEvent HitSound {  get {  return mHitSound; } }
+        public string Name { 
+            get { return mName; }
+            set { mName = value; }
+        }
+        public float Damage { 
+            get { return mDamage; }
+            set { mDamage = value; }
+        }
+        public float KnockbackStrength { 
+            get { return mKnockbackStrength; } 
+            set { mKnockbackStrength = value; } 
+        }
+        public float ActiveTime { 
+            get { return mActiveTime; } 
+            set { mActiveTime = value; } 
+        }
+        public float HitStunTime { 
+            get { return mHitStunTime; } 
+            set { mHitStunTime = value; } 
+        }
+        public int AttackLevel
+        {
+            get { return mAttackLevel; }
+            set { mAttackLevel = value; }
+        }
+        public float DamageDelayTime { 
+            get { return mDamageDelayTime; } 
+            set { mDamageDelayTime = value; } 
+        }
+        public float ScreenshakeStrength { 
+            get { return mScreenshakeStrength; }
+            set { mScreenshakeStrength = value; }
+        }
+        public float ScreenshakeTime { 
+            get { return mScreenshakeTime; } 
+            set { mScreenshakeTime = value; } 
+        }
+        public bool UseHitStunTimeAsClashStun { 
+            get { return mUseHitStunAsClashStun; } 
+            set { mUseHitStunAsClashStun = value; } 
+        }
+        public float ClashStunTime { 
+            get { return mClashStunTime; } 
+            set { mClashStunTime = value; ; } 
+        }
+        public float GasCost { 
+            get { return mGasCost; } 
+            set { mGasCost = value; } 
+        }
+        public float GasGainOnHit {  
+            get { return mGasGainOnHit; } 
+            set { mGasGainOnHit = value; } 
+        }
+        public float GasGainOnUse {  
+            get { return mGasGainOnUse; } 
+            set { mGasGainOnUse = value; } 
+        }
+        public float KnockbackEqualizationPercent { 
+            get { return mKnockbackEqualizationPercent; }
+            set { mKnockbackEqualizationPercent = value; }
+        }
+        public float KnockbackDuration { 
+            get { return mKnockbackDuration; }
+            set { mKnockbackDuration = value; }
+        }
+        public bool UseDirectVelocity { 
+            get { return mUseDirectVelocity; }
+            set { mUseDirectVelocity = value; }
+        }
+        public float DirectVelocityStrength { 
+            get { return mDirectVelocityStrength; }
+            set { mDirectVelocityStrength = value; }
+        }
+        public AnimationCurve SquishCurve {  
+            get { return mSquishCurve; }
+            set { mSquishCurve = value; }
+        }
+        public bool UseCustomHitSquishCurve { 
+            get { return mUseCustomCurveHitSquish; }
+            set { mUseCustomCurveHitSquish = value; }
+        }
+        public float HitstopTime { 
+            get { return mHitstopTime; }
+            set { mHitstopTime = value; }
+        }
+        public float AttackOffsetDistance {  
+            get { return mAttackOffsetDistance; }
+            set { mAttackOffsetDistance = value; }
+        }
+        public Vector2 HitboxScale { 
+            get { return mHitboxScaleFromPlayer; }
+            set { mHitboxScaleFromPlayer = value; }
+        }
+        public GameObject HitParticlesPrefab { 
+            get { return mHitParticlesPrefab; }
+            set { mHitParticlesPrefab = value; }
+        }
+        public bool HitParticlesFollowTarget { 
+            get { return mHitParticlesFollowTarget; }
+            set { mHitParticlesFollowTarget = value; }
+        }
+        public SoundEvent AttackStartSoundEvent {  
+            get {  return mAttackStartSoundEvent; }
+            set {  mAttackStartSoundEvent = value; }
+        }
+        public SoundEvent HitSound {  
+            get {  return mHitSound; }
+            set {  mHitSound = value; }
+        }
     }
 
     [System.Serializable]

@@ -30,6 +30,6 @@ public class BotBehaviourStats : ScriptableObject
 
     public void InitializeVariablesOntoBehaviourTree(MonoBehaviourTree playerBotTree, Blackboard blackboard)
     {
-        blackboard.GetVariable<RandomBinVariable>("AttackOptionsRandomBin").Value = AttackOptionsRandomBin;
+        blackboard.GetVariable<RandomBinVariable>("AttackOptionsRandomBin").Value = new RandomBin(AttackOptionsRandomBin);
     }
 }

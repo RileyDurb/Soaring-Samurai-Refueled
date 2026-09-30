@@ -61,7 +61,6 @@ public class ScriptableObjectDebugList : MonoBehaviour
 
         FieldInfo[] objectFields = typeToShow.GetFields();
 
-        //PropertyInfo[] objectProperties = typeToShow.GetProperties();
 
         // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
         foreach (FieldInfo field in objectFields)
@@ -95,6 +94,12 @@ public class ScriptableObjectDebugList : MonoBehaviour
         // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
         foreach (PropertyInfo property in objectProperties)
         {
+            // Skip any properties of the basic object type, which will mainly be like it's name, that we don't want to edit
+            if (property.DeclaringType == typeof(UnityEngine.Object))
+            {
+                continue;
+            }
+
             GameObject editorIfAny = null;
 
             editorIfAny = mEditorSettings.GetVariableTypeEditor(property.PropertyType);

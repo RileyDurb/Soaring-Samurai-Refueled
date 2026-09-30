@@ -16,9 +16,13 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
         public delegate void OnStateExitCallback(T nextState);
 
         // Editor Accessible variables ///////////////////////////////////////////
+        
         // State definition
         public T mName;
         public List<T> mStatesCancellableInto = new List<T>();
+        //// Functions for cancel conditions
+        //public List<Func<T, object, bool>> mCancelConditions = new List<Func<T, object, bool>>();
+
 
         // Events
         public OnStateEnterCallback mOnStateEnterEvent;
@@ -141,7 +145,7 @@ public class StateManagerEnum <T> : MonoBehaviour where T : Enum
     // Interface functions ////////////////////////////////////////////////////////////////////////////////////
     public bool CanEnterState(T newStateName)
     {
-        return mCurrState.mStatesCancellableInto.Contains(newStateName);
+        return mCurrState.mStatesCancellableInto.Contains(newStateName); 
     }
 
     // Enters the give state, if any

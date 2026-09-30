@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public interface IFlinchCheckable
+{
+    public bool CanFlinchFromAttack(Hitbox.AttackCurrentData currentAttackData, Hitbox.AttackDefinition baseAttackInfo);
+}
+
 public class State_Flinch : StateManagerPlayer.State
 {
     public State_Flinch() : base(PlayerStates.Flinch) { }

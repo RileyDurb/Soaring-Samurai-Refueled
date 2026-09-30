@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 3369414187433325143}
+  selectedEditorNode: {fileID: 0}
   repeatOnFinish: 1
   maxExecutionsPerTick: 1000
   parent: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
     x: 220
     y: 100
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 0}
   children:
   - {fileID: 518112194628645778}
@@ -168,7 +168,7 @@ MonoBehaviour:
     x: 40
     y: 760
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -4917903527875671316}
   children: []
   behaviourTree: {fileID: 0}
@@ -200,7 +200,7 @@ MonoBehaviour:
     x: 220
     y: 400
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 1983559125739861588}
   children:
   - {fileID: 3247519503796901226}
@@ -228,7 +228,7 @@ MonoBehaviour:
     x: 880
     y: 1060
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2626795167488137538}
   children: []
   behaviourTree: {fileID: 0}
@@ -268,7 +268,7 @@ MonoBehaviour:
     x: 880
     y: 780
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -2519617241621421113}
   children:
   - {fileID: -490254134927774445}
@@ -296,7 +296,7 @@ MonoBehaviour:
     x: 1040
     y: 940
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3437770279166195343}
   children: []
   behaviourTree: {fileID: 0}
@@ -370,7 +370,7 @@ MonoBehaviour:
     x: 880
     y: 580
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2551272652439459061}
   children:
   - {fileID: -971492261933530248}
@@ -399,7 +399,7 @@ MonoBehaviour:
     x: 340
     y: 680
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -8650863565938330097}
   children: []
   behaviourTree: {fileID: 0}
@@ -435,7 +435,7 @@ MonoBehaviour:
     x: 880
     y: 680
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -8650863565938330097}
   children:
   - {fileID: 3437770279166195343}
@@ -559,7 +559,7 @@ MonoBehaviour:
     x: 1820
     y: 880
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 6745280054288282283}
   children: []
   behaviourTree: {fileID: 0}
@@ -584,7 +584,7 @@ MonoBehaviour:
     x: 1920
     y: 680
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3904444274939619010}
   children:
   - {fileID: 6745280054288282283}
@@ -638,7 +638,7 @@ MonoBehaviour:
     x: 1420
     y: 460
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2551272652439459061}
   children:
   - {fileID: 1027531221367638166}
@@ -665,7 +665,7 @@ MonoBehaviour:
     x: 1420
     y: 580
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 1183958386016253489}
   children: []
   behaviourTree: {fileID: 0}
@@ -707,7 +707,7 @@ MonoBehaviour:
     x: -60
     y: 600
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3247519503796901226}
   children:
   - {fileID: -4917903527875671316}
@@ -752,7 +752,7 @@ MonoBehaviour:
     x: -180
     y: 760
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -4917903527875671316}
   children: []
   behaviourTree: {fileID: 0}
@@ -873,7 +873,7 @@ MonoBehaviour:
     x: 1920
     y: 800
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 7457807998418779025}
   children:
   - {fileID: 7371633414262407249}
@@ -900,7 +900,7 @@ MonoBehaviour:
     x: 2020
     y: 1000
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -5354827662432201384}
   children: []
   behaviourTree: {fileID: 0}
@@ -932,7 +932,7 @@ MonoBehaviour:
     x: 660
     y: 960
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3437770279166195343}
   children: []
   behaviourTree: {fileID: 0}
@@ -986,7 +986,7 @@ MonoBehaviour:
     x: 880
     y: 880
     width: 160
-    height: 45
+    height: 59
   parent: {fileID: 3437770279166195343}
   children:
   - {fileID: 2626795167488137538}
@@ -1052,7 +1052,7 @@ MonoBehaviour:
     x: 520
     y: 680
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: -8650863565938330097}
   children: []
   behaviourTree: {fileID: 0}
@@ -1096,7 +1096,7 @@ MonoBehaviour:
     x: 880
     y: 980
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 8002417812860321925}
   children:
   - {fileID: 7763014114658045548}
@@ -1131,7 +1131,7 @@ MonoBehaviour:
     x: 2120
     y: 680
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3904444274939619010}
   children: []
   behaviourTree: {fileID: 0}
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     x: 1760
     y: 540
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 1183958386016253489}
   children:
   - {fileID: 2780522658280085655}
@@ -1203,10 +1203,10 @@ MonoBehaviour:
   title: TriggerDashAttack
   rect:
     serializedVersion: 2
-    x: 1520
-    y: 700
+    x: 1499.9995
+    y: 748.7994
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2780522658280085655}
   children: []
   behaviourTree: {fileID: 0}
@@ -1230,7 +1230,7 @@ MonoBehaviour:
     x: 1600
     y: 860
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 0}
   children: []
   behaviourTree: {fileID: 0}
@@ -1255,7 +1255,7 @@ MonoBehaviour:
     x: -60
     y: 520
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2551272652439459061}
   children:
   - {fileID: 9105174727044084480}
@@ -1277,10 +1277,10 @@ MonoBehaviour:
   title: MoveTowardOpponent
   rect:
     serializedVersion: 2
-    x: 1720
-    y: 700
+    x: 1699.9995
+    y: 748.7994
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2780522658280085655}
   children: []
   behaviourTree: {fileID: 0}
@@ -1302,10 +1302,10 @@ MonoBehaviour:
   title: Dash Attack Sequence
   rect:
     serializedVersion: 2
-    x: 1640
-    y: 600
+    x: 1620
+    y: 640
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 3904444274939619010}
   children:
   - {fileID: 8818792797803259887}
@@ -1330,10 +1330,10 @@ MonoBehaviour:
   title: Reset Dash Attack Chance
   rect:
     serializedVersion: 2
-    x: 1360
-    y: 700
+    x: 1339.9995
+    y: 748.7994
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 2780522658280085655}
   children: []
   behaviourTree: {fileID: 0}
@@ -1432,9 +1432,9 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 220
-    y: 160
+    y: 140
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 5161406469011026009}
   children:
   - {fileID: 4663432757455894551}
@@ -1462,7 +1462,7 @@ MonoBehaviour:
     x: -220
     y: 260
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 518112194628645778}
   children: []
   behaviourTree: {fileID: 0}
@@ -1492,7 +1492,7 @@ MonoBehaviour:
     x: -20
     y: 260
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 518112194628645778}
   children: []
   behaviourTree: {fileID: 0}
@@ -1521,31 +1521,31 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[0]
+      propertyPath: 'variables.Array.data[0]'
       value: 
       objectReference: {fileID: 1069269990901503515}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[1]
+      propertyPath: 'variables.Array.data[1]'
       value: 
       objectReference: {fileID: 8564790825420106947}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[2]
+      propertyPath: 'variables.Array.data[2]'
       value: 
       objectReference: {fileID: 5330499851404202208}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[3]
+      propertyPath: 'variables.Array.data[3]'
       value: 
       objectReference: {fileID: 25998929135873918}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[4]
+      propertyPath: 'variables.Array.data[4]'
       value: 
       objectReference: {fileID: 5325240906487853827}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[5]
+      propertyPath: 'variables.Array.data[5]'
       value: 
       objectReference: {fileID: 2544070030172627373}
     - target: {fileID: 59052786170558792, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: variables.Array.data[6]
+      propertyPath: 'variables.Array.data[6]'
       value: 
       objectReference: {fileID: 7674196410812031569}
     - target: {fileID: 1361235298070627379, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
@@ -1609,23 +1609,23 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[0]
+      propertyPath: 'children.Array.data[0]'
       value: 
       objectReference: {fileID: 6949844364755657649}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[1]
+      propertyPath: 'children.Array.data[1]'
       value: 
       objectReference: {fileID: 718094018111522735}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[2]
+      propertyPath: 'children.Array.data[2]'
       value: 
       objectReference: {fileID: 4843337886370341995}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[3]
+      propertyPath: 'children.Array.data[3]'
       value: 
       objectReference: {fileID: 2407982115951928377}
     - target: {fileID: 4439678235624369338, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[4]
+      propertyPath: 'children.Array.data[4]'
       value: 
       objectReference: {fileID: 2134506922150527993}
     - target: {fileID: 5466766633071047034, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
@@ -1709,7 +1709,7 @@ PrefabInstance:
       value: 320
       objectReference: {fileID: 0}
     - target: {fileID: 7386468187820312306, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
-      propertyPath: children.Array.data[0]
+      propertyPath: 'children.Array.data[0]'
       value: 
       objectReference: {fileID: 4721752533650390794}
     - target: {fileID: 8178328718445563318, guid: c41396a2cd0540f4fac7dc620059d5bd, type: 3}
@@ -1949,27 +1949,27 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8337776675897930559}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[0]
+      propertyPath: 'variables.Array.data[0]'
       value: 
       objectReference: {fileID: 1069269990901503515}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[1]
+      propertyPath: 'variables.Array.data[1]'
       value: 
       objectReference: {fileID: 8564790825420106947}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[2]
+      propertyPath: 'variables.Array.data[2]'
       value: 
       objectReference: {fileID: 5330499851404202208}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[3]
+      propertyPath: 'variables.Array.data[3]'
       value: 
       objectReference: {fileID: 25998929135873918}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[4]
+      propertyPath: 'variables.Array.data[4]'
       value: 
       objectReference: {fileID: 5325240906487853827}
     - target: {fileID: 59052786170558792, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: variables.Array.data[5]
+      propertyPath: 'variables.Array.data[5]'
       value: 
       objectReference: {fileID: 2544070030172627373}
     - target: {fileID: 1361235298070627379, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
@@ -1987,6 +1987,10 @@ PrefabInstance:
     - target: {fileID: 1361235298070627379, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: MaxMoveTime
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361235298070627379, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
+      propertyPath: rect.height
+      value: 44
       objectReference: {fileID: 0}
     - target: {fileID: 1361235298070627379, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: UseMaxMoveTime
@@ -2021,6 +2025,10 @@ PrefabInstance:
       value: 720
       objectReference: {fileID: 0}
     - target: {fileID: 4213649645553395621, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
+      propertyPath: rect.height
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4213649645553395621, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: AttackDirection.key
       value: CurrAttackDirection
       objectReference: {fileID: 0}
@@ -2041,27 +2049,31 @@ PrefabInstance:
       value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
+      propertyPath: rect.height
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: children.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: children.Array.data[0]
+      propertyPath: 'children.Array.data[0]'
       value: 
       objectReference: {fileID: 4156739261059088711}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: children.Array.data[1]
+      propertyPath: 'children.Array.data[1]'
       value: 
       objectReference: {fileID: 4337301974407968765}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: children.Array.data[2]
+      propertyPath: 'children.Array.data[2]'
       value: 
       objectReference: {fileID: 7847248851764841319}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: children.Array.data[3]
+      propertyPath: 'children.Array.data[3]'
       value: 
       objectReference: {fileID: 6804114360800819119}
     - target: {fileID: 4439678235624369338, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
-      propertyPath: children.Array.data[4]
+      propertyPath: 'children.Array.data[4]'
       value: 
       objectReference: {fileID: 6804114360800819119}
     - target: {fileID: 5466766633071047034, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
@@ -2136,6 +2148,10 @@ PrefabInstance:
       propertyPath: rect.y
       value: 360
       objectReference: {fileID: 0}
+    - target: {fileID: 7386468187820312306, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
+      propertyPath: rect.height
+      value: 44
+      objectReference: {fileID: 0}
     - target: {fileID: 8178328718445563318, guid: 956942fd67e51d24a95e5ae56d2c9473, type: 3}
       propertyPath: m_Name
       value: BT_AttackSequence
@@ -2174,7 +2190,7 @@ MonoBehaviour:
     x: -179
     y: 720
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 6451426412890946736}
   children: []
   behaviourTree: {fileID: 0}
@@ -2204,7 +2220,7 @@ MonoBehaviour:
     x: 280
     y: 660
     width: 160
-    height: 45
+    height: 44
   parent: {fileID: 6451426412890946736}
   children:
   - {fileID: 8570598286723552313}

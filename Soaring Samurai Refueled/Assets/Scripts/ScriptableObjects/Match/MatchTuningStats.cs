@@ -30,5 +30,6 @@ public class MatchTuningStats : ScriptableObject
 
     [Header("SFX")]
     public SoundEvent RoundFinishSFX;
+    public SoundEvent MainMatchBGM;
 
 }

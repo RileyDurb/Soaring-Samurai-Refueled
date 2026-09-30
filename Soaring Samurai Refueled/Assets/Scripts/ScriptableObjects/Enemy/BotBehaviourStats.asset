@@ -23,7 +23,7 @@ MonoBehaviour:
   AttackOptionsRandomBin:
     mItems:
     - Name: Dash Attack
-      Weight: 20
+      Weight: 31
     - Name: Slow Pursuit Attack
       Weight: 50
     - Name: Combo Attack

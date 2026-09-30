@@ -76,6 +76,20 @@ public interface ICommand_
 
 public class SetStatCommand : ICommand_
 {
+    // For saving the path to get to a property, supporting going through multiple nested fields and/ or properties
+    protected class PropertyFieldChainLinkPackage
+    {
+        public PropertyFieldChainLinkPackage(string name, bool isProperty)
+        {
+            mName = name;
+            mIsProperty = isProperty;
+        }
+
+        public string mName;
+        public bool mIsProperty = false;
+    }
+
+
     protected float mNewStatValue;
     protected float mPreviousStatValue;
     protected string mPropertyNameToSet;
@@ -85,7 +99,7 @@ public class SetStatCommand : ICommand_
     protected PropertyInfo mPropertyToSet;
 
     protected List<string> mFieldChainToAccessValue = new List<string>();
-    protected List<string> mPropertyChainToAccessValue = new List<string>();
+    protected List<PropertyFieldChainLinkPackage> mPropertyChainToAccessValue = new List<PropertyFieldChainLinkPackage>();
 
     protected object mSettingValue;
 
@@ -125,7 +139,7 @@ public class SetStatCommand : ICommand_
                 for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
                 {
                    // Find the next field to go to
-                   currField = recursiveObjectToSetOn.GetType().GetField(mPropertyChainToAccessValue[i]);
+                   currField = recursiveObjectToSetOn.GetType().GetField(mFieldChainToAccessValue[i]);
                    // Get the object at that field
                    recursiveObjectToSetOn = currField.GetValue(recursiveObjectToSetOn);
                 }
@@ -146,15 +160,27 @@ public class SetStatCommand : ICommand_
             // If there are any subfields we need to go through to get to the proprty
             if (mPropertyChainToAccessValue.Count > 0)
             {
-                PropertyInfo currProperty = null;
+                MemberInfo currMember = null;
+                PropertyFieldChainLinkPackage currChainLink = null;
 
                 // For each subfield
                 for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
                 {
-                    // Find the next field to go to
-                    currProperty = recursiveObjectToSetOn.GetType().GetProperty(mPropertyChainToAccessValue[i]);
-                    // Get the object at that field
-                    recursiveObjectToSetOn = currProperty.GetValue(recursiveObjectToSetOn);
+                    currChainLink = mPropertyChainToAccessValue[i];
+                    if (currChainLink.mIsProperty)
+                    {
+                        currMember = recursiveObjectToSetOn.GetType().GetProperty(currChainLink.mName);
+
+                        // Get the object at that field
+                        recursiveObjectToSetOn = (currMember as PropertyInfo).GetValue(recursiveObjectToSetOn);
+                    }
+                    else
+                    {
+                        currMember = recursiveObjectToSetOn.GetType().GetField(currChainLink.mName);
+
+                        recursiveObjectToSetOn = (currMember as FieldInfo).GetValue(recursiveObjectToSetOn);
+
+                    }
                 }
             }
 
@@ -200,17 +226,31 @@ public class SetStatCommand : ICommand_
             // If there are any subfields we need to go through to get to the field
             if (mPropertyChainToAccessValue.Count > 0)
             {
-                PropertyInfo currProperty = null;
+                MemberInfo currMember = null;
+                PropertyFieldChainLinkPackage currChainLink = null;
+
 
                 // For each subfield
                 for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
                 {
-                    // Find the next field to go to
-                    currProperty = recursiveObjectToSetOn.GetType().GetProperty(mPropertyChainToAccessValue[i]);
-                    // Get the object at that field
-                    recursiveObjectToSetOn = currProperty.GetValue(recursiveObjectToSetOn);
+                    currChainLink = mPropertyChainToAccessValue[i];
+                    if (currChainLink.mIsProperty)
+                    {
+                        currMember = recursiveObjectToSetOn.GetType().GetProperty(currChainLink.mName);
+
+                        // Get the object at that field
+                        recursiveObjectToSetOn = (currMember as PropertyInfo).GetValue(recursiveObjectToSetOn);
+                    }
+                    else // Get the field
+                    {
+                        currMember = recursiveObjectToSetOn.GetType().GetField(currChainLink.mName);
+
+                        recursiveObjectToSetOn = (currMember as FieldInfo).GetValue(recursiveObjectToSetOn);
+
+                    }
                 }
             }
+
             return mPropertyToSet.GetValue(recursiveObjectToSetOn);
         }
     }
@@ -282,7 +322,7 @@ public class SetStatCommand : ICommand_
         return null;
     }
 
-    private PropertyInfo FindProperty_Rec(Type typeToLookIn, ref string fieldName, int depthCount, ref List<string> propertyChain, int maxDepthCount = 1)
+    private PropertyInfo FindProperty_Rec(Type typeToLookIn, ref string fieldName, int depthCount, ref List<PropertyFieldChainLinkPackage> propertyChain, int maxDepthCount = 1)
     {
         PropertyInfo foundProperty = typeToLookIn.GetProperty(fieldName);
 
@@ -301,8 +341,30 @@ public class SetStatCommand : ICommand_
 
         foreach (PropertyInfo property in typeProperties)
         {
-            propertyChain.Add(property.Name);
+            propertyChain.Add(new PropertyFieldChainLinkPackage(property.Name, true));
             foundProperty = FindProperty_Rec(property.PropertyType, ref fieldName, depthCount + 1, ref propertyChain, maxDepthCount);
+
+
+            if (foundProperty != null)
+            {
+                return foundProperty;
+            }
+
+            propertyChain.RemoveAt(propertyChain.Count - 1);
+        }
+
+        // Search in each field, in case the property is nested within that (like a struct stored as a field that has the value stored as a property), and see if any contain the property
+        FieldInfo[] typeFields = typeToLookIn.GetFields();
+
+        if (typeFields.Length == 0 || typeToLookIn == typeof(System.Single) || depthCount > maxDepthCount)
+        {
+            return null;
+        }
+
+        foreach (FieldInfo field in typeFields)
+        {
+            propertyChain.Add(new PropertyFieldChainLinkPackage(field.Name, false));
+            foundProperty = FindProperty_Rec(field.FieldType, ref fieldName, depthCount + 1, ref propertyChain, maxDepthCount);
 
 
             if (foundProperty != null)

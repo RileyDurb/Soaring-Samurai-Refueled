@@ -17,6 +17,17 @@ public class RandomBin
         public int Weight = 0;
     }
 
+    public RandomBin() { }
+
+    public RandomBin(RandomBin other)
+    {
+        // Deep copy the items of the other random bin
+        foreach (RandomBinItem binItem in other.mItems)
+        {
+            mItems.Add(new RandomBinItem(binItem.Name, binItem.Weight));
+        }
+    }
+
     [SerializeField] List<RandomBinItem> mItems = new List<RandomBinItem>();
 
     public virtual void AddToItem(string itemName, int amountToAdd)

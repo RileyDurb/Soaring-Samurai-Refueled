@@ -128,9 +128,9 @@ public class AIBehaviour : MonoBehaviour
             {
                 if (mAttackOnTimerActive == false)
                 {
-                    mAIActionList.AddActionCallback(()=> { TriggerNormalSlashAttack(mAttackOnTimerAttackDirection); }, mAttackOnTimerInterval, false, true); // Set a looping action to trigger an attack
+                    mAIActionList.AddActionCallback(() => { TriggerNormalSlashAttack(mAttackOnTimerAttackDirection); }, mAttackOnTimerInterval, false, true); // Set a looping action to trigger an attack
 
-                        mLastTimerInterval = mAttackOnTimerInterval;
+                    mLastTimerInterval = mAttackOnTimerInterval;
 
                     mAttackOnTimerActive = true;
                 }

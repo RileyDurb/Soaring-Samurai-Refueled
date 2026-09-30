@@ -22,6 +22,7 @@ MonoBehaviour:
     mUseHitStunAsClashStun: 0
     mClashStunTime: 1.8
     mDamageDelayTime: 1
+    mAttackLevel: 2
     mGasCost: 50
     mGasGainOnUse: 0
     mGasGainOnHit: 0
