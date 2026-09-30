@@ -46,6 +46,7 @@ public class State_DashAttack : StateManagerPlayer.State, IFlinchCheckable
     {
 
         // Initialize variables
+        mDashAttackActionList.Clear(); // Get rid of any previously uncleared action
         mCombatController = mParentObject.GetComponent<PlayerCombatController>();
         mDashAttackStats = mCombatController.mDashAttackStats; // bring in dash attack stats
         mCurrDashAttackState = DashAttackStates.Charge;
