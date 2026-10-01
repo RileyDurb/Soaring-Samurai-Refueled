@@ -23,7 +23,7 @@ MonoBehaviour:
   FirstPreRoundLength: 4
   SubsequentPreRoundsLength: 4
   MatchEndMenuPopupDelay: 3.6
-  MatchEndTimeScaleValue: 0.35
+  MatchEndTimeScaleValue: 0.42
   MatchEndTimeScaleDuration: 1.5
   MatchEndTimeScaleEasing: 9
   MatchEndTimeScaleCurve:
