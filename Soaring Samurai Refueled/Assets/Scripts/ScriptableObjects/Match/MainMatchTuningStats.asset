@@ -61,3 +61,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   RoundFinishSFX: 9
   MainMatchBGM: 0
+  StartWithCPUActive: 0

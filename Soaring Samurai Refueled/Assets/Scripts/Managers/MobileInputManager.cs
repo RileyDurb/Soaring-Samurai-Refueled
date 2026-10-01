@@ -16,6 +16,7 @@ public class MobileInputManager : MonoBehaviour
     public Dictionary<int, GameObject> mSpawnedControlsPerPlayer = new Dictionary<int, GameObject>();
 
     int mNumMobileControllersSpawned = 0;
+
     // Start is called before the first frame update
     void Start()
     {

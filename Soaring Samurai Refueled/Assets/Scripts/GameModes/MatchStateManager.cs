@@ -31,6 +31,7 @@ public class MatchStateManager : MonoBehaviour
     public Action<int> PlayerDefeated;
     public Action<int, int> PlayerRoundWin; // Event for saying a player has won, sends the player index as the 1st parameter, and the new number of round wins in this match as the second parameter
     public Action OnInitMatch;
+    public Action<int> OnPlayerJoined;
 
 
     // Private variables ///////////////////////////////////////////////////////////////////////////
@@ -121,6 +122,8 @@ public class MatchStateManager : MonoBehaviour
 
         // Create round timer
         LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundTimerPrefab);
+
+        OnPlayerJoined += UpdateCPUActivityOnPlayerJoin;
 
         RestartMatch();
     }
@@ -601,6 +604,20 @@ public class MatchStateManager : MonoBehaviour
         audioMan.StopEvent(MatchStats.MainMatchBGM); // Stop the bgm so it can restart
         audioMan.PlayEvent(MatchStats.MainMatchBGM);
 
+    }
+
+    void UpdateCPUActivityOnPlayerJoin(int newPlayerIndex)
+    {
+        if (mMatchStats.StartWithCPUActive)
+        {
+            foreach (PlayerCombatController player in mPlayers)
+            {
+                if (player.GetIsNonPlayerControlled())
+                {
+                    player.GetComponent<AIBehaviour>().SetAIMode(AIBehaviour.AIMode.BehaviourTree);
+                }
+            }
+        }
     }
     // Public interface /////////////////////////////////////////////////////////////////////////////////
     public void RestartMatch()

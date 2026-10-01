@@ -40,6 +40,9 @@ public class PlayerInputHandler : MonoBehaviour
                     mobileControlsVisuals.UpdateCharacterBasedVisuals(controller.CharacterVisualsName);
                 }
 
+                LevelScopeManagers.Instance.GetComponent<MatchStateManager>().OnPlayerJoined.Invoke(input.playerIndex);
+
+
                 break;
             }
         }

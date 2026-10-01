@@ -37,4 +37,7 @@ public class MatchTuningStats : ScriptableObject
     public SoundEvent RoundFinishSFX;
     public SoundEvent MainMatchBGM;
 
+    [Header("Bot AI Behaviour")]
+    public bool StartWithCPUActive = false;
+
 }
