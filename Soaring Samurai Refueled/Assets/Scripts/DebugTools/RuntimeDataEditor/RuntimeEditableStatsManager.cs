@@ -131,12 +131,12 @@ public class SetStatCommand : ICommand_
             object recursiveObjectToSetOn = mObjectToSetOn;
 
             // If there are any subfields we need to go through to get to the field
-            if (mPropertyChainToAccessValue.Count > 0)
+            if (mFieldChainToAccessValue.Count > 0)
             {
                 FieldInfo currField = null;
 
                 // For each subfield
-                for (int i = 0; i < mPropertyChainToAccessValue.Count; i++)
+                for (int i = 0; i < mFieldChainToAccessValue.Count; i++)
                 {
                    // Find the next field to go to
                    currField = recursiveObjectToSetOn.GetType().GetField(mFieldChainToAccessValue[i]);
