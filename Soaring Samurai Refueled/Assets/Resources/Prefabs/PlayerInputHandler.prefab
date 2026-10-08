@@ -94,7 +94,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 4332c5d9-dc68-423c-8221-2257adf4f57e
-    m_ActionName: Combat/Move[/DualShock4GamepadHID/leftStick]
+    m_ActionName: 'Combat/Move[/DualShock4GamepadHID/leftStick]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -110,7 +110,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 2082df76-b3d3-44e2-a9c3-a8226d2b6068
-    m_ActionName: Combat/LowLeftAttack[/SwitchProControllerHID/buttonSouth,/DualShock4GamepadHID/buttonSouth]
+    m_ActionName: 'Combat/LowLeftAttack[/SwitchProControllerHID/buttonSouth,/DualShock4GamepadHID/buttonSouth]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -126,7 +126,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 123304fe-bd68-421f-93cc-da02d49ecfd1
-    m_ActionName: Combat/UpLeftSlash[/SwitchProControllerHID/buttonWest,/DualShock4GamepadHID/buttonWest]
+    m_ActionName: 'Combat/UpLeftSlash[/SwitchProControllerHID/buttonWest,/DualShock4GamepadHID/buttonWest]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -142,7 +142,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 8b145e31-289f-4aad-89c2-a79451905779
-    m_ActionName: Combat/DownRightSlash[/SwitchProControllerHID/buttonEast,/DualShock4GamepadHID/buttonEast]
+    m_ActionName: 'Combat/DownRightSlash[/SwitchProControllerHID/buttonEast,/DualShock4GamepadHID/buttonEast]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -158,7 +158,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: c4911a38-56e9-48d4-86c6-b404719124c1
-    m_ActionName: Combat/UpRightSlash[/SwitchProControllerHID/buttonNorth,/DualShock4GamepadHID/buttonNorth]
+    m_ActionName: 'Combat/UpRightSlash[/SwitchProControllerHID/buttonNorth,/DualShock4GamepadHID/buttonNorth]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -174,7 +174,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: d07e46c7-ee7e-4515-9bba-0e4f8a7d5b69
-    m_ActionName: Combat/Dash[/DualShock4GamepadHID/leftTrigger]
+    m_ActionName: 'Combat/Dash[/DualShock4GamepadHID/leftTrigger]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -190,7 +190,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 0753e57c-2fc5-4ce2-9f22-145b761a931f
-    m_ActionName: Combat/DashAttack[/DualShock4GamepadHID/rightTrigger]
+    m_ActionName: 'Combat/DashAttack[/DualShock4GamepadHID/rightTrigger]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -206,7 +206,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: d82c4d39-0162-412f-a80c-50e8e757ca3b
-    m_ActionName: Combat/Pause[/Keyboard/p,/DualShock4GamepadHID/start]
+    m_ActionName: 'Combat/Pause[/Keyboard/p,/DualShock4GamepadHID/start]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121991200020816112}
@@ -222,7 +222,23 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 96ca1789-d103-4733-b926-d55ca6fe3ca2
-    m_ActionName: Combat/Sprint[/Keyboard/space]
+    m_ActionName: 'Combat/Sprint[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1121991200020816112}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnMenuBack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 248678dd-994c-47f7-b283-97798929e622
+    m_ActionName: 'Combat/MenuBack[/Keyboard/escape,/SwitchProControllerHID/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Combat

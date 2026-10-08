@@ -585,6 +585,20 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
         }
     }
 
+    public void OnMenuBack(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            MenuManager menuMan = LevelScopeManagers.Instance.GetComponent<MenuManager>();
+
+            // Right now just supports going back in pause menu
+            if (menuMan.NumItemsInPauseMenu() > 0)
+            {
+                PublicMenuFunctions.GoBackInPauseMenu();
+            }
+        }
+    }
+
     public void SprintInputGiven(InputAction.CallbackContext context)
     {
         SprintInputGiven(context.phase);

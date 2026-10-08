@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PublicMenuFunctions", menuName = "Scripts/ScriptableObjects/UI/Menu/PublicMenuFunctions")]
 public class PublicMenuFunctions : ScriptableObject
 {
-    public void GoBackInPauseMenu()
+    public static void GoBackInPauseMenu()
     {
         MenuManager currentMenuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
 
@@ -26,7 +26,7 @@ public class PublicMenuFunctions : ScriptableObject
         }
     }
 
-    public void ExitGame()
+    public static void ExitGame()
     {
         SimManager.Instance.Exit();
     }

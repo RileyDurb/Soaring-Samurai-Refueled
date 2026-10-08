@@ -1,13 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Input;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
+using System.IO;
+using static FileIOHandler;
+using static RuntimeEditableDataManager.StatsVersionData;
 
 // Runtime data manager, and command class for setting the data
 // may want to move commands, or at least the defined commands, into a separate file
@@ -45,6 +45,36 @@ SOFTWARE.
 public class RuntimeEditableDataManager : MonoBehaviour
 {
     [SerializeField] PlayerBaseDataObject mPlayerStats;
+
+    [System.Serializable]
+    public class StatsVersionData
+    {
+        [System.Serializable]
+        public class StatEditPackage
+        {
+            public StatEditPackage(ScriptableObject editedObject, string fieldOrPropertyEdited, object newValue)
+            {
+                mEditedObject = editedObject;
+                mFieldOrPropertyEdited = fieldOrPropertyEdited;
+                mNewValue = newValue;
+            }
+            public ScriptableObject mEditedObject = null;
+            public string mFieldOrPropertyEdited  = "";
+            public object mNewValue;
+
+        }
+        public ArraySerializeWrapper<SetStatCommand> mStatSettingInfo = new ArraySerializeWrapper<SetStatCommand>();
+        public string Test = "Testing";
+        public SetStatCommand mCommand = new SetStatCommand();
+        public ArraySerializeWrapper<StatEditPackage> mAllStatEdits = new ArraySerializeWrapper<StatEditPackage>();
+
+
+    }
+
+    List<SetStatCommand> mCurrentSavedCommands = new List<SetStatCommand>();
+
+    public List<StatEditPackage> mAllStatEdits = new List<StatEditPackage>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +93,61 @@ public class RuntimeEditableDataManager : MonoBehaviour
         mPlayerStats.mMovementStats.DirectVelocityNormal = newMoveSpeed;
 
     }
+
+
+    // Saving functions
+
+    public void TrackStatSetCommand(SetStatCommand command)
+    {
+        mCurrentSavedCommands.Add(command);
+    }
+
+    public void TrackStatEdit(ScriptableObject editedObject, string propertyName, object newValue)
+    {
+        mAllStatEdits.Add(new StatEditPackage(editedObject, propertyName, newValue));
+    }
+    public void SaveStatSettingVersion(string statsVersionFileName)
+    {
+        // Make a package to be saved as JSON
+        StatsVersionData statsVersionData = new StatsVersionData();
+
+        //// Store all the stats set commands that are currently tracked, for reapplying when loading the save
+        //statsVersionData.mStatSettingInfo.mItems = mCurrentSavedCommands.ToArray();
+
+        // Store all the stats set commands that are currently tracked, for reapplying when loading the save
+        statsVersionData.mAllStatEdits.mItems = mAllStatEdits.ToArray();
+
+        // Turn the stat setting info into a JSON string for saving
+        string statSaveJSON = JsonUtility.ToJson(statsVersionData, true);
+
+        string filepath = "";
+
+        // Save the json to a file, using the given filename, and starting path if any
+        StreamWriter writer = new StreamWriter(filepath + statsVersionFileName + ".json", false);
+        writer.WriteLine(statSaveJSON);
+        writer.Close();
+    }
+}
+public class FileIOHandler
+{
+    public static T[] LoadFromJson<T>(string json)
+    {
+        ArraySerializeWrapper<T> wrapper = JsonUtility.FromJson<ArraySerializeWrapper<T>>(json);
+        return wrapper.mItems;
+    }
+
+    public static string ToJson<T>(T[] array, bool prettyPrint = false)
+    {
+        ArraySerializeWrapper<T> wrapper = new ArraySerializeWrapper<T>();
+        wrapper.mItems = array;
+        return JsonUtility.ToJson(wrapper, prettyPrint);
+    }
+
+    [System.Serializable]
+    public class ArraySerializeWrapper<T>
+    {
+        public T[] mItems;
+    }
 }
 
 public interface ICommand_
@@ -73,10 +158,11 @@ public interface ICommand_
     //void Redo();
 }
 
-
+[System.Serializable]
 public class SetStatCommand : ICommand_
 {
     // For saving the path to get to a property, supporting going through multiple nested fields and/ or properties
+    [System.Serializable]
     protected class PropertyFieldChainLinkPackage
     {
         public PropertyFieldChainLinkPackage(string name, bool isProperty)

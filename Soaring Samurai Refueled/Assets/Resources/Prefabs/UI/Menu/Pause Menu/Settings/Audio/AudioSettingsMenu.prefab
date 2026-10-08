@@ -59,6 +59,7 @@ MonoBehaviour:
   MovesListMenuPrefab: {fileID: 3561947021320039053, guid: 4f85d9cde176862498297faf0890adde, type: 3}
   PlayerControllersMenuPrefab: {fileID: 3561947021320039053, guid: 6582b4ef23cc1c949b375da36e0a861a, type: 3}
   SettingsMenuPrefab: {fileID: 0}
+  RuntimeStatsEditingMenuPrefab: {fileID: 0}
 --- !u!114 &8605278073532479115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c4d86a94262b24ab6f4df278efb8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFirstItemToFocus: {fileID: 0}
+  mFirstItemToFocus: {fileID: 1875838828427993738}
 --- !u!114 &9004724536925053099
 MonoBehaviour:
   m_ObjectHideFlags: 0

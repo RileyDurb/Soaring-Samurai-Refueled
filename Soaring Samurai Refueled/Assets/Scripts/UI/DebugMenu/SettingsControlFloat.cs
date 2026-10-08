@@ -21,6 +21,9 @@ public class SettingsControlFloat : SettingsControl
             // Execute the stat command
             mStatSetCommandObject.Execute();
 
+            PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().TrackStatSetCommand(mStatSetCommandObject);
+            PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().TrackStatEdit(objectToUse, propertyOrFieldName, value);
+
         });
 
         // Initialize name

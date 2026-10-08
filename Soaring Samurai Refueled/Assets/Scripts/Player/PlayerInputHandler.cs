@@ -156,4 +156,13 @@ public class PlayerInputHandler : MonoBehaviour
         }
         playerController.SprintInputGiven(context);
     }
+
+    public void OnMenuBack(InputAction.CallbackContext context)
+    {
+        if (playerController == null)
+        {
+            return;
+        }
+        playerController.OnMenuBack(context);
+    }
 }

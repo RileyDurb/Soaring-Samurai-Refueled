@@ -22,6 +22,8 @@ public class SettingsControlBool : SettingsControl
             // Execute the stat command
             mStatSetCommandObject.Execute();
 
+            PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().TrackStatSetCommand(mStatSetCommandObject);
+
         });
 
         // Initialize name

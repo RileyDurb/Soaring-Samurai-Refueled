@@ -7,6 +7,7 @@ using UnityEngine;
 public class RuntimeStatEditorFunctions : MonoBehaviour
 {
     //[SerializeField] TMP_InputField TestScriptableObjectEditorButton;
+    [SerializeField] TMP_InputField SaveFileNameBox;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,11 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
 
         // Apply stat change directly
         PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().TestChangeScriptableObject(speed);
+    }
+
+    public void TestSaveEditedStats()
+    {
+        PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().SaveStatSettingVersion("Test Stat Version");
     }
 
 

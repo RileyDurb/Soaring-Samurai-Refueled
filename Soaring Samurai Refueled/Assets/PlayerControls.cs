@@ -171,6 +171,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""248678dd-994c-47f7-b283-97798929e622"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -448,6 +457,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""985962b9-2303-4465-9c80-b563ef6f0eca"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""822f9624-5cc3-4ac8-b216-e8f245f6e9c9"",
+                    ""path"": ""<Gamepad>/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -498,6 +529,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Combat_DashAttack = m_Combat.FindAction("DashAttack", throwIfNotFound: true);
         m_Combat_Pause = m_Combat.FindAction("Pause", throwIfNotFound: true);
         m_Combat_Sprint = m_Combat.FindAction("Sprint", throwIfNotFound: true);
+        m_Combat_MenuBack = m_Combat.FindAction("MenuBack", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -587,6 +619,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_DashAttack;
     private readonly InputAction m_Combat_Pause;
     private readonly InputAction m_Combat_Sprint;
+    private readonly InputAction m_Combat_MenuBack;
     /// <summary>
     /// Provides access to input actions defined in input action map "Combat".
     /// </summary>
@@ -634,6 +667,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Combat/Sprint".
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Combat_Sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat/MenuBack".
+        /// </summary>
+        public InputAction @MenuBack => m_Wrapper.m_Combat_MenuBack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -687,6 +724,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @MenuBack.started += instance.OnMenuBack;
+            @MenuBack.performed += instance.OnMenuBack;
+            @MenuBack.canceled += instance.OnMenuBack;
         }
 
         /// <summary>
@@ -725,6 +765,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @MenuBack.started -= instance.OnMenuBack;
+            @MenuBack.performed -= instance.OnMenuBack;
+            @MenuBack.canceled -= instance.OnMenuBack;
         }
 
         /// <summary>
@@ -880,5 +923,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MenuBack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenuBack(InputAction.CallbackContext context);
     }
 }
