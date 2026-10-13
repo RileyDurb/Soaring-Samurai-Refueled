@@ -14,7 +14,7 @@ public class Task_MoveTo : Leaf
 
     [SerializeField] bool UseMaxMoveTime = false;
     [SerializeField] float MaxMoveTime = 5.0f;
-    [SerializeField] Vector2 TargetClosnessThresholdXY = new Vector2(2.0f, 2.0f); // How close the player needs to be to the target to be considered there, and for this task to count as succeded. If giving different values for x and y, lerps between them based on the directon the moving object is incoming to the target
+    [SerializeField] Vector2Reference TargetClosnessThresholdXY; // How close the player needs to be to the target to be considered there, and for this task to count as succeded. If giving different values for x and y, lerps between them based on the directon the moving object is incoming to the target. Default should be 2 and 2
     [SerializeField] Vector2 ManualTargetOffset = new Vector2(0, -5.0f);
 
 
@@ -29,6 +29,7 @@ public class Task_MoveTo : Leaf
         mCurrMoveTime = MaxMoveTime;
 
         mCombatController = behaviourTree.GetComponentInParent<PlayerCombatController>();
+
     }
     public override NodeResult Execute()
     {
@@ -49,7 +50,7 @@ public class Task_MoveTo : Leaf
             }
 
             float closenessToBeingVertical = Mathf.Abs(Vector2.Dot(Vector2.up, vecToTarget.normalized));
-            float targetClosenessMagnitide = Mathf.Lerp(TargetClosnessThresholdXY.x, TargetClosnessThresholdXY.y, closenessToBeingVertical);
+            float targetClosenessMagnitide = Mathf.Lerp(TargetClosnessThresholdXY.Value.x, TargetClosnessThresholdXY.Value.y, closenessToBeingVertical);
             if (vecToTarget.magnitude <= targetClosenessMagnitide)
             {
                 return NodeResult.success;

@@ -17,7 +17,7 @@ MonoBehaviour:
     DashingJerk: 500000
     UseMaxJerkCurve: 0
     UseDirectVelocity: 1
-    DirectVelocityNormal: 12
+    DirectVelocityNormal: 13
     DirectVelocityDash: 50
     StopDashOnNoInput: 1
     InputValueToMaxJerkCurve:

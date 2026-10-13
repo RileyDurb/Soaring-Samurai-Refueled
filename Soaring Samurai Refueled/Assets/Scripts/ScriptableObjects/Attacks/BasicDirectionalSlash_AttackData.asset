@@ -15,13 +15,16 @@ MonoBehaviour:
   mStats:
     mName: Directional Slash
     mDamage: 10
-    mActiveTime: 0.3
+    mStartupTimeFrames: 4
+    mActiveTimeFrames: 16
+    mRecoveryTimeFrames: 0
     mAttackOffsetDistance: 0.3
     mHitboxScaleFromPlayer: {x: 0.5, y: 0.5}
     mHitStunTime: 0.5
     mUseHitStunAsClashStun: 1
     mClashStunTime: 1
     mDamageDelayTime: 0
+    mAttackLevel: 1
     mGasCost: 0
     mGasGainOnUse: 0
     mGasGainOnHit: 15

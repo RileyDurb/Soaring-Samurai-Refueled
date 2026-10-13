@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a2abd45aa266248a4f896ac04d936e, type: 3}
+  m_Name: CombatDebugInfoSettings
+  m_EditorClassIdentifier: 
+  mHitboxInactiveColor: {r: 0, g: 0, b: 0, a: 0}
+  mHitboxActiveColor: {r: 0.5647059, g: 0.13725491, b: 0.13725491, a: 0.9019608}

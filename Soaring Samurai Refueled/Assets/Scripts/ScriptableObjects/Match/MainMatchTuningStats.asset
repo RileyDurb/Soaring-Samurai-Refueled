@@ -21,10 +21,10 @@ MonoBehaviour:
   SuddenDeathHealthValue: 2
   MatchEndRestartDelay: 5
   FirstPreRoundLength: 4
-  SubsequentPreRoundsLength: 4
+  SubsequentPreRoundsLength: 3
   MatchEndMenuPopupDelay: 3.6
-  MatchEndTimeScaleValue: 0.42
-  MatchEndTimeScaleDuration: 1.5
+  MatchEndTimeScaleValue: 0.1
+  MatchEndTimeScaleDuration: 3
   MatchEndTimeScaleEasing: 9
   MatchEndTimeScaleCurve:
     serializedVersion: 2
@@ -32,15 +32,24 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.06415506
+      outSlope: -0.06415506
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.7
-      value: 1
+      time: 0.2706906
+      value: 0.9826338
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3731477
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5003235
+      value: 0.84949493
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -50,8 +59,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -3.3333333
-      outSlope: -3.3333333
+      inSlope: -1.7000897
+      outSlope: -1.7000897
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

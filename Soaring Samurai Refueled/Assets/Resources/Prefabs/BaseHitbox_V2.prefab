@@ -178,3 +178,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae4ff65bb5d67349996fe94d0b643b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCollider: {fileID: 5066977873908196723}
+  mDebugSettings: {fileID: 11400000, guid: adb4a06cca258764d9fa691467c6c5d0, type: 2}

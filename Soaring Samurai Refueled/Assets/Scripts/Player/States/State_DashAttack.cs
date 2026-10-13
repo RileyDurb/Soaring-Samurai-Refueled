@@ -96,7 +96,7 @@ public class State_DashAttack : StateManagerPlayer.State, IFlinchCheckable
 
 
             // Set to go into recovery after active time is done
-            mDashAttackActionList.AddActionCallback(() => StartDashAttackRecovery(), mDashAttackStats.mStats.ActiveTime);
+            mDashAttackActionList.AddActionCallback(() => StartDashAttackRecovery(), mDashAttackStats.mStats.ActiveTimeSeconds);
         }
 
         // Calculate current speed

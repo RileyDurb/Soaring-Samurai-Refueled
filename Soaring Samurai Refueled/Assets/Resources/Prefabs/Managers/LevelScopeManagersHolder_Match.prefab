@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3680314576665779589}
   - component: {fileID: -471477971343604047}
   m_Layer: 0
-  m_Name: LevelScopeManagersHolder
+  m_Name: LevelScopeManagersHolder_Match
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -15,7 +15,9 @@ MonoBehaviour:
   mStats:
     mName: Charged Dash Attack
     mDamage: 20
-    mActiveTime: 0.7
+    mStartupTimeFrames: 0
+    mActiveTimeFrames: 42
+    mRecoveryTimeFrames: 0
     mAttackOffsetDistance: 0
     mHitboxScaleFromPlayer: {x: 1, y: 1}
     mHitStunTime: 3

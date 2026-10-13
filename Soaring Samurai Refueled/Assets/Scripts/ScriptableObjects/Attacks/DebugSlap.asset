@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: DebugSlap
   m_EditorClassIdentifier: 
   mStats:
-    mName: 
+    mName: Debug Slap
     mDamage: 0
-    mActiveTime: 1
+    mStartupTimeFrames: 0
+    mActiveTimeFrames: 1
+    mRecoveryTimeFrames: 0
     mAttackOffsetDistance: 1
     mHitboxScaleFromPlayer: {x: 1, y: 1}
     mHitStunTime: 1
@@ -38,8 +40,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    mHitParticlesPrefab: {fileID: 0}
-    mHitParticlesFollowTarget: 0
+    mHitParticlesPrefab: {fileID: 9200201252025249482, guid: f8254fd35d0cbe942a6207544129ebe0, type: 3}
+    mHitParticlesFollowTarget: 1
     mHitstopTime: 0
     mScreenshakeStrength: 0
     mScreenshakeTime: 0

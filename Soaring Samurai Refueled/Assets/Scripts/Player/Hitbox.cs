@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Hitbox : MonoBehaviour
 {
@@ -27,7 +29,12 @@ public class Hitbox : MonoBehaviour
         [SerializeField] string mName;
         [Header("Main Effectiveness")]
         [SerializeField] float mDamage = 0.0f;
-        [SerializeField] float mActiveTime = 1.0f;
+        float mStartupTime = 0.0f;
+        [SerializeField] float mStartupTimeFrames = 0.0f;
+        float mActiveTime = 1.0f;
+        [SerializeField] float mActiveTimeFrames = 1.0f;
+        float mRecoveryTime = 0.0f;
+        [SerializeField] float mRecoveryTimeFrames = 0.0f;
         [SerializeField] float mAttackOffsetDistance = 1.0f;
         [SerializeField] Vector2 mHitboxScaleFromPlayer = new Vector2(1.0f, 1.0f);
         [SerializeField] float mHitStunTime = 1.0f;
@@ -73,10 +80,35 @@ public class Hitbox : MonoBehaviour
             get { return mKnockbackStrength; } 
             set { mKnockbackStrength = value; } 
         }
-        public float ActiveTime { 
-            get { return mActiveTime; } 
-            set { mActiveTime = value; } 
+        public float StartupTimeSeconds
+        {
+            get { return FightingGameHelpers.GetFramesAsTime(mStartupTimeFrames); }
+
         }
+        public float ActiveTimeSeconds { 
+            get { return FightingGameHelpers.GetFramesAsTime(mActiveTimeFrames); } 
+        }
+        public float RecoveryTimeSeconds
+        {
+            get { return FightingGameHelpers.GetFramesAsTime(mRecoveryTimeFrames); }
+        }
+        public float StartupTimeFrames
+        {
+            set { mStartupTimeFrames = value; mStartupTime = FightingGameHelpers.GetFramesAsTime(value); }
+        }
+        public float ActiveTimeFrames
+        {
+            set { mStartupTimeFrames = value; mStartupTime = FightingGameHelpers.GetFramesAsTime(value); }
+        }
+        public float RecoveryTimeFrames
+        {
+            set { mRecoveryTimeFrames = value; mRecoveryTime = FightingGameHelpers.GetFramesAsTime(value); }
+        }
+        public float TotalAttackTimeSeconds
+        {
+            get { return StartupTimeSeconds + ActiveTimeSeconds + RecoveryTimeSeconds; }
+        }
+
         public float HitStunTime { 
             get { return mHitStunTime; } 
             set { mHitStunTime = value; } 
@@ -193,15 +225,38 @@ public class Hitbox : MonoBehaviour
         public bool IsClashing { get { return mIsClashing; } }
         public Vector2 AttackOffset { get { return mAttackOffset; } }
     }
+    public enum AttackStage
+    {
+        Startup,
+        Active,
+        Recovery
+    }
 
     // Editor accessible variables
 
+
+
+    // Public variables
+    public Action<AttackStage> mOnAttackStageChanged;
 
     // private variables
     bool mAlreadyHit = false; // Whether this hitbox has already hit an opponent
     float mCurrLifeTimer = 0.0f;
     AttackDefinition mAttackInfo = new AttackDefinition();
     int mOwningPlayerID = -1;
+    [SerializeField] BoxCollider2D mCollider;
+
+    // Attack stage
+    AttackStage mAttackStage = AttackStage.Startup;
+    AttackStage CurrAttackStage
+    {
+        set { mAttackStage = value; mOnAttackStageChanged.Invoke(mAttackStage); }
+        get { return mAttackStage; }
+    }
+
+    // Debug renderer
+    SpriteRenderer mDebugHitboxRenderer;
+    [SerializeField] CombatDebugInfoSettings mDebugSettings;
     
 
     // Start is called before the first frame update
@@ -209,9 +264,26 @@ public class Hitbox : MonoBehaviour
     {
         mCurrLifeTimer = 0.0f;
 
+        mOnAttackStageChanged += UpdateHitboxRendererColor;
+
+        mDebugHitboxRenderer = GetComponentInChildren<SpriteRenderer>();
+
+
         // Enables debug draw if in debug mode, disables if not
         // NOTE: Size not accurate at the moment
-        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugModeOn;
+        mDebugHitboxRenderer.enabled = SimManager.Instance.DebugModeOn;
+
+        // Set initial attack stage
+        if (mAttackInfo.StartupTimeSeconds > 0.0f)
+        {
+            mCollider.enabled = false;
+            CurrAttackStage = AttackStage.Startup;
+
+        }
+        else
+        {
+            CurrAttackStage = AttackStage.Active;
+        }
     }
 
     // Update is called once per frame
@@ -222,7 +294,14 @@ public class Hitbox : MonoBehaviour
         {
             mCurrLifeTimer += Time.deltaTime;
 
-            if (mCurrLifeTimer >= mAttackInfo.ActiveTime) // If timer is up
+            // Check for startup being finished
+            if (mAttackStage == AttackStage.Startup && mCurrLifeTimer >= mAttackInfo.StartupTimeSeconds)
+            {
+                mCollider.enabled = true;
+                CurrAttackStage = AttackStage.Active;
+            }
+            
+            if (mCurrLifeTimer >= mAttackInfo.StartupTimeSeconds + mAttackInfo.ActiveTimeSeconds)
             {
                 Destroy(gameObject);
             }
@@ -231,7 +310,7 @@ public class Hitbox : MonoBehaviour
 
         // Enables debug draw if in debug mode, disables if not
         // NOTE: Size not accurate at the moment
-        GetComponentInChildren<SpriteRenderer>().enabled = SimManager.Instance.DebugModeOn;
+        mDebugHitboxRenderer.enabled = SimManager.Instance.DebugModeOn;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -347,5 +426,19 @@ public class Hitbox : MonoBehaviour
         mAttackInfo = attack;
         mCurrLifeTimer = 0.0f;
         mOwningPlayerID = owningPlayerID;
+
+    }
+
+    // private helpers
+    void UpdateHitboxRendererColor(AttackStage newStage)
+    {
+        if (newStage == AttackStage.Startup || newStage == AttackStage.Recovery)
+        {
+            mDebugHitboxRenderer.color = mDebugSettings.mHitboxInactiveColor;
+        }
+        else if (newStage == AttackStage.Active)
+        {
+            mDebugHitboxRenderer.color = mDebugSettings.mHitboxActiveColor;
+        }
     }
 }

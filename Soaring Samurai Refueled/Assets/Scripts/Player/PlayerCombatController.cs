@@ -359,7 +359,7 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
                 mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
             }
 
-            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.TotalAttackTimeSeconds, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.DLAttack);
 
@@ -399,7 +399,7 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
                 mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
             }
 
-            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.TotalAttackTimeSeconds, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(-1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.ULAttack);
 
@@ -441,7 +441,7 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
                 mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
             }
 
-            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.TotalAttackTimeSeconds, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, -1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.DRAttack);
 
@@ -482,7 +482,7 @@ public class PlayerCombatController : MonoBehaviour, IDamageable
                 mPoolContainer.GetPool("Gas").DecreasePool(-DirectionalSlashAttackStats.mStats.GasGainOnUse);
             }
 
-            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.ActiveTime, PlayerStates.Ready); // Enter State, and set up state done timer
+            mStateManager.EnterState(PlayerStates.SlashAttack, DirectionalSlashAttackStats.mStats.TotalAttackTimeSeconds, PlayerStates.Ready); // Enter State, and set up state done timer
 
             SpawnDirectionalAttack(new Vector2(1, 1) * DirectionalSlashAttackStats.mStats.AttackOffsetDistance, DirectionalSlashAttackStats.mStats, PlayerMoves.URAttack);
 
