@@ -11,7 +11,7 @@ public class ManagersSpawner : MonoBehaviour
     {
         if (mManagerSetupSettings.UsePersistentScopedManagers)
         {
-            if (PersistentScopeManagers.Instance != null) // if not already spawned
+            if (PersistentScopeManagers.Instance == null) // if not already spawned
             {
                 Instantiate(mManagerSetupSettings.PersistentScopedManagersPrefab);
             }
@@ -19,7 +19,7 @@ public class ManagersSpawner : MonoBehaviour
 
         if (mManagerSetupSettings.UseLevelScopedManagers)
         {
-            if (LevelScopeManagers.Instance != null) // if not already spawned
+            if (LevelScopeManagers.Instance == null) // if not already spawned
             {
                 Instantiate(mManagerSetupSettings.LevelScopedManagersPrefab);
             }

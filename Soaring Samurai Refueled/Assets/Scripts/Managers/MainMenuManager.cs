@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] GameObject MainMenuPrefab;
+    [SerializeField] GameObject MainMenuObjectReference;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Pe
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(MainMenuObjectReference);
     }
 
     // Update is called once per frame

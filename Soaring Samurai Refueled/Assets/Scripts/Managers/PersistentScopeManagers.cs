@@ -14,12 +14,12 @@ public class PersistentScopeManagers : MonoBehaviour
         {
             // Set this as the signgleton instance
             Instance = this;
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
             // Instance already exists, destroy this new one
-            Destroy(this);
+            Destroy(gameObject);
         }
 
     }

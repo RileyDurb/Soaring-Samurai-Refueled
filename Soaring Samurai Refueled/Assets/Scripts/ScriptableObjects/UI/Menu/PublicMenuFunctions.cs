@@ -22,6 +22,29 @@ public class PublicMenuFunctions : ScriptableObject
         }
         else
         {
+            if (SimManager.Instance.GetIsPaused)
+            {
+                SimManager.Instance.QueuePauseMenuChange();
+            }
+        }
+    }
+
+    public static void GoBackInMainMenu()
+    {
+        MenuManager currentMenuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
+
+        if (currentMenuManager == null)
+        {
+            Console.Write("PublicMenuFunctions:GoBacxkInMainMenu: level scope manager could be found by the static go back in menu function, so no context to go back from. Make sure one exists in the scene, likely by adding the LevelScopeManagersHolder prefab");
+            return;
+        }
+
+        if (currentMenuManager.NumItemsInLayer(MenuManager.MenuLayers.PauseMenu) > 1)
+        {
+            currentMenuManager.PopPauseMenu();
+        }
+        else
+        {
             SimManager.Instance.QueuePauseMenuChange();
         }
     }

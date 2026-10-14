@@ -110,15 +110,30 @@ public class MenuManager : MonoBehaviour
     {
         mNumUIItems++;
 
-        // Spawms the new object as a child of the menu layer parent
-        GameObject newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)layer].mLayerParentRef.transform);
-        if (mUseDebugNames)
+        GameObject newUIObject = null;
+        if (uiPrefabToUse.activeInHierarchy == false)
         {
-            newUIObject.name = newUIObject.name + "UI " + mNumUIItems.ToString();
+            // Spawms the new object as a child of the menu layer parent
+            newUIObject = Instantiate(uiPrefabToUse, mMenuLayers[(int)layer].mLayerParentRef.transform);
+            if (mUseDebugNames)
+            {
+                newUIObject.name = newUIObject.name + "UI " + mNumUIItems.ToString();
+            }
+        }
+        else // Just reparents ui
+        {
+            newUIObject = uiPrefabToUse;
+            uiPrefabToUse.transform.SetParent(mMenuLayers[(int)layer].mLayerParentRef.transform);
+
+            if (mUseDebugNames)
+            {
+                uiPrefabToUse.name = uiPrefabToUse.name + "UI " + mNumUIItems.ToString();
+            }
         }
 
-        // Handles adding an additive item to the current level, or moving past the current level and hiding everything in the previous one
-        List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
+
+            // Handles adding an additive item to the current level, or moving past the current level and hiding everything in the previous one
+            List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
         if (additiveToTopLayer == true)
         {
             if (additiveCounts.Count == 0)

@@ -7,6 +7,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.SceneManagement;
 
 public class SimManager : MonoBehaviour
 {
@@ -32,9 +33,13 @@ public class SimManager : MonoBehaviour
     bool mInPause = false;
     bool mPauseChangeQueued = false;
     private bool IsPaused { 
-        get { return mInPause; } 
         set { mInPause = value; if (OnPausedChange != null) { OnPausedChange(mInPause); } }
     }
+    public bool GetIsPaused
+    {
+        get { return mInPause; }
+    }
+
     // Debug related
     bool mDebugMode = false;
     bool mAllowDebug = true;
@@ -50,7 +55,7 @@ public class SimManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
 
@@ -182,4 +187,13 @@ public class SimManager : MonoBehaviour
         mPauseChangeQueued = true;
     }
 
+    public void ReturnToMainMenu()
+    {
+        if (GetIsPaused == true)
+        {
+            IsPaused = false;
+        }
+
+        SceneManager.LoadScene("MainMenu");
+    }
 }
