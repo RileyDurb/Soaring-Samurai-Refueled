@@ -95,14 +95,17 @@ public class Hitbox : MonoBehaviour
         public float StartupTimeFrames
         {
             set { mStartupTimeFrames = value; mStartupTime = FightingGameHelpers.GetFramesAsTime(value); }
+            get { return mStartupTimeFrames; }
         }
         public float ActiveTimeFrames
         {
             set { mStartupTimeFrames = value; mStartupTime = FightingGameHelpers.GetFramesAsTime(value); }
+            get { return mActiveTimeFrames; }
         }
         public float RecoveryTimeFrames
         {
             set { mRecoveryTimeFrames = value; mRecoveryTime = FightingGameHelpers.GetFramesAsTime(value); }
+            get { return mRecoveryTimeFrames; }
         }
         public float TotalAttackTimeSeconds
         {

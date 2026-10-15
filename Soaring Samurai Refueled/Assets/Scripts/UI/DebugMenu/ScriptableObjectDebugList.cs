@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -94,8 +95,9 @@ public class ScriptableObjectDebugList : MonoBehaviour
         // For each field, show the individually editable variables, and their sub-objects, to the maximum depth
         foreach (PropertyInfo property in objectProperties)
         {
-            // Skip any properties of the basic object type, which will mainly be like it's name, that we don't want to edit
-            if (property.DeclaringType == typeof(UnityEngine.Object))
+            // Skip any properties of the basic object type, which will mainly be like it's class name, that we don't want to edit
+            // Also skip if there is no setter on the property, as it's not an editable variable
+            if (property.DeclaringType == typeof(UnityEngine.Object) || property.CanWrite == false)
             {
                 continue;
             }
