@@ -21,6 +21,9 @@ MonoBehaviour:
   - mSupportedTypeNames:
     - System.Boolean
     mEditorPrefab: {fileID: 1972739374712344703, guid: c7791d64cddb29a49b4445eed0fe12b7, type: 3}
+  - mSupportedTypeNames:
+    - UnityEngine.Vector2
+    mEditorPrefab: {fileID: 1372763268752757977, guid: 0f563b9245a38564b8abc1a0d66a4624, type: 3}
   mNestedObjectHeaderPrefab: {fileID: 8890069032266701822, guid: ac264a617dcb0b143b89dd1463261b7b, type: 3}
   mMaxFieldDepthToShow: 1
   mEditableScriptableObjectsToChooseFrom:

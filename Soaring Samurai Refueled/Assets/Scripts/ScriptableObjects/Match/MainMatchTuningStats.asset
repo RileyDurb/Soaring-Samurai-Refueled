@@ -77,7 +77,7 @@ MonoBehaviour:
   CinematicCamSize: 10
   CinematicStartingOffset: {x: 0, y: -10}
   CinematicFlyInTime: 4
-  CinematicFlyInTimeVariationMinMax: {x: -0.2, y: 0.7}
+  CinematicFlyInTimeVariationMinMax: {x: -0.5, y: 1}
   CinematicFlyInEasing: 9
   CinematicFlyInEasingCurve:
     serializedVersion: 2
