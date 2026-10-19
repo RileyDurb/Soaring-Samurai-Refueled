@@ -22,6 +22,7 @@ MonoBehaviour:
   MatchEndRestartDelay: 5
   FirstPreRoundLength: 4
   SubsequentPreRoundsLength: 3
+  PreRoundMoveAllowDelay: 0.3
   MatchEndMenuPopupDelay: 3.6
   MatchEndTimeScaleValue: 0.1
   MatchEndTimeScaleDuration: 3
@@ -70,4 +71,45 @@ MonoBehaviour:
     m_RotationOrder: 4
   RoundFinishSFX: 9
   MainMatchBGM: 0
-  StartWithCPUActive: 0
+  StartWithCPUActive: 1
+  PlayPreMatchSequence: 1
+  CinematicCamPosition: {x: 0, y: 0}
+  CinematicCamSize: 10
+  CinematicStartingOffset: {x: 0, y: -10}
+  CinematicFlyInTime: 4
+  CinematicFlyInTimeVariationMinMax: {x: -0.2, y: 0.7}
+  CinematicFlyInEasing: 9
+  CinematicFlyInEasingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -0.013024624
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.87188643
+      value: 1.0188754
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CinematicWaitTimeAfterFlyIn: 1

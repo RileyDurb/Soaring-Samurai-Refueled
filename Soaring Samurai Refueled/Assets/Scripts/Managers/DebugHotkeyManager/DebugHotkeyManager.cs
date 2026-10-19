@@ -79,6 +79,11 @@ public class DebugHotkeyManager : MonoBehaviour
                     }
                 }
             }
+
+            if (Input.GetKeyUp(KeyCode.N))
+            {
+                LevelScopeManagers.Instance.GetComponent<MatchStateManager>().RestartMatch();
+            }
         }
 
     }

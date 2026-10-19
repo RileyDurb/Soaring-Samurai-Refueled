@@ -163,7 +163,7 @@ class Action_Move : Action_
     //    mDuration = duration;
     //}
 
-    public Action_Move(GameObject parent, Vector3 endPos, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None)
+    public Action_Move(GameObject parent, Vector3 endPos, float duration, float delay = 0.0f, EasingTypes easingType = EasingTypes.None, AnimationCurve customCurve = null)
     {
         mParentObj = parent;
         if (parent != null)
@@ -175,6 +175,7 @@ class Action_Move : Action_
         mDuration = duration;
         mDelay = delay;
         mEasingType = easingType;
+        mCustomEasingCurve = customCurve;
     }
 
     public override bool Update(float dt)

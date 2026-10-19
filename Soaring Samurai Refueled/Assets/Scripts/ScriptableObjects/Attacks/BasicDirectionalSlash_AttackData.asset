@@ -15,7 +15,7 @@ MonoBehaviour:
   mStats:
     mName: Directional Slash
     mDamage: 10
-    mStartupTimeFrames: 4
+    mStartupTimeFrames: 1
     mActiveTimeFrames: 16
     mRecoveryTimeFrames: 0
     mAttackOffsetDistance: 0.3

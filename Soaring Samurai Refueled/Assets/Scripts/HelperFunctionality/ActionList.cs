@@ -57,9 +57,9 @@ public class ActionList
     // Move
 
     // Moves position to the end position, from the position the object is at once the delay is over
-    public void AddActionMove(GameObject parent, Vector3 endPos, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None)
+    public void AddActionMove(GameObject parent, Vector3 endPos, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None, AnimationCurve customCurve = null)
     {
-        mActions.Add(new Action_Move(parent, endPos, duration, delay, easingType));
+        mActions.Add(new Action_Move(parent, endPos, duration, delay, easingType, customCurve));
     }
 
     public void AddActionLocalMove(GameObject parent, Vector3 endPos, float duration, float delay = 0.0f, Action_.EasingTypes easingType = Action_.EasingTypes.None)

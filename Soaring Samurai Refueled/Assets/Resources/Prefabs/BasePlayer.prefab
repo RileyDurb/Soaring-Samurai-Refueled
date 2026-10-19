@@ -115,6 +115,7 @@ MonoBehaviour:
     InputBeingApplied: 0
     mStaticFrictionThreshold: 0
   mDebugPrintPrefab: {fileID: 4349414876807131180, guid: 50e06c8efcc97db42bbdaae501facada, type: 3}
+  mDebugSettings: {fileID: 11400000, guid: 30979625e4c922f4882504f61226a0ba, type: 2}
   mDebugPrintCornerOffset: {x: 746, y: 406, z: 0}
   mDebugDraw: 1
 --- !u!70 &1457328239894749921

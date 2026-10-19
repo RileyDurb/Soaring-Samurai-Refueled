@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using AudioEvents;
+using System.Data;
 
 public class MatchStateManager : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class MatchStateManager : MonoBehaviour
     ActionList mActionList = new ActionList();
     MatchState mCurrMatchState = MatchState.PreRound;
 
+    // Scene object references
+    StageDataManager mStageDataManagerRef;
 
     // Round Start Message Variables
     [SerializeField]GameObject mMatchStartMessagePrefab;
@@ -62,7 +65,6 @@ public class MatchStateManager : MonoBehaviour
     // Round Tie message variables
     [SerializeField] GameObject mRoundTieMessagePrefab;
     GameObject mRoundTieMessageObject;
-
     public GameObject mTempSharedClashParticlesPrefab;
     GameObject mTempSharedClashParticlesObjectRef;
 
@@ -80,6 +82,10 @@ public class MatchStateManager : MonoBehaviour
 
     public List<Tuple<int, Hitbox.AttackCurrentData>> mHitsThisFrame = new List<Tuple<int, Hitbox.AttackCurrentData>>();
     public List<AttackHitPackage> mAttackHitsThisFrame = new List<AttackHitPackage>();
+
+    // Round Start saving
+    Dictionary<int, Vector2> mCurrRoundStartPositions = new Dictionary<int, Vector2>();
+
 
     // Getters and setters
     public List<PlayerCombatController> PlayerList {  get { return mPlayers; } }
@@ -100,6 +106,8 @@ public class MatchStateManager : MonoBehaviour
     void Start()
     {
         mPlayers.Clear(); // Don't need to clear list if scence is always reloading, so can remove this if we only reload, but otherwise, want to clear the list and readd all players
+
+        mStageDataManagerRef = FindAnyObjectByType<StageDataManager>(); // get and save stage data manager object
 
         // Makes a list of all current players
         PlayerCombatController[] players = FindObjectsByType<PlayerCombatController>(FindObjectsSortMode.None);
@@ -131,7 +139,8 @@ public class MatchStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mActionList.Update(Time.unscaledDeltaTime);
+        float cappedUnscaledDT = Mathf.Clamp(Time.unscaledDeltaTime, 0.0f, 0.33f); // Cap dt because unscaled dt is not caapped
+        mActionList.Update(cappedUnscaledDT);
 
         // Update match time
         if (mCurrMatchState == MatchState.InProgress && mInSuddenDeath == false && mTimerPaused == false)
@@ -242,7 +251,7 @@ public class MatchStateManager : MonoBehaviour
                 if (mMatchStats.ResetPositionsOnMatchStart)
                 {
                     // Reset player position
-                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec;
+                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec + mStageDataManagerRef.mStageStats.MatchStartCenterPosition;
                 }
             }
             else // For subsequent rounds
@@ -250,7 +259,7 @@ public class MatchStateManager : MonoBehaviour
                 if (mMatchStats.ResetPositionsOnRoundStart)
                 {
                     // Reset player position
-                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec;
+                    currPlayer.GetComponent<Rigidbody2D>().position = currSpawnVec + mStageDataManagerRef.mStageStats.MatchStartCenterPosition;
                 }
             }
 
@@ -268,6 +277,9 @@ public class MatchStateManager : MonoBehaviour
 
             currPlayer.GetComponent<StateManagerPlayer>().EnterState(PlayerStates.Ready);
 
+            // Save start position for purposes such as the cinematics knowing where to end the player at
+            mCurrRoundStartPositions[i] = currPlayer.GetComponent<Rigidbody2D>().position;
+
             // Do other restarting stuff as needed
 
             // Rotate spawn vec
@@ -276,9 +288,88 @@ public class MatchStateManager : MonoBehaviour
 
         InitRoundState(); // Inits state info like the timer
 
-        StartPreRound();
+        if (mMatchStats.PlayPreMatchSequence && mCurrRoundNumber == 0)
+        {
+            //StartCoroutine(StartCinematicsAfterFixedUpdate());
+            StartPreRoundCinematics();
+        }
+        else
+        {
+            StartPreRound();
+        }
     }
 
+    public IEnumerator StartCinematicsAfterFixedUpdate()
+    {
+        yield return new WaitForFixedUpdate();
+
+        StartPreRoundCinematics();
+    }
+
+    void StartPreRoundCinematics()
+    {
+        // Block all movement and combat input
+        LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().BlockInputType(InputBlockingManager.InputType.CombatAction);
+        LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().BlockInputType(InputBlockingManager.InputType.MovementAction);
+
+        Camera camComponent = Camera.main;
+        CameraFollow camBehaviour = camComponent.GetComponent<CameraFollow>();
+        
+        // Setup camera
+        camBehaviour.CurrFollowMode = CameraFollow.FollowMode.NoFollow;
+        camBehaviour.transform.position = new Vector3(mStageDataManagerRef.mStageStats.MatchStartCenterPosition.x, mStageDataManagerRef.mStageStats.MatchStartCenterPosition.y, camBehaviour.transform.position.z);
+        camComponent.orthographicSize = mMatchStats.CinematicCamSize / 2.0f;
+
+        float currTimePassed = 0.0f;
+        float maxFlyInTimeVariation = 0.0f;
+        for (int i = 0; i < mPlayers.Count; i++)
+        {
+            PlayerCombatController currPlayer = GetPlayerByIndex(i);
+            Vector3 targetPlayerPos = mCurrRoundStartPositions[i];
+            //currPlayer.GetComponent<Rigidbody2D>().Sleep();
+
+            // Set into a starting position off screen
+            Vector3 startingPosition = targetPlayerPos + mMatchStats.CinematicStartingOffset.ConvertTo<Vector3>();
+            currPlayer.GetComponent<Rigidbody2D>().position = startingPosition;
+            currPlayer.transform.position = startingPosition;
+            float flyInTimeVariation = MyRandom.RandomRange(mMatchStats.CinematicFlyInTimeVariationMinMax.x, mMatchStats.CinematicFlyInTimeVariationMinMax.y);
+            if (flyInTimeVariation > maxFlyInTimeVariation)
+            {
+                maxFlyInTimeVariation = flyInTimeVariation;
+            }
+            mActionList.AddActionMove(currPlayer.gameObject, targetPlayerPos, mMatchStats.CinematicFlyInTime + flyInTimeVariation, 0.0f, mMatchStats.CinematicFlyInEasing, mMatchStats.CinematicFlyInEasingCurve);
+
+
+        }
+
+        currTimePassed += mMatchStats.CinematicFlyInTime;
+
+        // If our time variation is later than wait time after flying in, add difference to the time we wait so we don't end later and affect any of the preround behaviour
+        if (maxFlyInTimeVariation > mMatchStats.CinematicWaitTimeAfterFlyIn)
+        {
+            currTimePassed += maxFlyInTimeVariation - mMatchStats.CinematicWaitTimeAfterFlyIn;
+        }
+        // Wait for a defined time after flying in, then start pre-round
+        mActionList.AddActionCallback(() => { EndPreRoundCinematicsAndStartPreRound(); }, currTimePassed + mMatchStats.CinematicWaitTimeAfterFlyIn);
+
+    }
+
+    void EndPreRoundCinematicsAndStartPreRound()
+    {
+        // Block all movement and combat input
+        LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().UnblockInputType(InputBlockingManager.InputType.CombatAction);
+        LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().UnblockInputType(InputBlockingManager.InputType.MovementAction);
+
+        Camera.main.GetComponent<CameraFollow>().CurrFollowMode = CameraFollow.FollowMode.AllPlayers;
+
+        //for (int i = 0; i < mPlayers.Count; i++)
+        //{
+        //    PlayerCombatController currPlayer = GetPlayerByIndex(i);
+        //    currPlayer.GetComponent<Rigidbody2D>().WakeUp();
+        //}
+
+        StartPreRound();
+    }
 
     void StartPreRound()
     {
@@ -303,6 +394,15 @@ public class MatchStateManager : MonoBehaviour
             {
                 mMatchStartMessageObject.GetComponent<AnimationController>().SetAnimationState("MatchRound2StartSequence");
             }
+        }
+
+        // Set up any delay to players being able to move
+        if (mMatchStats.PreRoundMoveAllowDelay > 0.0f)
+        {
+            // Block movememt right now
+            LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().BlockInputType(InputBlockingManager.InputType.MovementAction);
+            // Restore movement input allowing after a delay
+            mActionList.AddActionCallback(() => { LevelScopeManagers.Instance.GetComponent<InputBlockingManager>().UnblockInputType(InputBlockingManager.InputType.MovementAction); }, mMatchStats.PreRoundMoveAllowDelay);
         }
 
         // Begin the round after a delay
@@ -622,6 +722,8 @@ public class MatchStateManager : MonoBehaviour
     // Public interface /////////////////////////////////////////////////////////////////////////////////
     public void RestartMatch()
     {
+        mActionList.Clear();
+
         InitMatch();
 
         RestartRound();

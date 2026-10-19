@@ -16,5 +16,6 @@ MonoBehaviour:
   BackgroundImageScale: 12.99
   MaxMoveBounds: {x: 350, y: 270}
   MaxPlayerSpacingBounds: {x: 3.5, y: 3.5}
+  MatchStartCenterPosition: {x: 0, y: 0}
   ShowMaxMoveBoundLines: 1
   ShowPlayerSpacingBounds: 1

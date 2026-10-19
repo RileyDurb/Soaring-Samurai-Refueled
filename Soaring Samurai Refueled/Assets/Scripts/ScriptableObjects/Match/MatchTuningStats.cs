@@ -25,6 +25,7 @@ public class MatchTuningStats : ScriptableObject
     public float MatchEndRestartDelay = 5.0f;
     public float FirstPreRoundLength = 4.0f;
     public float SubsequentPreRoundsLength = 3.0f;
+    public float PreRoundMoveAllowDelay = 0.0f;
 
     [Header("Match End Sequence Aesthetics")]
     public float MatchEndMenuPopupDelay = 1.0f;
@@ -39,5 +40,16 @@ public class MatchTuningStats : ScriptableObject
 
     [Header("Bot AI Behaviour")]
     public bool StartWithCPUActive = false;
+
+    [Header("PrematchSequences")]
+    public bool PlayPreMatchSequence = true;
+    public Vector2 CinematicCamPosition = Vector2.zero;
+    public float CinematicCamSize = 10;
+    public Vector2 CinematicStartingOffset = new Vector2(0.0f, -20.0f);
+    public float CinematicFlyInTime = 4.5f;
+    public Vector2 CinematicFlyInTimeVariationMinMax = Vector2.zero;
+    public Action_.EasingTypes CinematicFlyInEasing = Action_.EasingTypes.None;
+    public AnimationCurve CinematicFlyInEasingCurve;
+    public float CinematicWaitTimeAfterFlyIn = 2.0f;
 
 }

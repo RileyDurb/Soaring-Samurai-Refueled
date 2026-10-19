@@ -546,6 +546,7 @@ public class PhysicsApplier : MonoBehaviour
     [SerializeField] private GameObject mDebugPrintPrefab;
     private GameObject mDebugPrintObjectRef;
 
+    [SerializeField] PhysicsDebugSettings mDebugSettings;
     [SerializeField] Vector3 mDebugPrintCornerOffset = new Vector3(746, 406, 0);
     Vector2[] mDebugPrintOffsetDirections =
         { 
@@ -631,7 +632,7 @@ public class PhysicsApplier : MonoBehaviour
     {
         mActionList.Update(Time.fixedDeltaTime);
 
-        if (mDebugDraw == true)
+        if (mDebugDraw == true && mDebugSettings.ShowMoveSpeedDebugTextDuringDebugMode)
         {
                 // Draw debug lines for each force and derivative
                 Debug.DrawRay(transform.position, new Vector3(mDirectionalForces.GetVelocity().x, mDirectionalForces.GetVelocity().y, 0), Color.green, 0, false);
@@ -656,6 +657,7 @@ public class PhysicsApplier : MonoBehaviour
                                "Jerk: " + mRotationalForces.Jerk;
                 }
         }
+
 
 
 
@@ -723,7 +725,14 @@ public class PhysicsApplier : MonoBehaviour
 
     public void OnDebugModeChanged(bool newDebugActive)
     {
-        mDebugPrintObjectRef.SetActive(newDebugActive);
+        if (mDebugSettings.ShowMoveSpeedDebugTextDuringDebugMode == false)
+        {
+            mDebugPrintObjectRef.SetActive(false);
+        }
+        else
+        {
+            mDebugPrintObjectRef.SetActive(newDebugActive);
+        }
         mDebugDraw = newDebugActive;
     }
 }
