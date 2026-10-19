@@ -1,0 +1,20 @@
+{
+    "mStatSettingInfo": {
+        "mItems": []
+    },
+    "Test": "Testing",
+    "mCommand": {},
+    "mAllStatEdits": {
+        "mItems": [
+            {
+                "mEditedObject": {
+                    "instanceID": 43826
+                },
+                "mEditedObjectName": "PlayerBaseDataObject",
+                "mFieldOrPropertyEditedName": "DirectVelocityDash",
+                "mValueAsString": "13",
+                "mTypeName": "String"
+            }
+        ]
+    }
+}

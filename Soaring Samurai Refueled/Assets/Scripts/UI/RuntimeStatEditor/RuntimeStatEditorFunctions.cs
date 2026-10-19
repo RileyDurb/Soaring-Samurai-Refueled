@@ -27,6 +27,8 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
 
 
         RefreshExistingSaveFileOptions();
+
+        ExistingSaveFilenamesDropdown.onValueChanged.AddListener(SelectExistingFilenameFromDropdown); // Add select event to occur when value is changed
     }
 
     // Update is called once per frame
@@ -54,14 +56,14 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
 
     public void TestSaveEditedStats()
     {
-        PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().SaveStatSettingVersion(mSaveLoadStatVersionName);
+        PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().SaveStatSettingVersion(mSaveFilenamePrefix + mSaveLoadStatVersionName);
 
         RefreshExistingSaveFileOptions();
     }
 
     public void TestLoadEditedStats()
     {
-        PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().LoadStatSettingVersion(mSaveLoadStatVersionName);
+        PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().LoadStatSettingVersion(mSaveFilenamePrefix + mSaveLoadStatVersionName);
     }
 
     public void SetCurrentStatFilename(string newFilename)
@@ -72,6 +74,7 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
     public void SelectExistingFilenameFromDropdown(int filenameIndex)
     {
         mSaveLoadStatVersionName = ExistingSaveFilenamesDropdown.options[filenameIndex].text;
+        SaveFilenameInputBox.SetTextWithoutNotify(ExistingSaveFilenamesDropdown.options[filenameIndex].text);
     }
 
     // Private helpers
@@ -80,15 +83,17 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
         // Initialize items for stat filename selector
         ExistingSaveFilenamesDropdown.ClearOptions();
 
+        string mainDirectory = Directory.GetCurrentDirectory();
         // Get all filename options
-        string[] allFilesInSaveDirectory = Directory.GetFiles(mSaveDirectory, "*.json", SearchOption.TopDirectoryOnly);
+        string[] allFilesInSaveDirectory = Directory.GetFiles(mainDirectory, "*.*", SearchOption.TopDirectoryOnly);
         List<string> allStatSaveFiles = new List<string>();
 
         for (int i = 0; i < allFilesInSaveDirectory.Length; i++)
         {
-            if (allFilesInSaveDirectory[i].StartsWith(mSaveFilenamePrefix))
+            if (allFilesInSaveDirectory[i].Contains(mSaveFilenamePrefix))
             {
-                allStatSaveFiles.Add(allFilesInSaveDirectory[i]); // Add file name to list
+                string[] splitName = allFilesInSaveDirectory[i].Split(mSaveFilenamePrefix); // Split string to isolate just the filename from the rest of the path
+                allStatSaveFiles.Add(splitName[1].Remove(splitName[1].Length - 5)); // Add file name to list, with the .json extension removed
             }
         }
 
@@ -104,7 +109,5 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
             existingStatFileOptions.Add(option);
         }
         ExistingSaveFilenamesDropdown.AddOptions(existingStatFileOptions);
-
-        ExistingSaveFilenamesDropdown.onValueChanged.AddListener(SelectExistingFilenameFromDropdown); // Add select event to occur when value is changed
     }
 }
