@@ -1,0 +1,47 @@
+{
+    "mStatSettingInfo": {
+        "mItems": []
+    },
+    "Test": "Testing",
+    "mCommand": {},
+    "mAllStatEdits": {
+        "mItems": [
+            {
+                "mEditedObject": {
+                    "instanceID": 43752
+                },
+                "mEditedObjectName": "BasicDirectionalSlash_AttackData",
+                "mFieldOrPropertyEditedName": "StartupTimeFrames",
+                "mValueAsString": "3",
+                "mTypeName": "String"
+            },
+            {
+                "mEditedObject": {
+                    "instanceID": 43752
+                },
+                "mEditedObjectName": "BasicDirectionalSlash_AttackData",
+                "mFieldOrPropertyEditedName": "StartupTimeFrames",
+                "mValueAsString": "2",
+                "mTypeName": "String"
+            },
+            {
+                "mEditedObject": {
+                    "instanceID": 43826
+                },
+                "mEditedObjectName": "PlayerBaseDataObject",
+                "mFieldOrPropertyEditedName": "DirectVelocityNormal",
+                "mValueAsString": "80",
+                "mTypeName": "String"
+            },
+            {
+                "mEditedObject": {
+                    "instanceID": 43826
+                },
+                "mEditedObjectName": "PlayerBaseDataObject",
+                "mFieldOrPropertyEditedName": "DirectVelocityNormal",
+                "mValueAsString": "70",
+                "mTypeName": "String"
+            }
+        ]
+    }
+}

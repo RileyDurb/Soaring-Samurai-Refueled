@@ -8,6 +8,8 @@ using UnityEngine;
 using System.IO;
 using static FileIOHandler;
 using static RuntimeEditableDataManager.StatsVersionData;
+using Unity.VisualScripting;
+using System.Linq;
 
 // Runtime data manager, and command class for setting the data
 // may want to move commands, or at least the defined commands, into a separate file
@@ -55,12 +57,19 @@ public class RuntimeEditableDataManager : MonoBehaviour
             public StatEditPackage(ScriptableObject editedObject, string fieldOrPropertyEdited, object newValue)
             {
                 mEditedObject = editedObject;
-                mFieldOrPropertyEdited = fieldOrPropertyEdited;
+                mFieldOrPropertyEditedName = fieldOrPropertyEdited;
                 mNewValue = newValue;
+
+                // Get info from parameters
+                mEditedObjectName = editedObject.name;
             }
             public ScriptableObject mEditedObject = null;
-            public string mFieldOrPropertyEdited  = "";
+            public string mEditedObjectName = "";
+            public string mFieldOrPropertyEditedName  = "";
             public object mNewValue;
+
+            public string mValueAsString;
+            public string mTypeName;
 
         }
         public ArraySerializeWrapper<SetStatCommand> mStatSettingInfo = new ArraySerializeWrapper<SetStatCommand>();
@@ -69,6 +78,59 @@ public class RuntimeEditableDataManager : MonoBehaviour
         public ArraySerializeWrapper<StatEditPackage> mAllStatEdits = new ArraySerializeWrapper<StatEditPackage>();
 
 
+        // Public interface
+        public void SetUpValuesForSerialization()
+        {
+
+            for (int i = 0; i < mAllStatEdits.mItems.Length; i++)
+            {
+                StatEditPackage currStatEdit = mAllStatEdits.mItems[i];
+
+                currStatEdit.mEditedObjectName = currStatEdit.mEditedObject.name;
+
+                // Save object as string and type name so we can serialize it no matter the type
+                currStatEdit.mValueAsString = currStatEdit.mNewValue.ToString();
+                currStatEdit.mTypeName = currStatEdit.mNewValue.GetType().Name;
+            }
+        }
+
+        public void InitializeValuesFromSerialization()
+        {
+            ScriptableObject[] scriptableObjects = Resources.FindObjectsOfTypeAll<ScriptableObject>();
+
+            for (int i = 0; i < mAllStatEdits.mItems.Length; i++)
+            {
+                StatEditPackage currStatEdit = mAllStatEdits.mItems[i];
+
+
+                // Find the current scriptable object
+                ScriptableObject targetScriptableObject = null;
+                for (int j = 0; j < scriptableObjects.Length; j++)
+                {
+                    // If found, set the scriptable object reference
+                    if (scriptableObjects[j].name == currStatEdit.mEditedObjectName)
+                    {
+                        currStatEdit.mEditedObject = scriptableObjects[j];
+                        break;
+                    }
+                }
+
+                // if scriptable object not found
+                if (currStatEdit.mEditedObject == null)
+                {
+                    Console.Write("RuntimeStatsEditorManager:InitializeValuesFromSerialization: could not find scriptable object of name " + currStatEdit.mEditedObjectName);
+                    continue;
+                }
+
+                // Convert the value from a string into it's object form so it's usable for setting the field or property it's for
+                //currStatEdit.mNewValue = currStatEdit.mValueAsString.ConvertTo(Type.GetType(currStatEdit.mTypeName));
+
+                //Type targetType = IsNullableType(reflectionTypeToSetOn) ? Nullable.GetUnderlyingType(reflectionTypeToSetOn) : reflectionTypeToSetOn;
+                //currStatEdit.mNewValue = Convert.ChangeType(currStatEdit.mValueAsString, Type.GetType(currStatEdit.mTypeName));
+                currStatEdit.mNewValue = currStatEdit.mValueAsString;
+
+            }
+        }
     }
 
     List<SetStatCommand> mCurrentSavedCommands = new List<SetStatCommand>();
@@ -117,6 +179,8 @@ public class RuntimeEditableDataManager : MonoBehaviour
         // Store all the stats set commands that are currently tracked, for reapplying when loading the save
         statsVersionData.mAllStatEdits.mItems = mAllStatEdits.ToArray();
 
+        statsVersionData.SetUpValuesForSerialization();
+
         // Turn the stat setting info into a JSON string for saving
         string statSaveJSON = JsonUtility.ToJson(statsVersionData, true);
 
@@ -127,7 +191,51 @@ public class RuntimeEditableDataManager : MonoBehaviour
         writer.WriteLine(statSaveJSON);
         writer.Close();
     }
+
+    public void LoadStatSettingVersion(string statsVersionFileName)
+    {
+        StatsVersionData loadedStatsData = new StatsVersionData();
+
+        string filepathPrefix = "";
+
+        string fullFilepath = filepathPrefix + statsVersionFileName + ".json";
+
+        if (File.Exists(fullFilepath) == false)
+        {
+            Console.Write("RuntimeStatsEditorManager: LoadStatSettingversion: No file of name " + statsVersionFileName + " could be found");
+            return;
+        }
+        string statDataAsString = File.ReadAllText(fullFilepath);
+
+
+        // Load data from string into the data object
+        JsonUtility.FromJsonOverwrite(statDataAsString, loadedStatsData);
+
+        // Get the scriptable object and object values, becuase they couldn't be serialized directly
+        loadedStatsData.InitializeValuesFromSerialization();
+
+        mAllStatEdits = loadedStatsData.mAllStatEdits.mItems.ToList();
+
+        // Apply all the loaded stat edits
+        for (int i = 0; i < mAllStatEdits.Count; i++)
+        {
+            StatEditPackage currStatEdit = mAllStatEdits[i];
+
+            /* Apply the stat edit*/
+
+            SetStatCommand statCommand = new SetStatCommand();
+            statCommand.Initalize(currStatEdit.mEditedObject, currStatEdit.mFieldOrPropertyEditedName);
+
+            // Give the command the value it will apply when executing it
+            statCommand.SetValue(currStatEdit.mNewValue);
+
+            statCommand.Execute(); // Make the stat edit that was read from the save file
+        }
+    }
+
 }
+
+
 public class FileIOHandler
 {
     public static T[] LoadFromJson<T>(string json)
