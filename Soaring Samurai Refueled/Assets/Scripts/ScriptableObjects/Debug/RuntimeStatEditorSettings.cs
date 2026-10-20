@@ -30,6 +30,7 @@ public class RuntimeStatEditorSettings : ScriptableObject
 
     [Header("Default Values")]
     public ScriptableObject mDefaultFirstObjectToShow;
+    public string DefaultInitialStatVersion = "";
 
     [Header("Aesthetics")]
     public RectOffset mListItemPadding = new RectOffset();

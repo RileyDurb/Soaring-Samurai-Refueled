@@ -39,6 +39,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5c374d603446ca74e938eade9b105da0, type: 2}
   - {fileID: 11400000, guid: d70f39fc99a4f964f8a77dfc327efd6d, type: 2}
   mDefaultFirstObjectToShow: {fileID: 11400000, guid: d0ac86635f7150e47a05418ba16067e8, type: 2}
+  DefaultInitialStatVersion: test
   mListItemPadding:
     m_Left: 10
     m_Right: 0

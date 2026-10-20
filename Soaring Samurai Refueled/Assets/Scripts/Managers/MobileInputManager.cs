@@ -33,7 +33,7 @@ public class MobileInputManager : MonoBehaviour
             return;
         }
 
-        if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0 || Input.GetKey(KeyCode.Equals))
+        if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0 || Input.GetKey(KeyCode.Minus))
         {
             GameObject newMobileControls = LevelScopeManagers.Instance.GetComponent<HUDManager>().AddControlsItem(MobileControllerPrefab);
             mSpawnedControlsObjects.Add(newMobileControls);

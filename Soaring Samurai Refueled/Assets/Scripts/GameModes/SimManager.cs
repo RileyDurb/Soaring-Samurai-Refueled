@@ -98,7 +98,7 @@ public class SimManager : MonoBehaviour
         }
 
         // Toggle pause menu on, or go back in pause menu, unpausing when we've closed the last pause menu item
-        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.P) || Input.GetKey(KeyCode.Menu) || mPauseChangeQueued)
+        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Equals) || Input.GetKey(KeyCode.Menu) || mPauseChangeQueued)
         {
             MenuManager menuManager = LevelScopeManagers.Instance.GetComponent<MenuManager>();
             if (mInPause == false)

@@ -8,14 +8,18 @@ using UnityEngine;
 
 public class RuntimeStatEditorFunctions : MonoBehaviour
 {
-    //[SerializeField] TMP_InputField TestScriptableObjectEditorButton;
+    // In-editor set references
     [SerializeField] TMP_InputField SaveFileNameBox;
-
-    [SerializeField] string mSaveLoadStatVersionName = "Test Stat Version";
-
     [SerializeField] TMP_InputField SaveFilenameInputBox;
     [SerializeField] TMP_Dropdown ExistingSaveFilenamesDropdown;
+    [SerializeField] ScriptableObjectSelector ObjectSelectorObject; // Object selector reference, for refreshing after loading stats
+    [SerializeField] RuntimeStatEditorSettings StatEditorSettings;
 
+    // In-game set  references
+    RuntimeEditableDataManager RuntimeDataManager;
+
+    // Defined filepath variables
+    [SerializeField] string mSaveLoadStatVersionName = "Test Stat Version";
     string mSaveDirectory = "";
     string mSaveFilenamePrefix = "StatData_";
 
@@ -24,11 +28,54 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
     {
         //TestScriptableObjectEditorButton.onSubmit.AddListener(ApplyTestSpeedChange);
 
-
+        mSaveDirectory = Application.persistentDataPath;
 
         RefreshExistingSaveFileOptions();
 
+
         ExistingSaveFilenamesDropdown.onValueChanged.AddListener(SelectExistingFilenameFromDropdown); // Add select event to occur when value is changed
+
+        RuntimeDataManager = PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>();
+
+        // get starting filename, first trying to use the last set stat filename
+        string startingStatFilename = RuntimeDataManager.LastSetFilenameInStatEditor;
+
+        if (startingStatFilename == "")
+        {
+            // if no stat filename has been set yet, use the default defined one in the settings
+            startingStatFilename = StatEditorSettings.DefaultInitialStatVersion;
+        }
+
+        // if there is a stat version that was found to use as the default
+        if (startingStatFilename != "")
+        {
+            // Search for the dropdown option that matches the default filename
+            int desiredFilenameOptionIndex = ExistingSaveFilenamesDropdown.options.FindIndex((TMP_Dropdown.OptionData currOption) => { return currOption.text == startingStatFilename; });
+
+
+            if (desiredFilenameOptionIndex >= 0) // if option is found
+            {
+                // Make sure dropdown has that option selected, with no notify, because it's possibly we'll select the currently selected option, and that won't trigger the notify
+                ExistingSaveFilenamesDropdown.SetValueWithoutNotify(desiredFilenameOptionIndex);
+
+                // Set the filename in the editor manually
+                SelectExistingFilenameFromDropdown(desiredFilenameOptionIndex);
+            }
+        }
+        else
+        {
+            // Set current filename as the first one in the dropdown
+            if (ExistingSaveFilenamesDropdown.options.Count > 0)
+            {
+                SelectExistingFilenameFromDropdown(ExistingSaveFilenamesDropdown.value);
+            }
+        }
+
+
+
+
+        //ExistingSaveFilenamesDropdown.SetValueWithoutNotify
+
     }
 
     // Update is called once per frame
@@ -64,17 +111,26 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
     public void TestLoadEditedStats()
     {
         PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().LoadStatSettingVersion(mSaveFilenamePrefix + mSaveLoadStatVersionName);
+
+        ObjectSelectorObject.RefreshSelectedScriptableObject();
     }
 
     public void SetCurrentStatFilename(string newFilename)
     {
         mSaveLoadStatVersionName = newFilename;
+
+        RuntimeDataManager.LastSetFilenameInStatEditor = newFilename; // Save this as the current last filename set, for restoring if we leave the editor and come back
     }
 
     public void SelectExistingFilenameFromDropdown(int filenameIndex)
     {
-        mSaveLoadStatVersionName = ExistingSaveFilenamesDropdown.options[filenameIndex].text;
-        SaveFilenameInputBox.SetTextWithoutNotify(ExistingSaveFilenamesDropdown.options[filenameIndex].text);
+        string newStatFilename = ExistingSaveFilenamesDropdown.options[filenameIndex].text;
+
+        mSaveLoadStatVersionName = newStatFilename; // Set filename variable to use for saving, loading, ect
+
+        SaveFilenameInputBox.SetTextWithoutNotify(newStatFilename); // Set text of input box to show the new filename
+
+        RuntimeDataManager.LastSetFilenameInStatEditor = newStatFilename; // Save this as the current last filename set, for restoring if we leave the editor and come back
     }
 
     // Private helpers
@@ -83,9 +139,10 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
         // Initialize items for stat filename selector
         ExistingSaveFilenamesDropdown.ClearOptions();
 
-        string mainDirectory = Directory.GetCurrentDirectory();
+        string saveDirectory = PersistentScopeManagers.Instance.GetComponent<RuntimeEditableDataManager>().StatDataSaveDirectory;
         // Get all filename options
-        string[] allFilesInSaveDirectory = Directory.GetFiles(mainDirectory, "*.*", SearchOption.TopDirectoryOnly);
+        string[] allFilesInSaveDirectory = Directory.GetFiles(saveDirectory, "*.*", SearchOption.TopDirectoryOnly);
+
         List<string> allStatSaveFiles = new List<string>();
 
         for (int i = 0; i < allFilesInSaveDirectory.Length; i++)
@@ -97,10 +154,21 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
             }
         }
 
+        // Disable and exit early if no files found
+        if (allStatSaveFiles.Count == 0)
+        {
+            ExistingSaveFilenamesDropdown.enabled = false;
+            return;
+        }
+        else
+        {
+            ExistingSaveFilenamesDropdown.enabled = true;
+        }
+
         List<TMP_Dropdown.OptionData> existingStatFileOptions = new List<TMP_Dropdown.OptionData>(); // Clear old options
 
 
-        // Make all existing filenames dropdown optios
+        // Make all existing filenames dropdown options
         foreach (string saveFileName in allStatSaveFiles)
         {
             TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
@@ -108,6 +176,7 @@ public class RuntimeStatEditorFunctions : MonoBehaviour
 
             existingStatFileOptions.Add(option);
         }
+
         ExistingSaveFilenamesDropdown.AddOptions(existingStatFileOptions);
     }
 }

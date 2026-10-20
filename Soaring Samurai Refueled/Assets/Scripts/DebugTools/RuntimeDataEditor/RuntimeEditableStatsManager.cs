@@ -137,6 +137,23 @@ public class RuntimeEditableDataManager : MonoBehaviour
 
     public List<StatEditPackage> mAllStatEdits = new List<StatEditPackage>();
 
+    // Recently selected data
+    public string LastSelectedScriptableObjectInEditorName = "";
+    public string LastSetFilenameInStatEditor = "";
+
+    private string mStatDataSaveDirectory; // Save directory, initialized in on awak
+    public string StatDataSaveDirectory
+    {
+        get { return mStatDataSaveDirectory; }
+    }
+
+
+
+    private void Awake()
+    {
+        mStatDataSaveDirectory = Application.persistentDataPath;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -184,10 +201,10 @@ public class RuntimeEditableDataManager : MonoBehaviour
         // Turn the stat setting info into a JSON string for saving
         string statSaveJSON = JsonUtility.ToJson(statsVersionData, true);
 
-        string filepath = "";
+        string saveDirectory = mStatDataSaveDirectory;
 
         // Save the json to a file, using the given filename, and starting path if any
-        StreamWriter writer = new StreamWriter(filepath + statsVersionFileName + ".json", false);
+        StreamWriter writer = new StreamWriter(saveDirectory + "/" + statsVersionFileName + ".json", false);
         writer.WriteLine(statSaveJSON);
         writer.Close();
     }
@@ -196,9 +213,9 @@ public class RuntimeEditableDataManager : MonoBehaviour
     {
         StatsVersionData loadedStatsData = new StatsVersionData();
 
-        string filepathPrefix = "";
+        string saveDirectory = mStatDataSaveDirectory;
 
-        string fullFilepath = filepathPrefix + statsVersionFileName + ".json";
+        string fullFilepath = saveDirectory + "\\" + statsVersionFileName + ".json";
 
         if (File.Exists(fullFilepath) == false)
         {
