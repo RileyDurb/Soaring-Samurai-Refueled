@@ -215,7 +215,7 @@ public class RuntimeEditableDataManager : MonoBehaviour
 
         string saveDirectory = mStatDataSaveDirectory;
 
-        string fullFilepath = saveDirectory + "\\" + statsVersionFileName + ".json";
+        string fullFilepath = saveDirectory + "/" + statsVersionFileName + ".json";
 
         if (File.Exists(fullFilepath) == false)
         {
