@@ -40,6 +40,17 @@ public class PlayerInputHandler : MonoBehaviour
                     mobileControlsVisuals.UpdateCharacterBasedVisuals(controller.CharacterVisualsName);
                 }
 
+                // Set current input binding map
+                InputBindingsManager inputBindingsMan = PersistentScopeManagers.Instance.GetComponent<InputBindingsManager>();
+                InputBindingsManager.PlayerInputBindingInfo inputBindingsInfo = inputBindingsMan.GetPlayerBindingInfo(input.playerIndex);
+
+                if (inputBindingsInfo != null)
+                {
+                    input.SwitchCurrentActionMap(inputBindingsInfo.CurrentInputMappingName);
+                }
+
+
+                // Player setup finished, tell match state manager that this player has joined
                 LevelScopeManagers.Instance.GetComponent<MatchStateManager>().OnPlayerJoined.Invoke(input.playerIndex);
 
 

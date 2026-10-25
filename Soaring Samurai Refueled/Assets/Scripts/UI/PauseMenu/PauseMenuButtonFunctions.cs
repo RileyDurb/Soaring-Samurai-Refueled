@@ -9,6 +9,7 @@ public class PauseMenuButtonFunctions : MonoBehaviour
     [SerializeField] GameObject MovesListMenuPrefab;
     [SerializeField] GameObject PlayerControllersMenuPrefab;
     [SerializeField] GameObject SettingsMenuPrefab;
+    [SerializeField] GameObject ControlsRebindingMenuPrefab;
     [SerializeField] GameObject RuntimeStatsEditingMenuPrefab;
     [SerializeField] GameObject CODAQuitPrefab;
     [SerializeField] string QuitToMainMenuMessage;
@@ -46,6 +47,12 @@ public class PauseMenuButtonFunctions : MonoBehaviour
     public void OpenSettingsMenu()
     {
         LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(SettingsMenuPrefab);
+    }
+
+    // NOTE: Later make this as a submenu of an overall settings menu, along with the audio settings menu, and have the settings button open that
+    public void OpenTestControlsRebindingMenu()
+    {
+        LevelScopeManagers.Instance.GetComponent<MenuManager>().PushPauseMenu(ControlsRebindingMenuPrefab);
     }
 
     public void OpenStatsEditingMenu()

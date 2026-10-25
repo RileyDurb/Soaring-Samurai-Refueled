@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using AudioEvents;
 using System.Data;
+using UnityEngine.InputSystem;
 
 public class MatchStateManager : MonoBehaviour
 {
@@ -128,10 +129,17 @@ public class MatchStateManager : MonoBehaviour
         // Subscribe bgm playing to on init match
         OnInitMatch += PlayMatchStartSoundtrack;
 
+        // Subscribe to input mapping changing
+        InputBindingsManager inputBindingsMan = PersistentScopeManagers.Instance.GetComponent<InputBindingsManager>();
+        inputBindingsMan.OnInputMappingSwitch += UpdatePlayerInputBindingMap;
+
         // Create round timer
         LevelScopeManagers.Instance.GetComponent<HUDManager>().AddInfoItem(mRoundTimerPrefab);
 
         OnPlayerJoined += UpdateCPUActivityOnPlayerJoin;
+
+
+
 
         RestartMatch();
     }
@@ -232,6 +240,18 @@ public class MatchStateManager : MonoBehaviour
             // After all potential clashes have been handled, clear list of hits
             mAttackHitsThisFrame.Clear();
         }
+    }
+
+    public void OnDestroy()
+    {
+        // Unsubscribe from input binding switching
+        if (PersistentScopeManagers.Instance != null)
+        {
+            InputBindingsManager inputBindingsMan = PersistentScopeManagers.Instance.GetComponent<InputBindingsManager>();
+            inputBindingsMan.OnInputMappingSwitch -= UpdatePlayerInputBindingMap;
+        }
+
+
     }
 
     // Helper functions
@@ -718,6 +738,30 @@ public class MatchStateManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void UpdatePlayerInputBindingMap(int playerIndex, string mappingName)
+    {
+
+        PlayerInput[] playerInputComponents = FindObjectsByType<PlayerInput>(FindObjectsSortMode.None);
+
+        PlayerInput targetPlayerInput = null;
+        for (int i = 0; i < playerInputComponents.Length; i++)
+        {
+            if (playerInputComponents[i].playerIndex == playerIndex)
+            {
+                targetPlayerInput = playerInputComponents[i];
+                break;
+            }
+        }
+
+        if (targetPlayerInput == null)
+        {
+            print($"MatchStateManager:UpdatePlayerInputBindingMap: No player input of selected player index {playerIndex} exists");
+            return;
+        }
+
+        targetPlayerInput.SwitchCurrentActionMap(mappingName);
     }
     // Public interface /////////////////////////////////////////////////////////////////////////////////
     public void RestartMatch()

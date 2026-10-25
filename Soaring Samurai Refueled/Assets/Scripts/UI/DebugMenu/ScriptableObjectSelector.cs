@@ -47,6 +47,7 @@ public class ScriptableObjectSelector : MonoBehaviour
         if (initialObjectIndex >= 0) // If initial object on the editor was found in the dropdown
         {
             mObjectDropdown.value = initialObjectIndex; // Set the dropdown to have the currently shown item selected
+            mObjectListToSetOn.PopulateValueList(mDropdownItems[initialObjectIndex]);
         }
 
         // Subscribe set function to be called when the value changes

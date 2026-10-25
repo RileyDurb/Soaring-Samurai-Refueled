@@ -427,6 +427,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""e3decb9d-28ee-41af-8775-28941e52a426"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f302a743-e7cf-401c-a7e7-d5fb0ca64e2e"",
                     ""path"": ""<Keyboard>/equals"",
                     ""interactions"": """",
@@ -438,12 +449,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e3decb9d-28ee-41af-8775-28941e52a426"",
-                    ""path"": ""<Gamepad>/start"",
+                    ""id"": ""da6be7a1-846b-4b3e-b044-aee9cf5a27b0"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pause"",
+                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -460,8 +471,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""985962b9-2303-4465-9c80-b563ef6f0eca"",
-                    ""path"": ""<Keyboard>/backspace"",
+                    ""id"": ""822f9624-5cc3-4ac8-b216-e8f245f6e9c9"",
+                    ""path"": ""<Gamepad>/{Back}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -471,8 +482,414 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""822f9624-5cc3-4ac8-b216-e8f245f6e9c9"",
+                    ""id"": ""985962b9-2303-4465-9c80-b563ef6f0eca"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Combat2"",
+            ""id"": ""e4c6b841-028a-4ea8-a7b5-2d09529545d7"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""4e5d981b-016f-4220-8dc4-fa09a47b7b1c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DownLeftSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""b65ecaa7-e5ff-4841-8a0e-a78de8c78e14"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpLeftSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e16fdc6-8288-44c7-91ce-131c00061bf6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownRightSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""13e29a24-9845-4a31-a822-1c6cfbf23b77"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpRightSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""61a369ba-264d-42e9-947d-836cdd00166d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a934f50-97ec-478e-8c1f-1c966f1cf998"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DashAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""b4d76f3b-477d-4c0a-ad72-e30184f6077d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""868deca1-86e5-4e41-a6e8-3adfdddbb978"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""1fb42a4e-2e62-45e8-8011-6f044e45f8d2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a8a8c2c-3208-4fee-879a-c329d1f70de5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""93931457-7f5b-4861-b6bc-85e545a8a92e"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""8624e144-9000-4489-a54c-4e8a97a3279b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6970d6d9-8848-4680-976f-fe34e41b336d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c38f81a5-7844-43a3-acb7-ec124523d2b8"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""7b02f73b-1ef8-4574-8b2b-d76c4ae70aab"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0dd2148c-e886-4beb-a726-830f01ca2686"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88f08453-25e1-464d-9915-8286d5c6b762"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2db6c441-1fd3-4609-b8df-0ed4565cdbe2"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e17e0edc-d7d6-4ad9-bf91-0dcfa6d0dab0"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17cb7ebc-27fa-49c4-9613-f9c9376ffc1b"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpLeftSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3a14cc6-460e-4cc5-8427-462b365f694a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownRightSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c07f9a1-5e9b-424e-8101-9eaeb16105a4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownRightSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d62afa2-b503-4354-b608-4813a76b12b9"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpRightSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d47be89a-7c0b-4053-8935-154518f69f27"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpRightSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""533d35b8-b1d8-42d9-b187-2eb052f091d6"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""665bde3c-5924-49a4-a486-cb1b387b7332"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""129baefe-fc0b-40c1-9c54-3e5991838980"",
+                    ""path"": ""<AndroidGamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac2bbe16-44c4-46e3-921a-2fd2dd5e9201"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b07cbb2a-b0ae-4191-b383-644f8ea636dc"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""858766bb-2fc5-436a-b344-ad29ef9270ec"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c8b4e0c-aad6-4245-8c2d-300a696ed762"",
+                    ""path"": ""<AndroidGamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9134295-6269-4174-8aa5-cd08bae0260d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6103f145-ebd3-4986-bcf5-05ea2ede5bb9"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dd14c07a-0d9d-472e-a786-f50cbb73ec12"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19a00c1a-85e7-4502-b136-880fd56da991"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""699308ba-f10e-4603-9884-2078fcfc7d65"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2868e41e-123b-4414-bf07-c3eca34676ef"",
                     ""path"": ""<Gamepad>/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4da4c52-b22a-4957-8af2-e3d74c487321"",
+                    ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -530,11 +947,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Combat_Pause = m_Combat.FindAction("Pause", throwIfNotFound: true);
         m_Combat_Sprint = m_Combat.FindAction("Sprint", throwIfNotFound: true);
         m_Combat_MenuBack = m_Combat.FindAction("MenuBack", throwIfNotFound: true);
+        // Combat2
+        m_Combat2 = asset.FindActionMap("Combat2", throwIfNotFound: true);
+        m_Combat2_Move = m_Combat2.FindAction("Move", throwIfNotFound: true);
+        m_Combat2_DownLeftSlash = m_Combat2.FindAction("DownLeftSlash", throwIfNotFound: true);
+        m_Combat2_UpLeftSlash = m_Combat2.FindAction("UpLeftSlash", throwIfNotFound: true);
+        m_Combat2_DownRightSlash = m_Combat2.FindAction("DownRightSlash", throwIfNotFound: true);
+        m_Combat2_UpRightSlash = m_Combat2.FindAction("UpRightSlash", throwIfNotFound: true);
+        m_Combat2_Dash = m_Combat2.FindAction("Dash", throwIfNotFound: true);
+        m_Combat2_DashAttack = m_Combat2.FindAction("DashAttack", throwIfNotFound: true);
+        m_Combat2_Pause = m_Combat2.FindAction("Pause", throwIfNotFound: true);
+        m_Combat2_Sprint = m_Combat2.FindAction("Sprint", throwIfNotFound: true);
+        m_Combat2_MenuBack = m_Combat2.FindAction("MenuBack", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_Combat.enabled, "This will cause a leak and performance issues, PlayerControls.Combat.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Combat2.enabled, "This will cause a leak and performance issues, PlayerControls.Combat2.Disable() has not been called.");
     }
 
     /// <summary>
@@ -801,6 +1231,201 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="CombatActions" /> instance referencing this action map.
     /// </summary>
     public CombatActions @Combat => new CombatActions(this);
+
+    // Combat2
+    private readonly InputActionMap m_Combat2;
+    private List<ICombat2Actions> m_Combat2ActionsCallbackInterfaces = new List<ICombat2Actions>();
+    private readonly InputAction m_Combat2_Move;
+    private readonly InputAction m_Combat2_DownLeftSlash;
+    private readonly InputAction m_Combat2_UpLeftSlash;
+    private readonly InputAction m_Combat2_DownRightSlash;
+    private readonly InputAction m_Combat2_UpRightSlash;
+    private readonly InputAction m_Combat2_Dash;
+    private readonly InputAction m_Combat2_DashAttack;
+    private readonly InputAction m_Combat2_Pause;
+    private readonly InputAction m_Combat2_Sprint;
+    private readonly InputAction m_Combat2_MenuBack;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Combat2".
+    /// </summary>
+    public struct Combat2Actions
+    {
+        private @PlayerControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public Combat2Actions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_Combat2_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/DownLeftSlash".
+        /// </summary>
+        public InputAction @DownLeftSlash => m_Wrapper.m_Combat2_DownLeftSlash;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/UpLeftSlash".
+        /// </summary>
+        public InputAction @UpLeftSlash => m_Wrapper.m_Combat2_UpLeftSlash;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/DownRightSlash".
+        /// </summary>
+        public InputAction @DownRightSlash => m_Wrapper.m_Combat2_DownRightSlash;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/UpRightSlash".
+        /// </summary>
+        public InputAction @UpRightSlash => m_Wrapper.m_Combat2_UpRightSlash;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/Dash".
+        /// </summary>
+        public InputAction @Dash => m_Wrapper.m_Combat2_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/DashAttack".
+        /// </summary>
+        public InputAction @DashAttack => m_Wrapper.m_Combat2_DashAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Combat2_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/Sprint".
+        /// </summary>
+        public InputAction @Sprint => m_Wrapper.m_Combat2_Sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat2/MenuBack".
+        /// </summary>
+        public InputAction @MenuBack => m_Wrapper.m_Combat2_MenuBack;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Combat2; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="Combat2Actions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(Combat2Actions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="Combat2Actions" />
+        public void AddCallbacks(ICombat2Actions instance)
+        {
+            if (instance == null || m_Wrapper.m_Combat2ActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_Combat2ActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @DownLeftSlash.started += instance.OnDownLeftSlash;
+            @DownLeftSlash.performed += instance.OnDownLeftSlash;
+            @DownLeftSlash.canceled += instance.OnDownLeftSlash;
+            @UpLeftSlash.started += instance.OnUpLeftSlash;
+            @UpLeftSlash.performed += instance.OnUpLeftSlash;
+            @UpLeftSlash.canceled += instance.OnUpLeftSlash;
+            @DownRightSlash.started += instance.OnDownRightSlash;
+            @DownRightSlash.performed += instance.OnDownRightSlash;
+            @DownRightSlash.canceled += instance.OnDownRightSlash;
+            @UpRightSlash.started += instance.OnUpRightSlash;
+            @UpRightSlash.performed += instance.OnUpRightSlash;
+            @UpRightSlash.canceled += instance.OnUpRightSlash;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
+            @DashAttack.started += instance.OnDashAttack;
+            @DashAttack.performed += instance.OnDashAttack;
+            @DashAttack.canceled += instance.OnDashAttack;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
+            @MenuBack.started += instance.OnMenuBack;
+            @MenuBack.performed += instance.OnMenuBack;
+            @MenuBack.canceled += instance.OnMenuBack;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="Combat2Actions" />
+        private void UnregisterCallbacks(ICombat2Actions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @DownLeftSlash.started -= instance.OnDownLeftSlash;
+            @DownLeftSlash.performed -= instance.OnDownLeftSlash;
+            @DownLeftSlash.canceled -= instance.OnDownLeftSlash;
+            @UpLeftSlash.started -= instance.OnUpLeftSlash;
+            @UpLeftSlash.performed -= instance.OnUpLeftSlash;
+            @UpLeftSlash.canceled -= instance.OnUpLeftSlash;
+            @DownRightSlash.started -= instance.OnDownRightSlash;
+            @DownRightSlash.performed -= instance.OnDownRightSlash;
+            @DownRightSlash.canceled -= instance.OnDownRightSlash;
+            @UpRightSlash.started -= instance.OnUpRightSlash;
+            @UpRightSlash.performed -= instance.OnUpRightSlash;
+            @UpRightSlash.canceled -= instance.OnUpRightSlash;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
+            @DashAttack.started -= instance.OnDashAttack;
+            @DashAttack.performed -= instance.OnDashAttack;
+            @DashAttack.canceled -= instance.OnDashAttack;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
+            @MenuBack.started -= instance.OnMenuBack;
+            @MenuBack.performed -= instance.OnMenuBack;
+            @MenuBack.canceled -= instance.OnMenuBack;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="Combat2Actions.UnregisterCallbacks(ICombat2Actions)" />.
+        /// </summary>
+        /// <seealso cref="Combat2Actions.UnregisterCallbacks(ICombat2Actions)" />
+        public void RemoveCallbacks(ICombat2Actions instance)
+        {
+            if (m_Wrapper.m_Combat2ActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="Combat2Actions.AddCallbacks(ICombat2Actions)" />
+        /// <seealso cref="Combat2Actions.RemoveCallbacks(ICombat2Actions)" />
+        /// <seealso cref="Combat2Actions.UnregisterCallbacks(ICombat2Actions)" />
+        public void SetCallbacks(ICombat2Actions instance)
+        {
+            foreach (var item in m_Wrapper.m_Combat2ActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_Combat2ActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="Combat2Actions" /> instance referencing this action map.
+    /// </summary>
+    public Combat2Actions @Combat2 => new Combat2Actions(this);
     private int m_KeyboardSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -859,6 +1484,84 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// <seealso cref="CombatActions.AddCallbacks(ICombatActions)" />
     /// <seealso cref="CombatActions.RemoveCallbacks(ICombatActions)" />
     public interface ICombatActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DownLeftSlash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDownLeftSlash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UpLeftSlash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUpLeftSlash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DownRightSlash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDownRightSlash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UpRightSlash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUpRightSlash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DashAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDashAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Sprint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MenuBack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenuBack(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Combat2" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="Combat2Actions.AddCallbacks(ICombat2Actions)" />
+    /// <seealso cref="Combat2Actions.RemoveCallbacks(ICombat2Actions)" />
+    public interface ICombat2Actions
     {
         /// <summary>
         /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.

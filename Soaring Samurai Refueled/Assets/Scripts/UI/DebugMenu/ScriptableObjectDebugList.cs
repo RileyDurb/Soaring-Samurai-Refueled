@@ -17,15 +17,18 @@ public class ScriptableObjectDebugList : MonoBehaviour
         get { return mScriptableObjectToShow; } 
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         // If no object was manually selected in the editor
         if (mScriptableObjectToShow == null)
         {
             mScriptableObjectToShow = mEditorSettings.mDefaultFirstObjectToShow; // Use the first object to show defined in editor settings
         }
-        
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         PopulateValueList(mScriptableObjectToShow);
     }
 
