@@ -66,7 +66,6 @@ public class RebindMenuButtonFunctions : MonoBehaviour
         mBindingsManagerRef.SetInputMapping(0, selectedMapOption);
 
         // Refresh the current control list to show the new input mapping
-        mControlsRebindingListObject.ActionMapToShowName = selectedMapOption;
         mControlsRebindingListObject.PopulateControlEditingMenu();
     }
 
@@ -91,9 +90,6 @@ public class RebindMenuButtonFunctions : MonoBehaviour
 
 
 
-        // Update controls list to show right input map
-        mControlsRebindingListObject.ActionMapToShowName = currentInputMap;
-
         // Make control list display right control type
         PlayerInput[] playerInputComponents = FindObjectsByType<PlayerInput>(FindObjectsSortMode.None);
 
@@ -110,7 +106,17 @@ public class RebindMenuButtonFunctions : MonoBehaviour
         if (targetPlayerInput == null)
         {
             print($"RebindMenuButtonFunctions:SetSelectedPlayer: No player input of selected player index {mSelectedPlayerIndex} exists");
+
+            ActiveInputTypeManager.ControlMethodTypes errorInputMethodType = ActiveInputTypeManager.ControlMethodTypes.Invalid;
+            mControlsRebindingListObject.CurrentControlMethod = errorInputMethodType;
+
+            mControlsRebindingListObject.PopulateControlEditingMenu();
+            return;
         }
+
+        // Make rebinding menu show the selected action map of the new player
+        mControlsRebindingListObject.ActionMapToShow = targetPlayerInput.currentActionMap;
+
 
         ActiveInputTypeManager.ControlMethodTypes targetPlayerInputMethodType = ActiveInputTypeManager.GetControlMethodTypeFromInputDevice(targetPlayerInput.devices[0]);
         mControlsRebindingListObject.CurrentControlMethod = targetPlayerInputMethodType;

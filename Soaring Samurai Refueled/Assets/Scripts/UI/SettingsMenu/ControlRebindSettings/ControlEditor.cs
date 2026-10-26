@@ -46,16 +46,23 @@ public class ControlEditor : MonoBehaviour
 
         mCurrControlMethodType = controlType;
 
-
+        InputBinding bindingToRead;
+        string[] splitPathAndBindingName;
         // Set input control name
         switch (mCurrControlMethodType)
         {
             case ActiveInputTypeManager.ControlMethodTypes.Gamepad:
-                ControlRebindingBoxes[0].text = actionToEdit.controls[0].name;
+                bindingToRead = actionToEdit.bindings[0];
+                splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
+                ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
                 break;
 
             case ActiveInputTypeManager.ControlMethodTypes.Keyboard:
-                ControlRebindingBoxes[0].text = actionToEdit.controls[1].name;
+                bindingToRead = actionToEdit.bindings[1];
+
+                splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
+                ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
+
                 break;
 
             default:
@@ -102,7 +109,7 @@ public class ControlEditor : MonoBehaviour
                 .WithControlsExcluding("Mouse") // Ignore non relevant inputs
                 .WithMagnitudeHavingToBeGreaterThan(.3f)
                 .WithControlsExcluding("<Gamepad>") // Ignore non relevant inputs
-                .WithTargetBinding(0)
+                .WithTargetBinding(1)
                 .OnMatchWaitForAnother(1.0f);
         }
         else if (mCurrControlMethodType == ActiveInputTypeManager.ControlMethodTypes.Gamepad)
@@ -135,7 +142,7 @@ public class ControlEditor : MonoBehaviour
 
         mRebindingOperation.Cancel();
 
-        mParentBindingsList.PopulateControlEditingMenu(); // Refresh parent list
+        mParentBindingsList.SetControlListDirty(); // Refresh parent list
     }
     private void OnRebindingPotentialMatch(InputActionRebindingExtensions.RebindingOperation operation)
     {

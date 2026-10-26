@@ -18,7 +18,7 @@ MonoBehaviour:
   mDefaultInputMapName: Combat
   ControlFilenamePrefix: ControlProfile
   mInputMethodBindingAesthetics:
-  - InputMethodType: 1
+  - InputMethodType: 2
     RebindNoticeMainMessage: Press any key to remap control
-  - InputMethodType: 0
+  - InputMethodType: 1
     RebindNoticeMainMessage: Press any button to remap control

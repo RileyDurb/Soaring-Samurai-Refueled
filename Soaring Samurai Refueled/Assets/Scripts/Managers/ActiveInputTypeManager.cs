@@ -9,6 +9,7 @@ public class ActiveInputTypeManager : MonoBehaviour
 {
     public enum ControlMethodTypes
     {
+        Invalid,
         Gamepad,
         Keyboard
     }
@@ -75,7 +76,7 @@ public class ActiveInputTypeManager : MonoBehaviour
     public static ControlMethodTypes GetControlMethodTypeFromInputDevice(InputDevice deviceToCheck)
     {
 
-        ControlMethodTypes determinedControlMethod = ControlMethodTypes.Keyboard;
+        ControlMethodTypes determinedControlMethod = ControlMethodTypes.Invalid;
         if (deviceToCheck.description.deviceClass == "Keyboard")
         {
             determinedControlMethod = ControlMethodTypes.Keyboard;
@@ -83,7 +84,6 @@ public class ActiveInputTypeManager : MonoBehaviour
         else if (deviceToCheck.description.deviceClass == "Controller" || deviceToCheck.description.deviceClass == "")
         {
             determinedControlMethod = ControlMethodTypes.Gamepad;
-
         }
 
         return determinedControlMethod;

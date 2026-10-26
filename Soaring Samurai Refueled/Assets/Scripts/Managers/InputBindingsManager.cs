@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputBindingsManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class InputBindingsManager : MonoBehaviour
     public Action<int, string> OnInputMappingSwitch; // Called when input mapping is switched. Param1: Player index whose mapping was switched. param2: new input mapping name
 
     List<PlayerInputBindingInfo> mPlayerBindingInfo = new List<PlayerInputBindingInfo>();
+
+    PlayerInput mCurrRebindingPlayerInput;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +53,16 @@ public class InputBindingsManager : MonoBehaviour
         PlayerInputBindingInfo info = mPlayerBindingInfo.Find((PlayerInputBindingInfo currBindingInfo) => { return currBindingInfo.PlayerIndex == playerIndex; });
 
         return info;
+    }
+
+    public void SetCurrRebindingPlayer(PlayerInput selectedPlayerInputComp)
+    {
+        mCurrRebindingPlayerInput = selectedPlayerInputComp;
+    }
+
+    public PlayerInput GetCurrRebindingPlayer()
+    {
+        return mCurrRebindingPlayerInput;
     }
 
 }

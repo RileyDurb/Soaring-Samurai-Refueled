@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -10,28 +11,33 @@ using UnityEngine.Rendering.LookDev;
 
 public class ControlRebindList : MonoBehaviour
 {
-
-    [SerializeField] InputActionAsset InputActionAssetToShow;
-    [SerializeField] public string ActionMapToShowName = "Combat";
     [SerializeField] ControlEditor TestControlEditor;
     [SerializeField] InputRebindingOptionSettings mSettings;
 
     [SerializeField] GameObject IndividualControlEditorPrefab;
     [SerializeField] GameObject ListParentObject;
 
-    [SerializeField] ActiveInputTypeManager.ControlMethodTypes TestStartingControlMethod = ActiveInputTypeManager.ControlMethodTypes.Gamepad;
+    [SerializeField] ActiveInputTypeManager.ControlMethodTypes TestStartingControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
 
     ActiveInputTypeManager mCurrentInputTypeManager;
 
     // Private variables
-    ActiveInputTypeManager.ControlMethodTypes mCurrControlMethod;
-    ActiveInputTypeManager.ControlMethodTypes mLastControlMethod;
+    ActiveInputTypeManager.ControlMethodTypes mCurrControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
+    ActiveInputTypeManager.ControlMethodTypes mLastControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
+
+    InputActionMap mCurrMapToShow;
+
+    bool mControlListDirtyForRepopulating = false;
 
     public ActiveInputTypeManager.ControlMethodTypes CurrentControlMethod
     {
         set { mCurrControlMethod = value; }
     }
 
+    public InputActionMap ActionMapToShow
+    {
+        set { mCurrMapToShow = value; }
+    }
 
 
     // Start is called before the first frame update
@@ -39,7 +45,7 @@ public class ControlRebindList : MonoBehaviour
     {
         mCurrentInputTypeManager = LevelScopeManagers.Instance.GetComponent<ActiveInputTypeManager>();
         //mCurrControlMethod = TestStartingControlMethod;
-        PopulateControlEditingMenu();
+        //PopulateControlEditingMenu();
     }
 
     // Update is called once per frame
@@ -50,17 +56,34 @@ public class ControlRebindList : MonoBehaviour
         if (mLastControlMethod != mCurrControlMethod)
         {
             mLastControlMethod = mCurrControlMethod;
+
+            mControlListDirtyForRepopulating = true;
+        }
+
+        if (mControlListDirtyForRepopulating)
+        {
             // Refresh control menu
             PopulateControlEditingMenu();
 
+
+            mControlListDirtyForRepopulating = false;
         }
     }
 
     public void PopulateControlEditingMenu()
     {
-        ListParentObject.transform.DetachChildren();
+        ListParentObject.transform.DetachChildren(); // Clear children no matter what
 
-        ReadOnlyArray<InputAction> inputActionsToShow = InputActionAssetToShow.FindActionMap(ActionMapToShowName).actions;
+        if (mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Invalid)
+        {
+
+            print("ControlRebindList:PopulateControlEditingMenu: Current player's control method is either invalid, or not control method is set. Cannot show control menu");
+            return;
+        }
+
+
+
+        ReadOnlyArray<InputAction> inputActionsToShow = mCurrMapToShow.actions;
         for (int i = 0; i < inputActionsToShow.Count; i++)
         {
             InputAction currInputAction = inputActionsToShow[i];
@@ -105,7 +128,7 @@ public class ControlRebindList : MonoBehaviour
 
     public void SaveInputBindings(int playerIndex)
     {
-        string currBindingOverridesJSON = InputActionAssetToShow.SaveBindingOverridesAsJson();
+        string currBindingOverridesJSON = mCurrMapToShow.SaveBindingOverridesAsJson();
 
         string saveFilepath = Application.persistentDataPath + "/Settings";
 
@@ -135,8 +158,19 @@ public class ControlRebindList : MonoBehaviour
 
         string readBindingOverridesJSON = File.ReadAllText(filepath);
 
-        InputActionAssetToShow.LoadBindingOverridesFromJson(readBindingOverridesJSON);
+        if (readBindingOverridesJSON == "\r\n")
+        {
+            print($"ControlRebindList:LoadInputBindings: Bindings for name Player {playerIndex} exist, but contain no remaps");
+            return;
+        }
+
+        mCurrMapToShow.LoadBindingOverridesFromJson(readBindingOverridesJSON);
 
         PopulateControlEditingMenu();
     }
+
+    public void SetControlListDirty()
+    {
+        mControlListDirtyForRepopulating = true;
+    }    
 }
