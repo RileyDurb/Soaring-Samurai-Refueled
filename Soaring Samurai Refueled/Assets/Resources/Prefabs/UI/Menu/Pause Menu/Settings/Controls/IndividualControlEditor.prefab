@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3026186502779066334}
   - component: {fileID: 8459377272264832459}
   - component: {fileID: 525233436800205876}
+  - component: {fileID: 8415738258730800112}
   m_Layer: 0
   m_Name: IndividualControlEditor
   m_TagString: Untagged
@@ -138,6 +139,26 @@ MonoBehaviour:
   mTriggerRebindButton: {fileID: 1864156794088619599}
   mRebindNoticePopupPrefab: {fileID: 1581162727404598135, guid: 5cd02c54ecad94144b248ee4f0c1995b, type: 3}
   mSettings: {fileID: 11400000, guid: 0baef752be714f149a1f061d29c786a3, type: 2}
+--- !u!114 &8415738258730800112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056765197620669053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 550
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 0
 --- !u!1 &1235412783623875942
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +345,7 @@ MonoBehaviour:
   m_PreferredHeight: 60
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
-  m_LayoutPriority: 1
+  m_LayoutPriority: -1
 --- !u!1 &5173048556691321457
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,9 +413,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Backspace
-
-'
+  m_text: Left Stick Press
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -421,8 +440,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -540,6 +559,7 @@ GameObject:
   - component: {fileID: 4979026960017957039}
   - component: {fileID: 1458718178885698894}
   - component: {fileID: 3794853437151310217}
+  - component: {fileID: 4357675449924576516}
   m_Layer: 0
   m_Name: Control Name
   m_TagString: Untagged
@@ -594,7 +614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Give me control name
+  m_text: Give Me Control
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 811b4bbc604057946a4d770fe560c85b, type: 2}
   m_sharedMaterial: {fileID: 8076585804251407445, guid: 811b4bbc604057946a4d770fe560c85b, type: 2}
@@ -665,3 +685,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4357675449924576516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804212169319804283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 300
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1

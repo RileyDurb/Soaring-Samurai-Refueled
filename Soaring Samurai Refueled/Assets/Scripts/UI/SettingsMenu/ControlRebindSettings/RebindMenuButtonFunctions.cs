@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -31,6 +32,9 @@ public class RebindMenuButtonFunctions : MonoBehaviour
 
 
         PopulateInputMappingDropdown();
+
+        //PlayerInputManager.instance.onPlayerJoined += RecievePlayerJoinedOrLeft; // Subscribe to player joining event so we can reset menu if we have the joining player selected
+        //PlayerInputManager.instance.onPlayerLeft += RecievePlayerJoinedOrLeft; // Subscribe to player leaving event so we can reset menu if we have the leaving player selected
     }
 
     // Update is called once per frame
@@ -149,4 +153,13 @@ public class RebindMenuButtonFunctions : MonoBehaviour
     {
         mControlsRebindingListObject.LoadInputBindings(mSelectedPlayerIndex);
     }
+
+    // Event subscriptions
+    //void RecievePlayerJoinedOrLeft(PlayerInput newPlayerInputComp)
+    //{
+    //    if (mSelectedPlayerIndex == newPlayerInputComp.playerIndex)
+    //    {
+    //        SetSelectedPlayer(newPlayerInputComp.playerIndex);
+    //    }
+    //}
 }

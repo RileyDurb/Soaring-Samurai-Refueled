@@ -52,16 +52,19 @@ public class ControlEditor : MonoBehaviour
         switch (mCurrControlMethodType)
         {
             case ActiveInputTypeManager.ControlMethodTypes.Gamepad:
-                bindingToRead = actionToEdit.bindings[0];
-                splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
-                ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
+                //bindingToRead = actionToEdit.bindings[0];
+                //splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
+                //ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
+                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(0);
                 break;
 
             case ActiveInputTypeManager.ControlMethodTypes.Keyboard:
-                bindingToRead = actionToEdit.bindings[1];
+                //bindingToRead = actionToEdit.bindings[1];
 
-                splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
-                ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
+                //splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
+                //ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
+
+                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(1);
 
                 break;
 
@@ -75,7 +78,7 @@ public class ControlEditor : MonoBehaviour
     public void InitializeWithInputBindingAndControl(InputBinding binding, InputControl inputControl, ActiveInputTypeManager.ControlMethodTypes controlType)
     {
         ControlNameText.text = binding.name;
-        ControlRebindingBoxes[0].text = inputControl.name;
+        ControlRebindingBoxes[0].text = inputControl.displayName;
 
         mCurrInputBinding = binding;
         mCurrInputControl = inputControl;
@@ -142,10 +145,15 @@ public class ControlEditor : MonoBehaviour
 
         mRebindingOperation.Cancel();
 
-        mParentBindingsList.SetControlListDirty(); // Refresh parent list
+        RefreshControlEditorDisplay();
     }
     private void OnRebindingPotentialMatch(InputActionRebindingExtensions.RebindingOperation operation)
     {
         print(operation.candidates[operation.candidates.Count - 1].name);
+    }
+
+    public void RefreshControlEditorDisplay()
+    {
+        InitializeWithInputAction(mCurrInputAction, mCurrControlMethodType); // Refreshes control box to show current input binding
     }
 }

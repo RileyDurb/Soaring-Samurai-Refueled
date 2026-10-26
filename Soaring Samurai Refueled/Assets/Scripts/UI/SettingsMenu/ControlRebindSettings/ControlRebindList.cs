@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Rendering.LookDev;
+using UnityEngine.UI;
 
 public class ControlRebindList : MonoBehaviour
 {
@@ -39,11 +41,11 @@ public class ControlRebindList : MonoBehaviour
         set { mCurrMapToShow = value; }
     }
 
-
     // Start is called before the first frame update
     void Start()
     {
         mCurrentInputTypeManager = LevelScopeManagers.Instance.GetComponent<ActiveInputTypeManager>();
+
         //mCurrControlMethod = TestStartingControlMethod;
         //PopulateControlEditingMenu();
     }
@@ -73,6 +75,7 @@ public class ControlRebindList : MonoBehaviour
     public void PopulateControlEditingMenu()
     {
         ListParentObject.transform.DetachChildren(); // Clear children no matter what
+
 
         if (mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Invalid)
         {
@@ -124,7 +127,7 @@ public class ControlRebindList : MonoBehaviour
             controlEditorComp.SetParentRebindList(this);
         }
 
-    }
+    } 
 
     public void SaveInputBindings(int playerIndex)
     {
