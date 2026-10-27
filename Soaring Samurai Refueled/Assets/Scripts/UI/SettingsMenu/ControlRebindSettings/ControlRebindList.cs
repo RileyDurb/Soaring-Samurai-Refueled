@@ -13,15 +13,15 @@ using UnityEngine.UI;
 
 public class ControlRebindList : MonoBehaviour
 {
-    [SerializeField] ControlEditor TestControlEditor;
     [SerializeField] InputRebindingOptionSettings mSettings;
 
     [SerializeField] GameObject IndividualControlEditorPrefab;
     [SerializeField] GameObject ListParentObject;
 
-    [SerializeField] ActiveInputTypeManager.ControlMethodTypes TestStartingControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
+    //[SerializeField] ActiveInputTypeManager.ControlMethodTypes TestStartingControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
 
     ActiveInputTypeManager mCurrentInputTypeManager;
+    ScrollRect mOwnScrollRect;
 
     // Private variables
     ActiveInputTypeManager.ControlMethodTypes mCurrControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
@@ -50,6 +50,10 @@ public class ControlRebindList : MonoBehaviour
         //PopulateControlEditingMenu();
     }
 
+    private void Awake()
+    {
+        mOwnScrollRect = GetComponent<ScrollRect>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -67,13 +71,17 @@ public class ControlRebindList : MonoBehaviour
             // Refresh control menu
             PopulateControlEditingMenu();
 
-
             mControlListDirtyForRepopulating = false;
         }
+    
     }
+
 
     public void PopulateControlEditingMenu()
     {
+        //StartCoroutine(RepopulateControlsOverTime());
+
+        //return;
         ListParentObject.transform.DetachChildren(); // Clear children no matter what
 
 
@@ -89,6 +97,7 @@ public class ControlRebindList : MonoBehaviour
         ReadOnlyArray<InputAction> inputActionsToShow = mCurrMapToShow.actions;
         for (int i = 0; i < inputActionsToShow.Count; i++)
         {
+            
             InputAction currInputAction = inputActionsToShow[i];
 
             //currInputAction.bindings[]
@@ -126,8 +135,68 @@ public class ControlRebindList : MonoBehaviour
             controlEditorComp.SetInputAction(currInputAction);
             controlEditorComp.SetParentRebindList(this);
         }
-
     } 
+
+    //public IEnumerator RepopulateControlsOverTime()
+    //{
+    //    ListParentObject.transform.DetachChildren(); // Clear children no matter what
+
+
+    //    if (mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Invalid)
+    //    {
+
+    //        print("ControlRebindList:PopulateControlEditingMenu: Current player's control method is either invalid, or not control method is set. Cannot show control menu");
+    //        yield break;
+    //    }
+
+
+
+    //    ReadOnlyArray<InputAction> inputActionsToShow = mCurrMapToShow.actions;
+    //    for (int i = 0; i < inputActionsToShow.Count; i++)
+    //    {
+
+    //        InputAction currInputAction = inputActionsToShow[i];
+
+    //        //currInputAction.bindings[]
+    //        //List<InputBinding> currInputBindings = currInputAction.bindings.ToList();
+    //        //int bindingIndexStart = mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Keyboard ? 1 : 0;
+
+
+    //        // Special case for move on keyboard
+    //        if (currInputAction.name == "Move" && mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Keyboard)
+    //        {
+    //            InputControl[] keyboardControls = currInputAction.controls.Where((InputControl control) => { return control.path.Contains("Keyboard"); }).ToArray();
+
+    //            // Make an editor for each cardinal direction
+    //            for (int j = 0; j < keyboardControls.Length; j++)
+    //            {
+    //                GameObject partialControlEditor = Instantiate(IndividualControlEditorPrefab, ListParentObject.transform);
+
+    //                // Initialize the editor with the input action to show it's name and controls
+    //                ControlEditor partialControlEditorComp = partialControlEditor.GetComponent<ControlEditor>();
+    //                partialControlEditorComp.InitializeWithInputBindingAndControl(currInputAction.GetBindingForControl(keyboardControls[j]).Value, keyboardControls[j], ActiveInputTypeManager.ControlMethodTypes.Keyboard);
+
+    //                partialControlEditorComp.SetInputAction(currInputAction);
+    //                partialControlEditorComp.SetParentRebindList(this);
+    //            }
+
+    //            continue;
+    //        }
+
+    //        // Make an editor for this control
+    //        GameObject newControlEditor = Instantiate(IndividualControlEditorPrefab, ListParentObject.transform);
+
+    //        // Initialize the editor with the input action to show it's name and controls
+    //        ControlEditor controlEditorComp = newControlEditor.GetComponent<ControlEditor>();
+    //        controlEditorComp.InitializeWithInputAction(currInputAction, mCurrControlMethod);
+    //        controlEditorComp.SetInputAction(currInputAction);
+    //        controlEditorComp.SetParentRebindList(this);
+
+
+    //        yield return new WaitForSecondsRealtime(0.5f);
+    //    }
+
+    //}
 
     public void SaveInputBindings(int playerIndex)
     {
@@ -169,7 +238,7 @@ public class ControlRebindList : MonoBehaviour
 
         mCurrMapToShow.LoadBindingOverridesFromJson(readBindingOverridesJSON);
 
-        PopulateControlEditingMenu();
+        SetControlListDirty();
     }
 
     public void SetControlListDirty()

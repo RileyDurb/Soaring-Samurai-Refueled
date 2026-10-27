@@ -155,5 +155,6 @@ public class ControlEditor : MonoBehaviour
     public void RefreshControlEditorDisplay()
     {
         InitializeWithInputAction(mCurrInputAction, mCurrControlMethodType); // Refreshes control box to show current input binding
+
     }
 }

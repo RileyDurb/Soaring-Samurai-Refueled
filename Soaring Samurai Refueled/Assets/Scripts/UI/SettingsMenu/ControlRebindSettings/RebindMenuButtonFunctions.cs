@@ -33,14 +33,30 @@ public class RebindMenuButtonFunctions : MonoBehaviour
 
         PopulateInputMappingDropdown();
 
-        //PlayerInputManager.instance.onPlayerJoined += RecievePlayerJoinedOrLeft; // Subscribe to player joining event so we can reset menu if we have the joining player selected
-        //PlayerInputManager.instance.onPlayerLeft += RecievePlayerJoinedOrLeft; // Subscribe to player leaving event so we can reset menu if we have the leaving player selected
+        PlayerInputManager inputMan = LevelScopeManagers.Instance.GetComponent<PlayerInputManager>();
+        inputMan.onPlayerJoined += RecievePlayerJoinedOrLeft; // Subscribe to player joining event so we can reset menu if we have the joining player selected
+        inputMan.onPlayerLeft +=RecievePlayerJoinedOrLeft; // Subscribe to player leaving event so we can reset menu if we have the leaving player selected
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnDestroy()
+    {
+        LevelScopeManagers levelScopedManagers = LevelScopeManagers.Instance;
+        if (levelScopedManagers != null)
+        {
+            PlayerInputManager inputMan = LevelScopeManagers.Instance.GetComponent<PlayerInputManager>();
+            if (inputMan != null)
+            {
+                inputMan.onPlayerJoined -= RecievePlayerJoinedOrLeft; // Subscribe to player joining event so we can reset menu if we have the joining player selected
+                inputMan.onPlayerLeft -= RecievePlayerJoinedOrLeft; // Subscribe to player leaving event so we can reset menu if we have the leaving player selected
+            }
+        }
+
     }
 
     public void PopulateInputMappingDropdown()
@@ -70,7 +86,7 @@ public class RebindMenuButtonFunctions : MonoBehaviour
         mBindingsManagerRef.SetInputMapping(0, selectedMapOption);
 
         // Refresh the current control list to show the new input mapping
-        mControlsRebindingListObject.PopulateControlEditingMenu();
+        mControlsRebindingListObject.SetControlListDirty();
     }
 
     public void SetSelectedPlayer(int newSelectedPlayer)
@@ -114,7 +130,7 @@ public class RebindMenuButtonFunctions : MonoBehaviour
             ActiveInputTypeManager.ControlMethodTypes errorInputMethodType = ActiveInputTypeManager.ControlMethodTypes.Invalid;
             mControlsRebindingListObject.CurrentControlMethod = errorInputMethodType;
 
-            mControlsRebindingListObject.PopulateControlEditingMenu();
+            mControlsRebindingListObject.SetControlListDirty();
             return;
         }
 
@@ -127,7 +143,8 @@ public class RebindMenuButtonFunctions : MonoBehaviour
 
 
         // Refesh controls rebinding list now that the map is set
-        mControlsRebindingListObject.PopulateControlEditingMenu();
+        //mControlsRebindingListObject.PopulateControlEditingMenu();
+        mControlsRebindingListObject.SetControlListDirty();
 
         // Update map dropdown to have the player's map selected
         int currInputMapOptionIndex = mInputMapPresetDropdown.options.FindIndex((TMP_Dropdown.OptionData currOption) => { return currOption.text == currentInputMap; });
@@ -155,11 +172,12 @@ public class RebindMenuButtonFunctions : MonoBehaviour
     }
 
     // Event subscriptions
-    //void RecievePlayerJoinedOrLeft(PlayerInput newPlayerInputComp)
-    //{
-    //    if (mSelectedPlayerIndex == newPlayerInputComp.playerIndex)
-    //    {
-    //        SetSelectedPlayer(newPlayerInputComp.playerIndex);
-    //    }
-    //}
+    public void RecievePlayerJoinedOrLeft(PlayerInput newPlayerInputComp)
+    {
+        if (mSelectedPlayerIndex == newPlayerInputComp.playerIndex)
+        {
+            SetSelectedPlayer(newPlayerInputComp.playerIndex);
+        }
+        //print($"Player {newPlayerInputComp.playerIndex} joined or left");
+    }
 }
