@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unity.Properties;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -117,9 +118,10 @@ public class ControlRebindList : MonoBehaviour
 
                     // Initialize the editor with the input action to show it's name and controls
                     ControlEditor partialControlEditorComp = partialControlEditor.GetComponent<ControlEditor>();
-                    partialControlEditorComp.InitializeWithInputBindingAndControl(currInputAction.GetBindingForControl(keyboardControls[j]).Value, keyboardControls[j], ActiveInputTypeManager.ControlMethodTypes.Keyboard);
+                    partialControlEditorComp.InitializeWithInputBindingAndControl(currInputAction.GetBindingForControl(keyboardControls[j]).Value, keyboardControls[j], j, ActiveInputTypeManager.ControlMethodTypes.Keyboard);
 
                     partialControlEditorComp.SetInputAction(currInputAction);
+                    partialControlEditorComp.SetInputActionMap(mCurrMapToShow);
                     partialControlEditorComp.SetParentRebindList(this);
                 }
 
@@ -244,5 +246,72 @@ public class ControlRebindList : MonoBehaviour
     public void SetControlListDirty()
     {
         mControlListDirtyForRepopulating = true;
-    }    
+    }
+
+    public void CheckForAndResolveDuplicates(InputBinding bindingBeingRebound, string desiredBindingCurrentPath, string desiredBindingInputPath)
+    {
+        bool duplicateHandled = false;
+        InputAction reboundDuplicateAction = null;
+        //InputControl reboundInputControl = null;
+        // For each action
+        ReadOnlyArray<InputAction> actionsToCheck = mCurrMapToShow.actions;
+        for (int i = 0; i < actionsToCheck.Count; i++)
+        {
+            InputAction currAction = actionsToCheck[i];
+
+            // Ignore the action we are rebinding
+            //if (currAction == actionBeingRebound && currAction.)
+            //{
+            //    continue;
+            //}            //if (currAction == actionBeingRebound && currAction.)
+            //{
+            //    continue;
+            //}
+
+            // For each binding in the action
+            ReadOnlyArray<InputBinding> actionBindings = currAction.bindings;
+            for (int j = 0; j < actionBindings.Count; j++)
+            {
+                InputBinding currBinding = actionBindings[j];
+                if (currBinding.name == bindingBeingRebound.name)
+                {
+                    continue;
+                }
+                if (currBinding.effectivePath == desiredBindingInputPath) // if this binding has the binding we want to bind our desired control to
+                {
+
+                    // Give the binding we currently have to the action that has the binding we want. This frees up the binding to give to our desired control
+                    currAction.ApplyBindingOverride(j, desiredBindingCurrentPath);
+
+                    //reboundInputControl = currAction.controls.First((InputControl currControl) => { return currAction.GetBindingForControl(currControl) == currBinding; });
+
+                    reboundDuplicateAction = currAction;
+                    duplicateHandled = true;
+                    break;
+                }
+            }
+
+            if (duplicateHandled == true) // Only need to handle one duplicate
+            {
+                break;
+            }
+        }
+
+        if (duplicateHandled)
+        {
+            // Find and refresh the display for the rebound control
+            ControlEditor[] childEditors = transform.GetComponentsInChildren<ControlEditor>();
+
+            for (int i = 0; i < childEditors.Length; i++)
+            {
+                if (childEditors[i].GetDisplayingInputAction() == reboundDuplicateAction)
+                {
+                    //childEditors[i].SetInputControlForCompositeBinding(reboundInputControl);
+                    childEditors[i].RefreshControlEditorDisplay();
+                }
+            }
+
+
+        }
+    }
 }

@@ -22,6 +22,9 @@ public class InputRebindingOptionSettings : ScriptableObject
 
     [SerializeField] List<InputMethodBindingAesthetics> mInputMethodBindingAesthetics = new List<InputMethodBindingAesthetics>();
 
+    [Header("FeelTuning")]
+    public float InputRebindDelayBeforeAcceptance = 0.5f;
+
 
 
     public InputMethodBindingAesthetics GetAestheticsForBindingMethod(ActiveInputTypeManager.ControlMethodTypes controlMethod)

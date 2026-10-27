@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,8 +21,13 @@ public class ControlEditor : MonoBehaviour
     InputBinding mCurrInputBinding;
     InputControl mCurrInputControl;
     InputAction mCurrInputAction;
+    InputActionMap mCurrInputActionMap;
+
     ActiveInputTypeManager.ControlMethodTypes mCurrControlMethodType;
-    int mSubInputActionIndex = -1;
+    int mInputActionRebindIndex = -1;
+    string mOldPathBeforeRebind;
+    bool mIsCompositeBindingPiece = false;
+    int mControlIndex = -1;
 
     // Input rebinding
 
@@ -46,8 +52,6 @@ public class ControlEditor : MonoBehaviour
 
         mCurrControlMethodType = controlType;
 
-        InputBinding bindingToRead;
-        string[] splitPathAndBindingName;
         // Set input control name
         switch (mCurrControlMethodType)
         {
@@ -75,7 +79,7 @@ public class ControlEditor : MonoBehaviour
 
     }
 
-    public void InitializeWithInputBindingAndControl(InputBinding binding, InputControl inputControl, ActiveInputTypeManager.ControlMethodTypes controlType)
+    public void InitializeWithInputBindingAndControl(InputBinding binding, InputControl inputControl, int controlIndex, ActiveInputTypeManager.ControlMethodTypes controlType, bool isCompositeBindingPiece = true)
     {
         ControlNameText.text = binding.name;
         ControlRebindingBoxes[0].text = inputControl.displayName;
@@ -84,20 +88,25 @@ public class ControlEditor : MonoBehaviour
         mCurrInputControl = inputControl;
 
         mCurrControlMethodType = controlType;
+
+        mIsCompositeBindingPiece = isCompositeBindingPiece;
+
+        mControlIndex = controlIndex;
     }
 
-    public void SetInputAction(InputAction actionToRepresent, int subInputActionIndex = -1)
+    public void SetInputAction(InputAction actionToRepresent)
     {
         mCurrInputAction = actionToRepresent;
-
-        mSubInputActionIndex = subInputActionIndex;
     }
 
     public void SetParentRebindList(ControlRebindList parentList)
     {
         mParentBindingsList = parentList;
     }
-
+    public void SetInputActionMap(InputActionMap actionMap)
+    {
+        mCurrInputActionMap = actionMap;
+    }
 
     // Private Helper functions
     private void ActivateRebindingSequence()
@@ -108,21 +117,37 @@ public class ControlEditor : MonoBehaviour
        
         if (mCurrControlMethodType == ActiveInputTypeManager.ControlMethodTypes.Keyboard)
         {
+            if (mIsCompositeBindingPiece)
+            {
+                mInputActionRebindIndex = mCurrInputAction.GetBindingIndexForControl(mCurrInputControl);
+            }
+            else
+            {
+                mInputActionRebindIndex = 1;
+            }
+
+            mOldPathBeforeRebind = mCurrInputAction.bindings[mInputActionRebindIndex].effectivePath;
+
+            mCurrInputAction.GetBindingIndex(mCurrInputBinding);
             mRebindingOperation = mCurrInputAction.PerformInteractiveRebinding()
                 .WithControlsExcluding("Mouse") // Ignore non relevant inputs
                 .WithMagnitudeHavingToBeGreaterThan(.3f)
                 .WithControlsExcluding("<Gamepad>") // Ignore non relevant inputs
-                .WithTargetBinding(1)
-                .OnMatchWaitForAnother(1.0f);
+                .WithTargetBinding(mInputActionRebindIndex)
+                .OnMatchWaitForAnother(mSettings.InputRebindDelayBeforeAcceptance);
+
         }
         else if (mCurrControlMethodType == ActiveInputTypeManager.ControlMethodTypes.Gamepad)
         {
+            mInputActionRebindIndex = 0;
+            mOldPathBeforeRebind = mCurrInputAction.bindings[mInputActionRebindIndex].effectivePath;
+
             mRebindingOperation = mCurrInputAction.PerformInteractiveRebinding()
                 .WithControlsExcluding("Mouse") // Ignore non relevant inputs
                 .WithMagnitudeHavingToBeGreaterThan(.3f)
                 .WithControlsExcluding("<Keyboard>") // Ignore non relevant inputs
-                .WithTargetBinding(0)
-                .OnMatchWaitForAnother(1.0f);
+                .WithTargetBinding(mInputActionRebindIndex)
+                .OnMatchWaitForAnother(mSettings.InputRebindDelayBeforeAcceptance);
         }
 
 
@@ -141,6 +166,12 @@ public class ControlEditor : MonoBehaviour
     {
         LevelScopeManagers.Instance.GetComponent<MenuManager>().PopPopup();
 
+        // Finds the current control using this binding, if any, and swaps that with this one
+        mParentBindingsList.CheckForAndResolveDuplicates(mCurrInputBinding, mOldPathBeforeRebind, mCurrInputAction.bindings[mInputActionRebindIndex].effectivePath);
+
+        mCurrInputControl = operation.selectedControl;
+
+
         operation.action.Enable(); //Re-enable input action
 
         mRebindingOperation.Cancel();
@@ -154,7 +185,25 @@ public class ControlEditor : MonoBehaviour
 
     public void RefreshControlEditorDisplay()
     {
-        InitializeWithInputAction(mCurrInputAction, mCurrControlMethodType); // Refreshes control box to show current input binding
-
+        if (mIsCompositeBindingPiece)
+        {
+            InputControl currControl = mCurrInputAction.controls[mControlIndex];
+            InitializeWithInputBindingAndControl(mCurrInputAction.GetBindingForControl(currControl).Value, currControl, mControlIndex, mCurrControlMethodType);
+        }
+        else
+        {
+            InitializeWithInputAction(mCurrInputAction, mCurrControlMethodType); // Refreshes control box to show current input binding
+        }
     }
+
+    public InputAction GetDisplayingInputAction()
+    {
+        return mCurrInputAction;
+    }
+
+    public void SetInputControlForCompositeBinding(InputControl newControl)
+    {
+        mCurrInputControl = newControl;
+    }
+
 }
