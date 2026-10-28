@@ -19,8 +19,6 @@ public class ControlRebindList : MonoBehaviour
     [SerializeField] GameObject IndividualControlEditorPrefab;
     [SerializeField] GameObject ListParentObject;
 
-    //[SerializeField] ActiveInputTypeManager.ControlMethodTypes TestStartingControlMethod = ActiveInputTypeManager.ControlMethodTypes.Invalid;
-
     ActiveInputTypeManager mCurrentInputTypeManager;
     ScrollRect mOwnScrollRect;
 
@@ -46,9 +44,6 @@ public class ControlRebindList : MonoBehaviour
     void Start()
     {
         mCurrentInputTypeManager = LevelScopeManagers.Instance.GetComponent<ActiveInputTypeManager>();
-
-        //mCurrControlMethod = TestStartingControlMethod;
-        //PopulateControlEditingMenu();
     }
 
     private void Awake()
@@ -100,11 +95,6 @@ public class ControlRebindList : MonoBehaviour
         {
             
             InputAction currInputAction = inputActionsToShow[i];
-
-            //currInputAction.bindings[]
-            //List<InputBinding> currInputBindings = currInputAction.bindings.ToList();
-            //int bindingIndexStart = mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Keyboard ? 1 : 0;
-
   
             // Special case for move on keyboard
             if (currInputAction.name == "Move" && mCurrControlMethod == ActiveInputTypeManager.ControlMethodTypes.Keyboard)
@@ -252,28 +242,19 @@ public class ControlRebindList : MonoBehaviour
     {
         bool duplicateHandled = false;
         InputAction reboundDuplicateAction = null;
-        //InputControl reboundInputControl = null;
         // For each action
         ReadOnlyArray<InputAction> actionsToCheck = mCurrMapToShow.actions;
         for (int i = 0; i < actionsToCheck.Count; i++)
         {
             InputAction currAction = actionsToCheck[i];
 
-            // Ignore the action we are rebinding
-            //if (currAction == actionBeingRebound && currAction.)
-            //{
-            //    continue;
-            //}            //if (currAction == actionBeingRebound && currAction.)
-            //{
-            //    continue;
-            //}
-
             // For each binding in the action
             ReadOnlyArray<InputBinding> actionBindings = currAction.bindings;
             for (int j = 0; j < actionBindings.Count; j++)
             {
                 InputBinding currBinding = actionBindings[j];
-                if (currBinding.name == bindingBeingRebound.name)
+                // Skip the binding we are rebinding. Compares names if there are names, which is for the part of a composite binding. Otherwise compares the action for single input actions. 
+                if (bindingBeingRebound.name == "" ? currBinding.action == bindingBeingRebound.action : currBinding.name == bindingBeingRebound.name)
                 {
                     continue;
                 }
@@ -282,8 +263,6 @@ public class ControlRebindList : MonoBehaviour
 
                     // Give the binding we currently have to the action that has the binding we want. This frees up the binding to give to our desired control
                     currAction.ApplyBindingOverride(j, desiredBindingCurrentPath);
-
-                    //reboundInputControl = currAction.controls.First((InputControl currControl) => { return currAction.GetBindingForControl(currControl) == currBinding; });
 
                     reboundDuplicateAction = currAction;
                     duplicateHandled = true;
@@ -306,7 +285,6 @@ public class ControlRebindList : MonoBehaviour
             {
                 if (childEditors[i].GetDisplayingInputAction() == reboundDuplicateAction)
                 {
-                    //childEditors[i].SetInputControlForCompositeBinding(reboundInputControl);
                     childEditors[i].RefreshControlEditorDisplay();
                 }
             }

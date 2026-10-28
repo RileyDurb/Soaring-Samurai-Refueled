@@ -52,23 +52,23 @@ public class ControlEditor : MonoBehaviour
 
         mCurrControlMethodType = controlType;
 
+
+
         // Set input control name
         switch (mCurrControlMethodType)
         {
-            case ActiveInputTypeManager.ControlMethodTypes.Gamepad:
-                //bindingToRead = actionToEdit.bindings[0];
-                //splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
-                //ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
-                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(0);
+            case ActiveInputTypeManager.ControlMethodTypes.Gamepad: 
+                mInputActionRebindIndex = 0; // All gamepad bindings are manually set to be at the first index
+                mCurrInputBinding = actionToEdit.bindings[mInputActionRebindIndex];
+
+                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(mInputActionRebindIndex);
                 break;
 
             case ActiveInputTypeManager.ControlMethodTypes.Keyboard:
-                //bindingToRead = actionToEdit.bindings[1];
-
-                //splitPathAndBindingName = bindingToRead.effectivePath.Split("/");
-                //ControlRebindingBoxes[0].text = splitPathAndBindingName[1];
-
-                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(1);
+                mInputActionRebindIndex = 1; // All keyboard bindings are manually set to be at the first index 
+                mCurrInputBinding = actionToEdit.bindings[mInputActionRebindIndex];
+     
+                ControlRebindingBoxes[0].text = actionToEdit.GetBindingDisplayString(mInputActionRebindIndex);
 
                 break;
 
@@ -128,7 +128,6 @@ public class ControlEditor : MonoBehaviour
 
             mOldPathBeforeRebind = mCurrInputAction.bindings[mInputActionRebindIndex].effectivePath;
 
-            mCurrInputAction.GetBindingIndex(mCurrInputBinding);
             mRebindingOperation = mCurrInputAction.PerformInteractiveRebinding()
                 .WithControlsExcluding("Mouse") // Ignore non relevant inputs
                 .WithMagnitudeHavingToBeGreaterThan(.3f)
