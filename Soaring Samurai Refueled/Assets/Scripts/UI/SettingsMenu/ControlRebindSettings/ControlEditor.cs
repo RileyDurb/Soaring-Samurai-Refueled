@@ -31,6 +31,7 @@ public class ControlEditor : MonoBehaviour
 
     // Input rebinding
 
+
     InputActionRebindingExtensions.RebindingOperation mRebindingOperation;
 
     // Start is called before the first frame update
@@ -43,6 +44,14 @@ public class ControlEditor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void OnDestroy()
+    {
+        if (mRebindingOperation != null && mRebindingOperation.completed == false)
+        {
+            mRebindingOperation.Cancel();
+        }
     }
 
     // Public interface
@@ -194,6 +203,8 @@ public class ControlEditor : MonoBehaviour
             InitializeWithInputAction(mCurrInputAction, mCurrControlMethodType); // Refreshes control box to show current input binding
         }
     }
+
+    //public void 
 
     public InputAction GetDisplayingInputAction()
     {

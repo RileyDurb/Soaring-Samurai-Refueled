@@ -36,6 +36,17 @@ public class MenuManager : MonoBehaviour
     }
 
 
+    //private class FocusedObjectPackage
+    //{
+    //    public FocusedObjectPackage(GameObject focusedObject, GameObject parentMenuItem)
+    //    {
+    //        FocusedObject = focusedObject;
+    //        ParentMenuItem = parentMenuItem;
+    //    }
+    //    public GameObject FocusedObject;
+    //    public GameObject ParentMenuItem;
+    //}
+
     [SerializeField] List<UILayerSettings> LayerSettings;
 
     List<MenuLayer> mMenuLayers = new List<MenuLayer>();
@@ -46,6 +57,8 @@ public class MenuManager : MonoBehaviour
     // References
     GameObject mCanvasRef;
     EventSystem mCurrEventSystem;
+
+    Stack<GameObject> mLastFocusedObjects = new Stack<GameObject>();
 
 
     // Start is called before the first frame update
@@ -106,8 +119,13 @@ public class MenuManager : MonoBehaviour
     // Helper functions ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Creates an object from the given prefab, and puts it as the front of the menu layer
-    public GameObject PushItem(MenuLayers layer, GameObject uiPrefabToUse, bool additiveToTopLayer = false)
+    public GameObject PushItem(MenuLayers layer, GameObject uiPrefabToUse, bool additiveToTopLayer = false, bool trackLastFocusedItem = true)
     {
+        if (trackLastFocusedItem)
+        {
+            mLastFocusedObjects.Push(mCurrEventSystem.currentSelectedGameObject);
+        }
+
         mNumUIItems++;
 
         GameObject newUIObject = null;
@@ -180,7 +198,7 @@ public class MenuManager : MonoBehaviour
 
 
     // Removes and destroys top level of the UI layer
-    public void PopItem(MenuLayers layer)
+    public void PopItem(MenuLayers layer, bool restoreLastFocusedItem = true)
     {
         List<int> additiveCounts = mMenuLayers[(int)layer].mAdditiveLevelCounts;
 
@@ -213,7 +231,21 @@ public class MenuManager : MonoBehaviour
             additiveCounts.RemoveAt(additiveCounts.Count - 1); // Removes the additive count for this level
         }
 
+        bool nextInteractableFound = false;
 
+        // Restore last focused item if any
+        if (restoreLastFocusedItem)
+        {
+            if (mLastFocusedObjects.Count > 0)
+            {
+                GameObject objectToFocus = mLastFocusedObjects.Peek();
+
+                mCurrEventSystem.SetSelectedGameObject(objectToFocus);
+                mLastFocusedObjects.Pop();
+
+                nextInteractableFound = true;
+            }
+        }
         // Activate new top level if any
         if (mMenuLayers[(int)layer].mLayerItems.Count > 0)
         {
@@ -224,19 +256,42 @@ public class MenuManager : MonoBehaviour
                 GameObject currItemToShow = mMenuLayers[(int)layer].mLayerItems.ElementAt(i - 1);
                 currItemToShow.SetActive(true);
 
+                // If this is the top item
                 if (i == additiveCounts[additiveCounts.Count - 1])
                 {
-
-                    InteractableMenuPage interactionInfo = currItemToShow.GetComponent<InteractableMenuPage>();
-                    if (interactionInfo == null)
+                    // try to activate any interactable element if we don't have a last item to restore
+                    if (nextInteractableFound == false)
                     {
-                        //print("MenuManager:Pop Item: Newly visible object " + currItemToShow.name + " does not have an interactableMenuPage component, cannot focus on a particular element for controller navigation. Reccomend adding one unless there are no interactable elements on the page");
+                        InteractableMenuPage interactionInfo = currItemToShow.GetComponent<InteractableMenuPage>();
+                        if (interactionInfo == null)
+                        {
+                            //print("MenuManager:Pop Item: Newly visible object " + currItemToShow.name + " does not have an interactableMenuPage component, cannot focus on a particular element for controller navigation. Reccomend adding one unless there are no interactable elements on the page");
+                        }
+                        else
+                        {
+                            mCurrEventSystem.SetSelectedGameObject(interactionInfo.FirstItemToFocus);
+                            nextInteractableFound = true;
+                        }
                     }
-                    else
+                }
+            }
+        }
+
+        if (nextInteractableFound == false) // if no new item exists, focus the next highest item
+        {
+            for (int i = mMenuLayers.Count - 1; i >= 0; i--)
+            {
+                if (mMenuLayers[i].mLayerItems.Count > 0)
+                {
+                    MenuLayer currMenuLayer = mMenuLayers[i];
+
+                    InteractableMenuPage interactionInfo = currMenuLayer.mLayerItems.ElementAt(0).GetComponent<InteractableMenuPage>();
+                    if (interactionInfo != null)
                     {
                         mCurrEventSystem.SetSelectedGameObject(interactionInfo.FirstItemToFocus);
-                    }
+                        break;
 
+                    }
                 }
             }
         }

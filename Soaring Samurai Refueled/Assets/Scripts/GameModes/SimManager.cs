@@ -145,28 +145,6 @@ public class SimManager : MonoBehaviour
             }
         } 
     }
-
-    // Helper functions /////////////////////////////////////////////////////////////////////////////////////
-    void LoadPrefabs()
-    {
-        UnityEngine.Object[] prefabs = Resources.LoadAll("Prefabs", typeof(GameObject));
-
-        foreach (GameObject prefab in prefabs)
-        {
-            mPrefabs.Add(prefab.name, prefab);
-        }
-    }
-
-    void CallGameEnd()
-    {
-        // Calls game end event
-        if (GameEnd != null)
-        {
-            GameEnd.Invoke();
-        }
-    }
-
-
     // Misc usage functions /////////////////////////////////////////////////////////////////////////////////
     public void Exit()
     {
@@ -196,4 +174,25 @@ public class SimManager : MonoBehaviour
 
         SceneManager.LoadScene("MainMenu");
     }
+
+    // Helper functions /////////////////////////////////////////////////////////////////////////////////////
+    void LoadPrefabs()
+    {
+        UnityEngine.Object[] prefabs = Resources.LoadAll("Prefabs", typeof(GameObject));
+
+        foreach (GameObject prefab in prefabs)
+        {
+            mPrefabs.Add(prefab.name, prefab);
+        }
+    }
+
+    void CallGameEnd()
+    {
+        // Calls game end event
+        if (GameEnd != null)
+        {
+            GameEnd.Invoke();
+        }
+    }
+ 
 }

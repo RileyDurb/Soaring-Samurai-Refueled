@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c4d86a94262b24ab6f4df278efb8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFirstItemToFocus: {fileID: 0}
+  mFirstItemToFocus: {fileID: 1519394272558084685}
 --- !u!114 &9004724536925053099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,11 +579,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515ee72cdb822d8478ea534f93e63073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestControlEditor: {fileID: 0}
   mSettings: {fileID: 11400000, guid: 0baef752be714f149a1f061d29c786a3, type: 2}
   IndividualControlEditorPrefab: {fileID: 1056765197620669053, guid: 3b016717ea3d1444c88f0cce2cfa14e3, type: 3}
   ListParentObject: {fileID: 1745421379410288999}
-  TestStartingControlMethod: 1
 --- !u!114 &2985109060147020377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,6 +753,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7539be406c52db4419d644ac2769857b, type: 3}
+--- !u!1 &1519394272558084685 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 278184578413687647, guid: 7539be406c52db4419d644ac2769857b, type: 3}
+  m_PrefabInstance: {fileID: 1642044114188927250}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3014155699490536054 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4548029584802233188, guid: 7539be406c52db4419d644ac2769857b, type: 3}
@@ -776,7 +779,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3169928691129570138, guid: 7539be406c52db4419d644ac2769857b, type: 3}
   m_PrefabInstance: {fileID: 1642044114188927250}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1519394272558084685}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
