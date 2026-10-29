@@ -230,7 +230,7 @@ public class ControlRebindList : MonoBehaviour
 
         mCurrMapToShow.LoadBindingOverridesFromJson(readBindingOverridesJSON);
 
-        SetControlListDirty();
+        RefreshAllControlDisplays();
     }
 
     public void SetControlListDirty()
@@ -290,6 +290,18 @@ public class ControlRebindList : MonoBehaviour
             }
 
 
+        }
+    }
+
+    // Private helpers //////////////////////////////////////////////////////////////////////////////////////
+    void RefreshAllControlDisplays()
+    {
+        // Find and refresh the display for the rebound control
+        ControlEditor[] childEditors = transform.GetComponentsInChildren<ControlEditor>();
+
+        for (int i = 0; i < childEditors.Length; i++)
+        {
+            childEditors[i].RefreshControlEditorDisplay();
         }
     }
 }
